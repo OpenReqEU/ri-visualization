@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import './plugins/vuetify'
 import VueRouter from 'vue-router';
 import VueTour from 'vue-tour';
 import 'vue-tour/dist/vue-tour.css';

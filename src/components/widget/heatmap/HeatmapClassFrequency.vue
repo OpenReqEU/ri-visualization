@@ -150,7 +150,6 @@ export default {
         //   });
         // });
 
-
         let data = [];
         let max = 0;
         Object.keys(chartDict).forEach(function(day) {
