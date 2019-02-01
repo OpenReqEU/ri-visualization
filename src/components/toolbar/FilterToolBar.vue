@@ -6,7 +6,6 @@
       class="account-select text-size"
       :items="twitterAccounts"
       v-model="selectedTwitterAccount"
-      @change="filterTweets"
       label="Twitter Account"
     ></v-select>
 
@@ -35,7 +34,12 @@
         clearable
         @input="clearDateFrom"
       ></v-text-field>
-      <v-date-picker v-model="dateFrom" no-title @input="menu1 = false" @change="filterTweets"></v-date-picker>
+      <v-date-picker 
+        v-model="dateFrom" 
+        no-title 
+        @input="menu1 = false" 
+        @change="filterTweets">
+      </v-date-picker>
     </v-menu>
 
     <v-spacer></v-spacer>
@@ -62,7 +66,12 @@
         clearable
         @input="clearDateTo"
       ></v-text-field>
-      <v-date-picker v-model="dateTo" no-title @input="menu2 = false" @change="filterTweets"></v-date-picker>
+      <v-date-picker 
+        v-model="dateTo" 
+        no-title 
+        @input="menu2 = false" 
+        @change="filterTweets">
+      </v-date-picker>
     </v-menu>
 
     <v-spacer></v-spacer>
@@ -178,11 +187,14 @@ export default {
       );
     }
   },
-  created() {
-    this.loadAccountNames();
-  },
   mounted() {
+    this.loadAccountNames();
     this.filterTweets();
+  },
+  watch: {
+    selectedTwitterAccount() {
+      this.filterTweets();
+    }
   }
 };
 </script>
