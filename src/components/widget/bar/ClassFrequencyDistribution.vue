@@ -124,7 +124,7 @@
     computed: {
       dataUpToDate() {
         if(this.$store.state.dataUpToDate) {
-          this.loadChartData(this.$store.state.filteredTweets)
+          this.loadData(this.$store.state.filteredTweets)
         }
         return this.$store.state.dataUpToDate;
       }
