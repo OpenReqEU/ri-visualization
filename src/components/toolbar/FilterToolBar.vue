@@ -132,9 +132,9 @@ export default {
     showFullToolbar() {
       let path = this.$router.currentRoute.path;
       return (
-        path === "/ri-visualization/comparison" ||
-        path === "/ri-visualization/problemReports" ||
-        path === "/ri-visualization/inquiries"
+        path === "/comparison" ||
+        path === "/problemReports" ||
+        path === "/inquiries"
       );
     },
     clearDateFrom() {

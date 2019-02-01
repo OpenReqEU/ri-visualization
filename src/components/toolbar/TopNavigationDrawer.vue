@@ -31,17 +31,17 @@ export default {
         {
           title: "Dashboard",
           icon: "dashboard",
-          path: "/ri-visualization/dashboard"
+          path: "/dashboard"
         },
         {
           title: "Problem Reports",
           icon: "error_outline",
-          path: "/ri-visualization/problemReports"
+          path: "/problemReports"
         },
         {
           title: "Inquiries",
           icon: "help_outline",
-          path: "/ri-visualization/inquiries"
+          path: "/inquiries"
         }
       ],
       style: {

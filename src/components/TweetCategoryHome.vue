@@ -158,11 +158,11 @@ export default {
   methods: {
     setup() {
       let currentPath = this.$route.path;
-      if (currentPath === "/ri-visualization/problemReports") {
+      if (currentPath === "/problemReports") {
         this.tooblarTitle = "Problem Reports";
         this.cardTableTitle = "Problem Reports";
         this.tweetCategory = "problem_report";
-      } else if (currentPath === "/ri-visualization/inquiries") {
+      } else if (currentPath === "/inquiries") {
         this.tooblarTitle = "inquiries";
         this.cardTableTitle = "Inquiries";
         this.tweetCategory = "inquiry";
