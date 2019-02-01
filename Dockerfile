@@ -14,6 +14,8 @@ ADD . /usr/src/app
 ARG VUE_APP_BASE_URL 
 ARG VUE_APP_BACKUP_URL
 
+ENV VUE_APP_BASE_URL=$VUE_APP_BASE_URL 
+
 RUN npm run build
 RUN rm -rf ./build
 RUN rm -rf ./test
