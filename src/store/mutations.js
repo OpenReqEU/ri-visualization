@@ -11,5 +11,6 @@ export const mutateToobarHeader = (state, title) => {
 };
 
 export const mutateFilteredTweets = (state, filteredTweets) => {
+  state.dataUpToDate = true;
   state.filteredTweets = filteredTweets;
 };
