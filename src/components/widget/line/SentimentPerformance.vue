@@ -123,37 +123,37 @@ export default {
         this.loadChartData(tweets);
     },
     loadChartData(tweets) {
-      let uniqueDates = new Set();
+      // initialize vars
       let dictTweetSentimentPerDay = {};
+      let now = moment(this.startDate, 'YYYYMMDD')
+      let until = moment(this.endDate, 'YYYYMMDD').subtract(1, "days")
+      for (now; now.isBefore(until) || now.isSame(until); now.add(1, "days")) {
+        dictTweetSentimentPerDay[now.format('YYYYMMDD')] = {
+          count: 0,
+          senitmentSum: 0,
+          sentimentAvg: 0
+        }
+      }
       tweets.forEach((tweet) => {
         if (this.ignoreNeutralTweets && tweet.sentiment_score <= 1 && tweet.sentiment_score >= -1) {
           // ignore neutral tweets
           return;
         }
         let date = tweet.created_at;
-        uniqueDates.add(date);
         dictTweetSentimentPerDay[date] = {
           count:
-            date in dictTweetSentimentPerDay
-              ? ++dictTweetSentimentPerDay[date].count
-              : 0,
+            date in dictTweetSentimentPerDay ? ++dictTweetSentimentPerDay[date].count : 0,
           senitmentSum:
-            date in dictTweetSentimentPerDay
-              ? dictTweetSentimentPerDay[date].senitmentSum +
-                tweet.sentiment_score
-              : tweet.sentiment_score,
+            date in dictTweetSentimentPerDay ? dictTweetSentimentPerDay[date].senitmentSum + tweet.sentiment_score : tweet.sentiment_score,
           sentimentAvg:
-            date in dictTweetSentimentPerDay
-              ? dictTweetSentimentPerDay[date].senitmentSum /
-                dictTweetSentimentPerDay[date].count
-              : 0
+            date in dictTweetSentimentPerDay ? dictTweetSentimentPerDay[date].senitmentSum / dictTweetSentimentPerDay[date].count : 0
         };
       });
 
       // dynamically create the xAxis labels
       let xAxisLabels = [];
-      uniqueDates = Array.from(uniqueDates).sort((a, b) => a - b);
-      uniqueDates.forEach(date => {
+      let dateRange = Array.from(Object.keys(dictTweetSentimentPerDay)).sort((a, b) => a - b);
+      dateRange.forEach(date => {
         xAxisLabels.push(moment(date, "YYYYMMDD").format("DD.MM"));
       });
       this.line.xAxis.data = xAxisLabels;
@@ -165,14 +165,17 @@ export default {
       });
       this.line.series[0].data = sentimentAvgPerDay;
     },
-    getFormattedDateAsInt(count) {
-      let date = new Date();
-      date.setDate(date.getDate() - -count);
+    getEarliestTweetDate() {
+      let earliestDate = Number.MAX_SAFE_INTEGER;
+      let tweets = this.$store.state.filteredTweets;
+      tweets.forEach((tweet) => {
+        earliestDate = tweet.created_at < earliestDate ? tweet.created_at : earliestDate
+      });
 
-      let year = date.getFullYear();
-      let month = `${date.getMonth() + 1}`.padStart(2, 0);
-      let day = `${date.getDate()}`.padStart(2, 0);
-      return parseInt(year + month + day);
+      return earliestDate
+    },
+    getFormattedDate(amount, unit) {
+      return moment().subtract(amount, unit).format("YYYYMMDD");
     }
   },
   mounted() {
@@ -192,24 +195,24 @@ export default {
     selectedTimeFrame() {
       switch (this.selectedTimeFrame) {
         case this.timeframes[0]:
-          this.startDate = moment().subtract(7, "days").format("YYYYMMDD");
-          this.endDate = moment().subtract(1, "days").format("YYYYMMDD");
+          this.startDate = this.getFormattedDate(7, "days");
+          this.endDate = this.getFormattedDate(1, "days");
           break;
         case this.timeframes[1]:
-          this.startDate = moment().subtract(30, "days").format("YYYYMMDD");
-          this.endDate = moment().subtract(1, "days").format("YYYYMMDD");
+          this.startDate = this.getFormattedDate(30, "days");
+          this.endDate = this.getFormattedDate(1, "days");
           break;
         case this.timeframes[2]:
-          this.startDate = moment().subtract(90, "days").format("YYYYMMDD");
-          this.endDate = moment().subtract(1, "days").format("YYYYMMDD");
+          this.startDate = this.getFormattedDate(90, "days");
+          this.endDate = this.getFormattedDate(1, "days");
           break;
         case this.timeframes[3]:
-          this.startDate = moment().subtract(moment().dayOfYear()-1, "days").format("YYYYMMDD");
-          this.endDate = moment().subtract(1, "days").format("YYYYMMDD");
+          this.startDate = this.getFormattedDate(moment().dayOfYear()-1, "days");
+          this.endDate = this.getFormattedDate(1, "days");
           break;
         case this.timeframes[4]:
-          this.startDate = 0;
-          this.endDate = moment().subtract(1, "days").format("YYYYMMDD");
+          this.startDate = this.getEarliestTweetDate();
+          this.endDate = this.getFormattedDate(1, "days");
           break;
         case this.timeframes[5]:
           this.customFromDateActive = true;
@@ -219,8 +222,8 @@ export default {
           break;
         default:
           this.selectedTimeFrame = this.timeframes[0]
-          this.startDate = moment().subtract(7, "days").format("YYYYMMDD");
-          this.endDate = moment().subtract(1, "days").format("YYYYMMDD");
+          this.endDate = this.getFormattedDate(7, "days");
+          this.endDate = this.getFormattedDate(1, "days");
       }
 
       this.loadData(this.$store.state.filteredTweets);
@@ -240,7 +243,6 @@ export default {
   width: 100%;
   .chart {
     width: 100%;
-    // height: 70%;
     height: 85%;
   }
 }
