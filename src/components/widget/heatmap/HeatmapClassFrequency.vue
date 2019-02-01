@@ -1,7 +1,30 @@
 <template>
+<v-layout>
   <v-card class="echarts">
-    <ECharts class="chart" :options="option" :loading="!dataUpToDate" auto-resize/>
+    <ECharts 
+      class="chart" 
+      :options="option" 
+      :loading="!dataUpToDate" 
+      auto-resize
+    />
+    <v-layout row align-center>
+      <v-flex xs2 offset-xs1>
+        <v-switch 
+          class="action-item"
+          :label="`only informative`" 
+          v-model="modelShowInformativeTweetsOnly">
+        </v-switch>
+      </v-flex>
+      <v-flex xs2>
+        <v-switch 
+          class="action-item"
+          :label="`show numbers`" 
+          v-model="modelShowNumbers">
+        </v-switch>
+      </v-flex>
+    </v-layout>
   </v-card>
+</v-layout>
 </template>
 
 <script>
@@ -16,10 +39,12 @@ export default {
   },
   props: {},
   data: () => ({
+    modelShowInformativeTweetsOnly: true,
+    modelShowNumbers: true,
     loading: true,
     option: {
       title: {
-        text: "Informative Tweets Frequency per Day and Hour",
+        text: "Tweet Frequency per Day and Hour",
         top: "0",
         left: "center",
         right: "center"
@@ -27,10 +52,12 @@ export default {
       tooltip: {
         position: "top"
       },
-      animation: false,
+      animation: true,
       grid: {
         top: "40",
         height: "60%",
+        left: "90",
+        right: "25",
         y: "10%"
       },
       xAxis: {
@@ -129,10 +156,11 @@ export default {
             let date = new Date(tweet.created_at_full);
             let day = this.convertJSDayToChartDay(date.getDay());
             let hour = date.getHours();
-            if (
-              tweet.tweet_class == "problem_report" ||
-              tweet.tweet_class == "inquiry"
-            ) {
+            if (this.modelShowInformativeTweetsOnly) {
+              if (tweet.tweet_class == "problem_report" || tweet.tweet_class == "inquiry") {
+                chartDict[day][hour] = ++chartDict[day][hour];
+              }
+            } else {
               chartDict[day][hour] = ++chartDict[day][hour];
             }
           }
@@ -197,6 +225,11 @@ export default {
       }
       return this.$store.state.dataUpToDate;
     }
+  },
+  watch: {
+    modelShowNumbers() {
+      this.option.series[0].label.normal.show = this.modelShowNumbers;
+    }
   }
 };
 </script>
@@ -204,11 +237,18 @@ export default {
 <style lang="scss" scoped>
 .echarts {
   min-height: 250px;
+  max-height: 300px;
   height: 100%;
   width: 100%;
   .chart {
-    height: 100%;
     width: 100%;
+    height: 85%;
   }
+}
+.action-item {
+  margin: 5px 0px 0px 0px;
+}
+.divider {
+  height: 40px;
 }
 </style>
