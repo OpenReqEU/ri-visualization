@@ -15,6 +15,7 @@ ARG VUE_APP_BASE_URL
 ARG VUE_APP_BACKUP_URL
 
 ENV VUE_APP_BASE_URL=$VUE_APP_BASE_URL 
+ENV NODE_ENV=production
 
 RUN npm run build
 RUN rm -rf ./build
