@@ -14,7 +14,7 @@
     <v-menu
       v-if="showFullToolbar()"
       :close-on-content-click="false"
-      v-model="menu1"
+      v-model="modelFromDateMenu"
       :nudge-right="40"
       lazy
       transition="scale-transition"
@@ -26,7 +26,7 @@
       <v-text-field
         class="date-text"
         slot="activator"
-        v-model="computedDateFromFormatted"
+        v-model="modelFromDateText"
         label="From:"
         persistent-hint
         prepend-icon="event"
@@ -37,7 +37,7 @@
       <v-date-picker 
         v-model="dateFrom" 
         no-title 
-        @input="menu1 = false" 
+        @input="modelFromDateMenu = false" 
         @change="filterTweets">
       </v-date-picker>
     </v-menu>
@@ -47,7 +47,7 @@
     <v-menu
       v-if="showFullToolbar()"
       :close-on-content-click="false"
-      v-model="menu2"
+      v-model="modelToDateMenu"
       :nudge-right="40"
       lazy
       transition="scale-transition"
@@ -58,7 +58,7 @@
     >
       <v-text-field
         slot="activator"
-        v-model="computedDateToFormatted"
+        v-model="modelToDateText"
         label="To:"
         persistent-hint
         prepend-icon="event"
@@ -69,11 +69,10 @@
       <v-date-picker 
         v-model="dateTo" 
         no-title 
-        @input="menu2 = false" 
+        @input="modelToDateMenu = false" 
         @change="filterTweets">
       </v-date-picker>
     </v-menu>
-
     <v-spacer></v-spacer>
   </v-toolbar>
 </template>
@@ -83,6 +82,8 @@ import VContent from "vuetify/lib/components/VGrid/VContent";
 import TopToolBar from "./TopToolBar";
 import { ACTION_FILTER_TWEETS } from "./../../store/types";
 import { BLUE_FILL } from "../../colors.js";
+import moment from "moment";
+import "moment/locale/de";
 
 export default {
   name: "FilterToolBar",
@@ -92,50 +93,32 @@ export default {
   },
   data: function() {
     return {
-      // TODO: Switch to momentjs
-      date: new Date().toISOString().substr(0, 10),
-      dateFormatted: this.formatDate(new Date().toISOString().substr(0, 10)),
-      menu1: false,
-      menu2: false,
+      modelFromDateMenu: false,
+      modelToDateMenu: false,
       twitterAccounts: ["All"],
       selectedTwitterAccount: "All",
-      dateFrom: null, //new Date().toISOString().substr(0, 10),
-      dateFromFormatted: this.formatDate(
-        new Date().toISOString().substr(0, 10)
-      ),
-      dateTo: null, //new Date().toISOString().substr(0, 10),
-      dateToFormatted: this.formatDate(new Date().toISOString().substr(0, 10)),
+      dateFrom: null,
+      dateTo: null,
       color: BLUE_FILL
     };
   },
   computed: {
-    computedDateFromFormatted: {
+    modelFromDateText: {
       get: function() {
-        return this.dateFrom ? this.formatDate(this.dateFrom) : "";
+        return this.dateFrom ? this.formatDate(this.dateFrom) : '';
       },
-      set: function(newValue) {
-        this.dateFromFormatted = newValue;
+      set: function(val) {
+        return this.dateFrom = val;
       }
     },
-    computedDateToFormatted: {
+    modelToDateText: {
       get: function() {
-        return this.dateTo ? this.formatDate(this.dateTo) : "";
+        return this.dateTo ? this.formatDate(this.dateTo) : '';
       },
-      set: function(newValue) {
-        this.dateToFormatted = newValue;
+      set: function(val) {
+        return this.dateTo = val;
       }
-    }
-  },
-  watch: {
-    date(val) {
-      this.dateFormatted = this.formatDate(this.date);
     },
-    dateFrom(val) {
-      this.dateFromFormatted = this.formatDate(val);
-    },
-    dateTo(val) {
-      this.dateToFormatted = this.formatDate(val);
-    }
   },
   methods: {
     showFullToolbar() {
@@ -154,24 +137,8 @@ export default {
       this.dateTo = null;
       this.filterTweets();
     },
-    formatDateCompare(date) {
-      if (!date) return null;
-      return parseInt(
-        date
-          .toString()
-          .split("-")
-          .join("")
-      );
-    },
     formatDate(date) {
-      if (!date) return null;
-      const [year, month, day] = date.split("-");
-      return `${year}-${month}-${day}`;
-    },
-    parseDate(date) {
-      if (!date) return null;
-      const [month, day, year] = date.split("/");
-      return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+      return moment(date, 'YYYY-MM-DD').format('DD.MM.YYYY');
     },
     filterTweets() {
       let payload = {
