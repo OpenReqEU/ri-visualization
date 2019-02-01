@@ -1,0 +1,164 @@
+<template>
+  <v-card v-if="dataUpToDate">
+    <v-card-title primary-title>
+      <div>
+        <span class="grey--text">Average Sentiment</span>
+        <div class="headline text-uppercase" v-model="polarity">{{polarity[0]}} - {{polarity[1]}}</div>
+      </div>
+    </v-card-title>
+
+    <v-divider horizontal></v-divider>
+
+    <v-card-actions>
+
+      <!--<v-divider vertical></v-divider>-->
+
+      <v-layout align-center justify-center column fill-height>
+        <v-flex xs12>
+          <span class="grey--text text-uppercase">yesterday</span>
+        </v-flex>
+        <v-flex xs12>
+          <span class="text-uppercase headline" v-model="yesterdaySentiment">{{yesterdaySentiment}}</span>
+        </v-flex>
+        <v-layout align-center justify-center row fill-height>
+          <v-icon v-if="yesterdayDifference > 0" large color="green">arrow_drop_up</v-icon>
+          <v-icon v-else-if="yesterdayDifference < 0" large color="red">arrow_drop_down</v-icon>
+          <v-icon v-else large color="black">remove</v-icon>
+          <span v-model="yesterdayDifference">{{yesterdayDifference}}</span>
+        </v-layout>
+      </v-layout>
+
+      <v-divider vertical></v-divider>
+
+      <v-layout align-center justify-center column fill-height>
+        <v-flex xs12>
+          <span class="grey--text text-uppercase">LAST WEEK</span>
+        </v-flex>
+        <v-flex xs12>
+          <span class="text-uppercase headline" v-model="lastWeekSentiment">{{lastWeekSentiment}}</span>
+        </v-flex>
+        <v-layout align-center justify-center row fill-height>
+          <v-icon v-if="lastWeekDifference > 0" large color="green">arrow_drop_up</v-icon>
+          <v-icon v-else-if="lastWeekDifference < 0" large color="red">arrow_drop_down</v-icon>
+          <v-icon v-else large color="black">remove</v-icon>
+          <span v-model="lastWeekDifference">{{lastWeekDifference}}</span>
+        </v-layout>
+      </v-layout>
+
+      <v-divider vertical></v-divider>
+
+      <v-layout align-center justify-center column fill-height>
+        <v-flex xs12>
+          <span class="grey--text text-uppercase">LAST MONTH</span>
+        </v-flex>
+        <v-flex xs12>
+          <span class="text-uppercase headline" v-model="lastMonthSentiment">{{lastMonthSentiment}}</span>
+        </v-flex>
+        <v-layout align-center justify-center row fill-height>
+          <v-icon v-if="lastMonthDifference > 0" large color="green">arrow_drop_up</v-icon>
+          <v-icon v-else-if="lastMonthDifference < 0" large color="red">arrow_drop_down</v-icon>
+          <v-icon v-else large color="black">remove</v-icon>
+          <span v-model="lastMonthDifference">{{lastMonthDifference}}</span>
+        </v-layout>
+      </v-layout>
+
+    </v-card-actions>
+  </v-card>
+</template>
+
+<script>
+  import moment from 'moment';
+  import math from 'mathjs'
+  import * as ss from 'simple-statistics';
+
+  export default {
+    name: "SentimentTrendReport",
+    components: {
+    },
+    data: () => ({
+      polarity: [],
+      totalSentiment: 0,
+      yesterdayDifference: 0,
+      yesterdaySentiment: 0,
+      lastWeekDifference: 0,
+      lastWeekSentiment: 0,
+      lastMonthDifference: 0,
+      lastMonthSentiment: 0
+    }),
+    computed: {
+      dataUpToDate() {
+        if(this.$store.state.dataUpToDate) {
+          this.loadChartData(this.$store.state.filteredTweets)
+        }
+        return this.$store.state.dataUpToDate;
+      }
+    },
+    methods: {
+      calculatePolarity(sentimentScore) {
+        let polarity = 'neutral';
+        if (sentimentScore >= -1 && sentimentScore <= 1) {
+          polarity = 'neutral';
+        }
+        else if (sentimentScore > 1) {
+          polarity = 'positive';
+        }
+        else if (sentimentScore < -1) {
+          polarity = 'negative';
+        }
+        return [sentimentScore, polarity]
+      },
+      loadChartData(tweets) {
+        if(tweets != null && tweets.length > 1){
+
+          let yesterday = parseInt(moment().subtract(1, 'day').format('YYYYMMDD'));
+          let lastWeek = parseInt(moment().subtract(1, 'week').format('YYYYMMDD'));
+          let lastMonth = parseInt(moment().subtract(1, 'month').format('YYYYMMDD'));
+
+          let sentimentTotal = [];
+          let sentimentYesterday = [];
+          let sentimentLastWeek = [];
+          let sentimentLastMonth = [];
+            tweets.forEach((tweet, index) => {
+            let sentimentScore = tweet.sentiment_score;
+            let createdAt = tweet.created_at;
+            if (createdAt <= lastMonth) {
+              sentimentLastMonth.push(sentimentScore);
+            }
+            if (createdAt <= lastWeek) {
+              sentimentLastWeek.push(sentimentScore);
+            }
+            if (createdAt <= yesterday) {
+              sentimentYesterday.push(sentimentScore);
+            }
+            sentimentTotal.push(sentimentScore);
+          });
+
+          let totalArithmeticMean =  sentimentTotal.length > 0 ? math.round(ss.mean(sentimentTotal), 2) : 0;
+          let yesterdayArithmeticMean = sentimentYesterday.length > 0 ? math.round(ss.mean(sentimentYesterday), 2) : 0;
+          let lastWeekArithmeticMean = sentimentLastWeek.length > 0 ? math.round(ss.mean(sentimentLastWeek), 2) : 0;
+          let lastMonthArithmeticMean = sentimentLastMonth.length > 0 ? math.round(ss.mean(sentimentLastMonth), 2) : 0;
+
+          let yesterdayDifference = math.round(totalArithmeticMean - yesterdayArithmeticMean, 2);
+          let lastWeekDifference = math.round(totalArithmeticMean - lastWeekArithmeticMean, 2);
+          let lastMonthDifference = math.round(totalArithmeticMean - lastMonthArithmeticMean, 2);
+
+          this.totalSentiment = totalArithmeticMean;
+          this.yesterdaySentiment = yesterdayArithmeticMean;
+          this.lastWeekSentiment = lastWeekArithmeticMean;
+          this.lastMonthSentiment = lastMonthArithmeticMean;
+
+          this.yesterdayDifference = yesterdayDifference;
+          this.lastWeekDifference = lastWeekDifference;
+          this.lastMonthDifference = lastMonthDifference;
+          this.polarity = this.calculatePolarity(this.totalSentiment);
+        }
+      }
+    }
+  }
+</script>
+
+<style scoped>
+.total-sentiment {
+  float: left;
+}
+</style>

@@ -1,0 +1,30 @@
+== ri-visualization image:https://img.shields.io/badge/License-EPL%202.0-blue.svg["EPL 2.0", link="https://www.eclipse.org/legal/epl-2.0/"]
+This service was created as a result of the OpenReq project funded by the European Union Horizon 2020 Research and Innovation programme under grant agreement No 732463.
+
+=== Used Technologies
+- Docker (-> https://www.docker.com/)
+- vuejs (-> https://github.com/vuejs)
+- echarts (-> https://echartsjs.com)
+- vuetify (-> https://github.com/vuetifyjs/vuetify)
+
+=== Functionalities 
+The ri-visualization microservice is the web-based dashboard for analysing tweets.
+
+[red]#Please be aware that this ms collects user interaction data. To turn it off, please consider removing line 9 in /public/index.html (<script src="https://api.openreq.eu/ri-logging/frontend/script"></script>)#
+
+=== Installation
+This ms requires a running instance of link:https://github.com/OpenReqEU/ri-storage-twitter[ri-storage-twitter].
+
+=== How to Run The microservice
+Run the following commands to start the microservice:
+
+1) docker build --build-arg "VUE_APP_BASE_URL=<URL_TO_ri-storage-twitter>" --build-arg "VUE_APP_BACKUP_URL=<URL_TO_OPTIONAL_BACKUP_BACKEND>" -t ri-visualization .
+
+2) docker run --rm -d -p 9707:9707 ri-visualization
+
+
+== How to contribute
+See OpenReq project contribution link:https://github.com/OpenReqEU/OpenReq/blob/master/CONTRIBUTING.md[Guidlines]
+
+== License
+Free use of this software is granted under the terms of the EPL version 2 (EPL2.0).
