@@ -1,4 +1,6 @@
 import axios from 'axios';
+import moment from "moment";
+import "moment/locale/de";
 import { GET_ALL_TWEETS_ENDPOINT } from './../RESTconf';
 import { ACTION_RESET_FILTERED_TWEETS, MUTATE_FILTERED_TWEETS, MUTATE_INITIAL_DATA, MUTATE_TOOLBAR_HEADER } from './../store/types';
 
@@ -48,11 +50,11 @@ export const actionFilterTweets = ({
 
   // 3. check if the user filters for a time-frame => if yes, filter
   if (payload.fromDate !== null) {
-    let dateFromCompare = parseInt(payload.fromDate.split('-').join(''));
+    let dateFromCompare = moment(payload.fromDate, 'YYYY-MM-DD').format('YYYYMMDD');
     tmpFilteredTweets = tmpFilteredTweets.filter(tweet => tweet.created_at >= dateFromCompare);
   }
   if (payload.toDate !== null) {
-    let dateToCompare = parseInt(payload.toDate.split('-').join(''));
+    let dateToCompare = moment(payload.toDate, 'YYYY-MM-DD').format('YYYYMMDD');
     tmpFilteredTweets = tmpFilteredTweets.filter(tweet => tweet.created_at <= dateToCompare);
   }
 
