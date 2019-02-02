@@ -7,6 +7,9 @@
       <hr>-->
       <router-view :key="$route.path"></router-view>
     </v-content>
+    <v-footer class="footer">
+      &copy;{{new Date().getFullYear()}} — Christoph Stanik <strong>@OpenReq</strong>
+    </v-footer>
   </v-app>
 </template>
 
@@ -49,5 +52,8 @@ export default {
 }
 .right-half-row-widget {
   padding-left: 10px;
+}
+.footer {
+  padding-left: 5%;
 }
 </style>

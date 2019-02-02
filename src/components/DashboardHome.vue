@@ -50,9 +50,6 @@
       </v-flex>
     </div>
     <v-tour name="dashboardTour" :steps="steps"></v-tour>
-    <v-footer>
-      &copy;{{new Date().getFullYear()}} — Christoph Stanik <strong>@OpenReq</strong>
-    </v-footer>
   </v-container>
 </template>
 <script>
