@@ -8,7 +8,7 @@
       <router-view :key="$route.path"></router-view>
     </v-content>
     <v-footer class="footer">
-      &copy;{{new Date().getFullYear()}} — Christoph Stanik <strong>@OpenReq</strong>
+      &copy;{{new Date().getFullYear()}} — Christoph Stanik <strong><a href="https://openreq.eu/"> @OpenReq</a></strong>
     </v-footer>
   </v-app>
 </template>

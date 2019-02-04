@@ -6,7 +6,7 @@
       <span class="font-weight-light">- {{ title }}</span>
     </v-toolbar-title>
     <v-spacer/>
-    <img src="@/assets/openreq_logo.png" style="height:50px;" alt="OpenReq">
+    <a href="https://openreq.eu/"><img src="@/assets/openreq_logo.png" style="height:50px;" alt="OpenReq"></a>
   </v-toolbar>
 </template>
 <script>
