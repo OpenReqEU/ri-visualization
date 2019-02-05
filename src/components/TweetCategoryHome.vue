@@ -29,7 +29,7 @@
           <td class="issue-action">
             <v-layout
               row
-              v-if="(props.item.classifier_certainty >= 0 && props.item.classifier_certainty < 70) || props.item.classifier_certainty === undefined"
+              v-if="(props.item.classifier_certainty < 70) || props.item.classifier_certainty === undefined"
             >
               <v-layout row v-if="props.item.label_status!=='wrong'">
                 <v-layout>
