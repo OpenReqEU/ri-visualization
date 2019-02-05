@@ -118,7 +118,7 @@
           let sentimentYesterday = [];
           let sentimentLastWeek = [];
           let sentimentLastMonth = [];
-            tweets.forEach((tweet, index) => {
+          tweets.forEach((tweet, index) => {
             let sentimentScore = tweet.sentiment_score;
             let createdAt = tweet.created_at;
             if (createdAt <= lastMonth) {
