@@ -21,6 +21,7 @@
       :headers="tableHeaders" 
       :items="data" 
       :search="searchQuery" 
+      :custom-sort="customTableSort"
       :pagination.sync="pagination" >
       <template slot="items" slot-scope="props">
         <tr>
@@ -136,15 +137,15 @@ export default {
         {
           text: "Tweet",
           align: "left",
-          sortable: true,
-          value: "text",
+          sortable: false,
+          value: "tweet",
           width: "80%"
         },
         {
-          text: "Action",
+          text: "Label required",
           align: "center",
-          sortable: false,
-          value: "text",
+          sortable: true,
+          value: "classifier_certainty",
           width: "10%"
         }
       ],
@@ -232,6 +233,26 @@ export default {
 
       // Update UI
       this.data.splice(0, 0);
+    },
+    customTableSort(items, index, isDescending) {
+      items.sort((a, b) => {
+          if (index === 'created_at') {
+              if (isDescending) {
+                  return b.created_at - a.created_at;
+              } else {
+                  return a.created_at - b.created_at;
+              }
+          }
+          else if (index === 'classifier_certainty') {
+              if (isDescending) {
+                  return b.classifier_certainty - a.classifier_certainty;
+              } else {
+                  return a.classifier_certainty - b.classifier_certainty;
+              }
+          }
+      });
+
+      return items;
     }
   },
   mounted() {
