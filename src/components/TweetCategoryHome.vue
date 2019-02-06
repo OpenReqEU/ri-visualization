@@ -192,7 +192,7 @@ export default {
         status_id: labelObject.tweet.status_id,
         label: labelObject.label,
         text: labelObject.tweet.text,
-        date: moment().format("YYYYMMDD"),
+        date: parseInt(moment().format("YYYYMMDD")),
         previous_label: this.tweetCategory
       };
       axios
