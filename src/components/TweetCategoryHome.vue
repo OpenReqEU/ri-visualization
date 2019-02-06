@@ -193,7 +193,7 @@ export default {
         label: labelObject.label,
         text: labelObject.tweet.text,
         date: parseInt(moment().format("YYYYMMDD")),
-        previous_label: this.tweetCategory
+        previous_label: labelObject.tweet.tweet_class
       };
       axios
         .post(POST_TWEET_LABEL_ENDPOINT(), POST_TWEET_LABEL_PAYLOAD(payload))

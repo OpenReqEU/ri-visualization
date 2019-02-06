@@ -10,10 +10,10 @@ export const POST_TWEET_LABEL_ENDPOINT = function () {
 };
 export const POST_TWEET_LABEL_PAYLOAD = function (data) {
   let payload = {
-    status_id: data.statusID,
+    status_id: data.status_id,
     label: data.label,
     date: data.date,
-    previous_label: data.previousLabel
+    previous_label: data.previous_label
   };
   return JSON.stringify(payload);
 };
@@ -26,11 +26,11 @@ export const POST_TWEET_LABEL_BACKUP_ENDPOINT = function () {
 };
 export const POST_TWEET_LABEL_BACKUP_PAYLOAD = function (data) {
   let payload = {
-    status_id: data.statusID,
+    status_id: data.status_id,
     label: data.label,
     text: data.text,
     date: data.date,
-    previous_label: data.previousLabel
+    previous_label: data.previous_label
   };
   return JSON.stringify(payload);
 };
