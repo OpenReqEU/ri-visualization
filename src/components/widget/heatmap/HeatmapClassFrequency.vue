@@ -11,14 +11,14 @@
       <v-flex xs2 offset-xs1>
         <v-switch 
           class="action-item"
-          :label="`only informative`" 
+          :label="`Show only relevant Tweets`" 
           v-model="modelShowInformativeTweetsOnly">
         </v-switch>
       </v-flex>
       <v-flex xs2>
         <v-switch 
           class="action-item"
-          :label="`show numbers`" 
+          :label="`show Tweet counts`" 
           v-model="modelShowNumbers">
         </v-switch>
       </v-flex>
