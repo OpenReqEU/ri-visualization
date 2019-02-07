@@ -53,7 +53,7 @@ export default {
     selectedTimeFrame: "7 days",
     line: {
       title: {
-        text: "Sentiment Trend (-5 very negativ, +5 very positive)",
+        text: "Sentiment Trend (-5 very negative, +5 very positive)",
         left: "center",
         right: "center"
       },
