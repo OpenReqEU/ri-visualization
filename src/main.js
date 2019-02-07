@@ -11,7 +11,7 @@ Vue.config.productionTip = true;
 Vue.use(VueTour);
 Vue.use(VueRouter);
 const router = new VueRouter({
-  base: '/ri-visualization/',
+  base: '/',
   mode: 'history',
   routes
 });
