@@ -126,8 +126,8 @@ export default {
       // initialize vars
       let dictTweetSentimentPerDay = {};
       let now = moment(this.startDate, 'YYYYMMDD')
-      let until = moment(this.endDate, 'YYYYMMDD').subtract(1, "days")
-      for (now; now.isBefore(until) || now.isSame(until); now.add(1, "days")) {
+      let until = moment(this.endDate, 'YYYYMMDD')
+      for (now; now.isBefore(until); now.add(1, "days")) {
         dictTweetSentimentPerDay[now.format('YYYYMMDD')] = {
           count: 0,
           senitmentSum: 0,
