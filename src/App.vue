@@ -43,6 +43,9 @@ export default {
 </script>
 
 <style lang="scss">
+.container {
+  max-width: 1200px;
+}
 .full-row-widget {
   margin-top: 10px;
   padding-top: 5px;
