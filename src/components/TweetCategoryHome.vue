@@ -138,7 +138,7 @@ export default {
           text: "Tweet",
           align: "left",
           sortable: false,
-          value: "tweet",
+          value: "text",
           width: "80%"
         },
         {
