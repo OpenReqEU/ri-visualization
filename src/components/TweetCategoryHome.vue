@@ -16,13 +16,14 @@
         ></v-text-field>
       </v-card-title>
     </v-card>
-    <v-data-table 
+    <v-data-table
       v-if="dataUpToDate"
-      :headers="tableHeaders" 
-      :items="data" 
-      :search="searchQuery" 
+      :headers="tableHeaders"
+      :items="data"
+      :search="searchQuery"
       :custom-sort="customTableSort"
-      :pagination.sync="pagination" >
+      :pagination.sync="pagination"
+    >
       <template slot="items" slot-scope="props">
         <tr>
           <td style="text-align:'center'">{{ getFormattedDate(props.item.created_at) }}</td>
@@ -75,7 +76,7 @@
                       label: tweetCategory==='problem_report' ? 'inquiry' : 'problem_report',
                       tweet: props.item
                   })"
-                  >inquiry</v-btn>
+                  >{{tweetCategory==='problem_report' ? 'inquiry' : 'problem'}}</v-btn>
                   <v-btn
                     small
                     outline
@@ -181,7 +182,7 @@ export default {
           this.data.push(tweet);
         }
       });
-      
+
       // Update UI
       this.data.splice(0, 0);
     },
@@ -236,20 +237,19 @@ export default {
     },
     customTableSort(items, index, isDescending) {
       items.sort((a, b) => {
-          if (index === 'created_at') {
-              if (isDescending) {
-                  return b.created_at - a.created_at;
-              } else {
-                  return a.created_at - b.created_at;
-              }
+        if (index === "created_at") {
+          if (isDescending) {
+            return b.created_at - a.created_at;
+          } else {
+            return a.created_at - b.created_at;
           }
-          else if (index === 'classifier_certainty') {
-              if (isDescending) {
-                  return b.classifier_certainty - a.classifier_certainty;
-              } else {
-                  return a.classifier_certainty - b.classifier_certainty;
-              }
+        } else if (index === "classifier_certainty") {
+          if (isDescending) {
+            return b.classifier_certainty - a.classifier_certainty;
+          } else {
+            return a.classifier_certainty - b.classifier_certainty;
           }
+        }
       });
 
       return items;
