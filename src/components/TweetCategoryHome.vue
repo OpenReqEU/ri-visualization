@@ -29,10 +29,7 @@
           <td style="text-align:'center'">{{ getFormattedDate(props.item.created_at) }}</td>
           <td class="issue-title-value">{{ props.item.text }}</td>
           <td class="issue-action">
-            <v-layout
-              row
-              v-if="(props.item.classifier_certainty < 70) || props.item.classifier_certainty === undefined"
-            >
+            <v-layout row v-if="(!props.item.is_annotated && props.item.classifier_certainty < 70)">
               <v-layout row v-if="props.item.label_status!=='wrong'">
                 <v-layout>
                   <v-btn
@@ -218,7 +215,7 @@ export default {
       }
 
       // remove the label option for the labeled tweet and update the UI
-      labelObject.tweet.classifier_certainty = 100;
+      labelObject.tweet.is_annotated = true;
       this.$store.dispatch(ACTION_UPDATE_TWEET, labelObject.tweet);
 
       // Update UI
