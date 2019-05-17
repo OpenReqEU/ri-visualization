@@ -42,6 +42,11 @@ export default {
           title: "Inquiries",
           icon: "help_outline",
           path: "/inquiries"
+        },
+        {
+          title: "Settings",
+          icon: "settings",
+          path: "/settings"
         }
       ],
       style: {

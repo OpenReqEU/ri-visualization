@@ -5,6 +5,9 @@ export const BACKUP_URL = process.env.VUE_APP_BACKUP_URL;
 export const GET_ALL_TWEETS_ENDPOINT = function (twitterAccount) {
   return `${BASE_URL}/account_name/${twitterAccount}/all`;
 };
+export const GET_TWITTER_ACCOUNT_EXISTS_ENDPOINT = function (twitterAccount) {
+  return `https://api.openreq.eu/ri-collection-explicit-feedback-twitter/${twitterAccount}/exists`;
+};
 export const POST_TWEET_LABEL_ENDPOINT = function () {
   return `${BASE_URL}/label/tweet/`;
 };

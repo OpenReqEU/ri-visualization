@@ -1,4 +1,5 @@
 import DashboardHome from './components/DashboardHome.vue';
+import SettingsHome from './components/SettingsHome.vue';
 import TweetCategoryHome from './components/TweetCategoryHome.vue';
 export const routes = [{
   path: '',
@@ -15,5 +16,9 @@ export const routes = [{
 {
   path: '/inquiries',
   component: TweetCategoryHome
+},
+{
+  path: '/settings',
+  component: SettingsHome
 }
 ];
