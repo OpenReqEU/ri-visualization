@@ -5,7 +5,14 @@
         <h1>Configure Twitter Accounts</h1>
       </v-card-title>
     </v-card>
-    <v-card flat>
+    <v-card
+      flat
+      @keyup.enter.native="addTwitterAccount({
+              account_name: newTwitterAccount, 
+              valid: false, 
+              checking_validity: true,
+          })"
+    >
       <v-card-title>
         <v-text-field
           class="input-field"
@@ -100,6 +107,7 @@ export default {
         this.twitterAccounts.push(twitterAccount);
         this.checkTwitterAccount(twitterAccount);
       }
+      this.newTwitterAccount = "";
     },
     removeTwitterAccount(twitterAccount) {
       this.twitterAccounts = this.twitterAccounts.filter(function(item) {
