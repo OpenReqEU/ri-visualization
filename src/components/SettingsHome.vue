@@ -9,6 +9,8 @@
       flat
       @keyup.enter.native="addTwitterAccount({
               account_name: newTwitterAccount, 
+              lang: newTwitterAccountLang,
+              interval: newTwitterAccountInterval,
               valid: false, 
               checking_validity: true,
           })"
@@ -19,7 +21,7 @@
             <v-text-field
               class="input-field"
               v-model="newTwitterAccount"
-              label="Twitter Account"
+              label="Twitter Account*"
               single-line
               hide-details
             ></v-text-field>
@@ -29,9 +31,19 @@
               v-model="newTwitterAccountLang"
               :items="languages"
               menu-props="auto"
-              label="Lang"
+              label="Lang*"
               hide-details
-              prepend-icon="map"
+              single-line
+              class="selector-lang"
+            ></v-select>
+          </v-flex>
+          <v-flex xs2>
+            <v-select
+              v-model="newTwitterAccountInterval"
+              :items="intervals"
+              menu-props="auto"
+              label="Interval*"
+              hide-details
               single-line
               class="selector-lang"
             ></v-select>
@@ -45,6 +57,8 @@
               class="action-button-add"
               @click="addTwitterAccount({
               account_name: newTwitterAccount, 
+              lang: newTwitterAccountLang,
+              interval: newTwitterAccountInterval,
               valid: false, 
               checking_validity: true,
           })"
@@ -124,7 +138,9 @@ export default {
       searchQuery: "",
       newTwitterAccount: "",
       newTwitterAccountLang: "",
+      newTwitterAccountInterval: "",
       languages: ["it", "en"],
+      intervals: ["every 2h", "daily", "weekly", "monthly"],
       errors: []
     };
   },
@@ -150,6 +166,8 @@ export default {
         this.checkTwitterAccount(twitterAccount);
       }
       this.newTwitterAccount = "";
+      this.newTwitterAccountLang = "";
+      this.newTwitterAccountInterval = "";
     },
     removeTwitterAccount(twitterAccount) {
       this.twitterAccounts = this.twitterAccounts.filter(function(item) {
@@ -176,6 +194,21 @@ export default {
           console.log(response.data);
           this.updateTwitterAccounts(response.data, twitterAccount);
           // if valid send action to the store
+          // if valid send info to the orchestrator
+          console.log("twitterAccount", twitterAccount);
+        })
+        .catch(e => {
+          this.errors.push(e);
+        });
+    },
+    async postNewTwitterObservable(twitterAccount) {
+      axios
+        .get(GET_TWITTER_ACCOUNT_EXISTS_ENDPOINT(twitterAccount.account_name))
+        .then(response => {
+          console.log(response.data);
+          this.updateTwitterAccounts(response.data, twitterAccount);
+          // if valid send action to the store
+          // if valid send info to the orchestrator
         })
         .catch(e => {
           this.errors.push(e);
