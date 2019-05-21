@@ -8,6 +8,9 @@ export const GET_ALL_TWEETS_ENDPOINT = function (twitterAccount) {
 export const GET_TWITTER_ACCOUNT_EXISTS_ENDPOINT = function (twitterAccount) {
   return `https://api.openreq.eu/ri-collection-explicit-feedback-twitter/${twitterAccount}/exists`;
 };
+export const GET_TWITTER_OBSERVABLES_ENDPOINT = function (twitterAccount) {
+  return `${BASE_URL}/observables`;
+};
 export const POST_TWEET_LABEL_ENDPOINT = function () {
   return `${BASE_URL}/label/tweet/`;
 };

@@ -14,25 +14,43 @@
           })"
     >
       <v-card-title>
-        <v-text-field
-          class="input-field"
-          v-model="newTwitterAccount"
-          label="Twitter Account"
-          single-line
-          hide-details
-        ></v-text-field>
-        <v-btn
-          small
-          outline
-          block
-          color="primary"
-          class="action-add"
-          @click="addTwitterAccount({
+        <v-layout row wrap align-center>
+          <v-flex xs3>
+            <v-text-field
+              class="input-field"
+              v-model="newTwitterAccount"
+              label="Twitter Account"
+              single-line
+              hide-details
+            ></v-text-field>
+          </v-flex>
+          <v-flex xs2>
+            <v-select
+              v-model="newTwitterAccountLang"
+              :items="languages"
+              menu-props="auto"
+              label="Lang"
+              hide-details
+              prepend-icon="map"
+              single-line
+              class="selector-lang"
+            ></v-select>
+          </v-flex>
+          <v-flex xs1>
+            <v-btn
+              small
+              outline
+              block
+              color="primary"
+              class="action-button-add"
+              @click="addTwitterAccount({
               account_name: newTwitterAccount, 
               valid: false, 
               checking_validity: true,
           })"
-        >add</v-btn>
+            >add</v-btn>
+          </v-flex>
+        </v-layout>
       </v-card-title>
     </v-card>
     <v-data-table
@@ -44,6 +62,7 @@
       <template slot="items" slot-scope="props">
         <tr>
           <td>{{ props.item.account_name }}</td>
+          <td>{{ props.item.lang }}</td>
           <!-- :style="{backgroundColor: (props.item.valid ? 'rgba(144,238,144,0.2)' : 'transparent' )}" -->
           <td class="text-xs-center">
             <v-progress-circular v-if="props.item.checking_validity" indeterminate></v-progress-circular>
@@ -64,7 +83,10 @@
 
 <script>
 import axios from "axios";
-import { GET_TWITTER_ACCOUNT_EXISTS_ENDPOINT } from "./../RESTconf.js";
+import {
+  GET_TWITTER_ACCOUNT_EXISTS_ENDPOINT,
+  GET_TWITTER_OBSERVABLES_ENDPOINT
+} from "./../RESTconf.js";
 export default {
   data() {
     return {
@@ -74,7 +96,14 @@ export default {
           align: "left",
           sortable: true,
           value: "twitter_account",
-          width: "90%"
+          width: "85%"
+        },
+        {
+          text: "Lang",
+          align: "center",
+          sortable: false,
+          value: "lang",
+          width: "5%"
         },
         {
           text: "Valid",
@@ -93,10 +122,23 @@ export default {
       ],
       twitterAccounts: [],
       searchQuery: "",
-      newTwitterAccount: ""
+      newTwitterAccount: "",
+      newTwitterAccountLang: "",
+      languages: ["it", "en"],
+      errors: []
     };
   },
   methods: {
+    initTwitterAccounts(twitterAccounts) {
+      twitterAccounts.forEach(observable => {
+        this.twitterAccounts.push({
+          account_name: observable.account_name,
+          lang: observable.lang,
+          valid: true,
+          checking_validity: false
+        });
+      });
+    },
     addTwitterAccount(twitterAccount) {
       // do not allow duplicates
       var twitterAccountAlreadyAdded =
@@ -138,9 +180,21 @@ export default {
         .catch(e => {
           this.errors.push(e);
         });
+    },
+    getTwitterObservables() {
+      axios
+        .get(GET_TWITTER_OBSERVABLES_ENDPOINT())
+        .then(response => {
+          this.initTwitterAccounts(response.data);
+        })
+        .catch(e => {
+          this.errors.push(e);
+        });
     }
   },
-  mounted() {}
+  mounted() {
+    this.getTwitterObservables();
+  }
 };
 </script>
 
@@ -151,14 +205,10 @@ export default {
 .header {
   margin-top: 20px;
 }
-.input-field {
-  /* min-width: 100px;
-  width: 100px;
-  max-width: 100px; */
-  max-width: 20%;
+.selector-lang {
+  margin-left: 20px;
 }
-.action-add {
-  margin-left: 10px;
-  max-width: 20px;
+.action-button-add {
+  margin-left: 20px;
 }
 </style>
