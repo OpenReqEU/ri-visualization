@@ -99,7 +99,9 @@
 import axios from "axios";
 import {
   GET_TWITTER_ACCOUNT_EXISTS_ENDPOINT,
-  GET_TWITTER_OBSERVABLES_ENDPOINT
+  GET_TWITTER_OBSERVABLES_ENDPOINT,
+  POST_TWITTER_OBSERVABLE_ENDPOINT,
+  DELETE_TWITTER_OBSERVABLE_ENDPOINT
 } from "./../RESTconf.js";
 export default {
   data() {
@@ -199,6 +201,8 @@ export default {
         return item != twitterAccount;
       });
       // send action to the store
+      // notify the orchestration ms
+      this.deleteTwitterObservable(twitterAccount.account_name);
     },
     updateTwitterAccounts(response, twitterAccount) {
       console.log("updateTwitterAccounts");
@@ -220,6 +224,7 @@ export default {
           this.updateTwitterAccounts(response.data, twitterAccount);
           // if valid send action to the store
           // if valid send info to the orchestrator
+          this.postNewTwitterObservable(twitterAccount);
           console.log("twitterAccount", twitterAccount);
         })
         .catch(e => {
@@ -228,12 +233,25 @@ export default {
     },
     async postNewTwitterObservable(twitterAccount) {
       axios
-        .get(GET_TWITTER_ACCOUNT_EXISTS_ENDPOINT(twitterAccount.account_name))
+        .post(
+          POST_TWITTER_OBSERVABLE_ENDPOINT(
+            twitterAccount.account_name,
+            twitterAccount.interval,
+            twitterAccount.lang
+          )
+        )
         .then(response => {
-          console.log(response.data);
-          this.updateTwitterAccounts(response.data, twitterAccount);
-          // if valid send action to the store
-          // if valid send info to the orchestrator
+          console.log("post observable:", response.data);
+        })
+        .catch(e => {
+          this.errors.push(e);
+        });
+    },
+    async deleteTwitterObservable(accountName) {
+      axios
+        .delete(DELETE_TWITTER_OBSERVABLE_ENDPOINT(accountName))
+        .then(response => {
+          console.log("delete observable:", response.data);
         })
         .catch(e => {
           this.errors.push(e);

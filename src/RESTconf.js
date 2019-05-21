@@ -11,6 +11,12 @@ export const GET_TWITTER_ACCOUNT_EXISTS_ENDPOINT = function (twitterAccount) {
 export const GET_TWITTER_OBSERVABLES_ENDPOINT = function (twitterAccount) {
   return `${BASE_URL}/observables`;
 };
+export const POST_TWITTER_OBSERVABLE_ENDPOINT = function (accountName, interval, lang) {
+  return `https://api.openreq.eu/ri-orchestration-twitter/hitec/orchestration/twitter/observe/tweet/account/${accountName}/interval/${interval}/lang/${lang}`;
+};
+export const DELETE_TWITTER_OBSERVABLE_ENDPOINT = function (accountName) {
+  return `https://api.openreq.eu/ri-orchestration-twitter/hitec/orchestration/twitter/observe/account/${accountName}`;
+};
 export const POST_TWEET_LABEL_ENDPOINT = function () {
   return `${BASE_URL}/label/tweet/`;
 };
