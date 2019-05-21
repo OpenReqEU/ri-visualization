@@ -148,6 +148,7 @@ export default {
           width: "5%"
         }
       ],
+      tooblarTitle: "Settings",
       twitterAccounts: [],
       searchQuery: "",
       /*
@@ -282,6 +283,7 @@ export default {
     }
   },
   mounted() {
+    this.$store.dispatch("setToolbarHeader", "Settings");
     this.getTwitterObservables();
   }
 };
