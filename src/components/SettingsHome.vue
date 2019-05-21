@@ -115,7 +115,7 @@ export default {
         {
           text: "Twitter Account",
           align: "left",
-          sortable: true,
+          sortable: false,
           value: "twitter_account",
           width: "80%"
         },
