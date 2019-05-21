@@ -76,7 +76,12 @@
       <template slot="items" slot-scope="props">
         <tr>
           <td>{{ props.item.account_name }}</td>
-          <td>{{ props.item.lang }}</td>
+          <td>
+            <v-layout justify-center>{{ props.item.lang }}</v-layout>
+          </td>
+          <td>
+            <v-layout justify-center>{{ props.item.interval }}</v-layout>
+          </td>
           <!-- :style="{backgroundColor: (props.item.valid ? 'rgba(144,238,144,0.2)' : 'transparent' )}" -->
           <td class="text-xs-center">
             <v-progress-circular v-if="props.item.checking_validity" indeterminate></v-progress-circular>
@@ -112,13 +117,20 @@ export default {
           align: "left",
           sortable: true,
           value: "twitter_account",
-          width: "85%"
+          width: "80%"
         },
         {
           text: "Lang",
           align: "center",
           sortable: false,
           value: "lang",
+          width: "5%"
+        },
+        {
+          text: "Interval",
+          align: "center",
+          sortable: false,
+          value: "interval",
           width: "5%"
         },
         {
@@ -168,6 +180,7 @@ export default {
         this.twitterAccounts.push({
           account_name: observable.account_name,
           lang: observable.lang,
+          interval: observable.interval,
           valid: true,
           checking_validity: false
         });
