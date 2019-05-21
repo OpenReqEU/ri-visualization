@@ -5,66 +5,66 @@
         <h1>Configure Twitter Accounts</h1>
       </v-card-title>
     </v-card>
-    <v-card
-      flat
-      @keyup.enter.native="addTwitterAccount({
-              account_name: newTwitterAccount, 
-              lang: newTwitterAccountLang,
-              interval: newTwitterAccountInterval,
-              valid: false, 
-              checking_validity: true,
-          })"
-    >
+    <v-card flat @keyup.enter.native="validate()">
       <v-card-title>
-        <v-layout row wrap align-center>
-          <v-flex xs3>
-            <v-text-field
-              class="input-field"
-              v-model="newTwitterAccount"
-              label="Twitter Account*"
-              single-line
-              hide-details
-            ></v-text-field>
-          </v-flex>
-          <v-flex xs2>
-            <v-select
-              v-model="newTwitterAccountLang"
-              :items="languages"
-              menu-props="auto"
-              label="Lang*"
-              hide-details
-              single-line
-              class="selector-lang"
-            ></v-select>
-          </v-flex>
-          <v-flex xs2>
-            <v-select
-              v-model="newTwitterAccountInterval"
-              :items="intervals"
-              menu-props="auto"
-              label="Interval*"
-              hide-details
-              single-line
-              class="selector-lang"
-            ></v-select>
-          </v-flex>
-          <v-flex xs1>
-            <v-btn
-              small
-              outline
-              block
-              color="primary"
-              class="action-button-add"
-              @click="addTwitterAccount({
+        <v-form v-model="valid" ref="form">
+          <v-layout row wrap align-center>
+            <v-flex xs3>
+              <v-text-field
+                class="input-field"
+                v-model="newTwitterAccount"
+                :rules="accountRules"
+                required
+                label="Twitter Account*"
+                single-line
+                hide-details
+              ></v-text-field>
+            </v-flex>
+            <v-flex xs2>
+              <v-select
+                v-model="newTwitterAccountLang"
+                :rules="langRules"
+                required
+                :items="languages"
+                menu-props="auto"
+                label="Lang*"
+                hide-details
+                single-line
+                class="selector-lang"
+              ></v-select>
+            </v-flex>
+            <v-flex xs2>
+              <v-select
+                v-model="newTwitterAccountInterval"
+                :rules="intervalRules"
+                required
+                :items="intervals"
+                menu-props="auto"
+                label="Interval*"
+                hide-details
+                single-line
+                class="selector-lang"
+              ></v-select>
+            </v-flex>
+            <v-flex xs1>
+              <v-btn
+                small
+                outline
+                block
+                color="primary"
+                class="action-button-add"
+                :disabled="!valid"
+                @click="addTwitterAccount({
               account_name: newTwitterAccount, 
               lang: newTwitterAccountLang,
               interval: newTwitterAccountInterval,
               valid: false, 
               checking_validity: true,
           })"
-            >add</v-btn>
-          </v-flex>
-        </v-layout>
+              >add</v-btn>
+            </v-flex>
+          </v-layout>
+        </v-form>
       </v-card-title>
     </v-card>
     <v-data-table
@@ -136,11 +136,27 @@ export default {
       ],
       twitterAccounts: [],
       searchQuery: "",
+      /*
+       * form fields and validation
+       */
+      valid: false,
       newTwitterAccount: "",
+      accountRules: [v => !!v || "required"],
       newTwitterAccountLang: "",
-      newTwitterAccountInterval: "",
       languages: ["it", "en"],
+      langRules: [
+        v => !!v || "required",
+        v => this.languages.includes(v) || "not supported"
+      ],
+      newTwitterAccountInterval: "",
       intervals: ["every 2h", "daily", "weekly", "monthly"],
+      intervalRules: [
+        v => !!v || "required",
+        v => this.intervals.includes(v) || "not supported"
+      ],
+      /*
+       * errors
+       */
       errors: []
     };
   },
@@ -155,6 +171,17 @@ export default {
         });
       });
     },
+    validate() {
+      if (this.$refs.form.validate()) {
+        this.valid = true;
+      }
+    },
+    reset() {
+      this.$refs.form.reset();
+    },
+    resetValidation() {
+      this.$refs.form.resetValidation();
+    },
     addTwitterAccount(twitterAccount) {
       // do not allow duplicates
       var twitterAccountAlreadyAdded =
@@ -165,9 +192,7 @@ export default {
         this.twitterAccounts.push(twitterAccount);
         this.checkTwitterAccount(twitterAccount);
       }
-      this.newTwitterAccount = "";
-      this.newTwitterAccountLang = "";
-      this.newTwitterAccountInterval = "";
+      this.reset();
     },
     removeTwitterAccount(twitterAccount) {
       this.twitterAccounts = this.twitterAccounts.filter(function(item) {
