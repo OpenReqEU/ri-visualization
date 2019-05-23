@@ -169,7 +169,7 @@ export default {
     },
     loadData(tweets, tweetCategory) {
       //Sorted by creation date
-      tweets = tweets.sort((val1, val2) => {
+      tweets.sort((val1, val2) => {
         return val1.created_at - val2.created_at;
       });
       this.data = [];
