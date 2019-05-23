@@ -28,7 +28,15 @@ Run the following commands to start the microservice:
 No Swagger documentation as this component does not have api calls.
 
 === Notes for developers 
-None.
+If you are interested in using this service it is important to note, that this dashboard uses three micro services of OpenReq, namely:
+
+- link:https://github.com/OpenReqEU/ri-orchestration-twitter[ri-orchestration-twitter]
+
+- link:https://github.com/OpenReqEU/ri-storage-twitter[ri-storage-twitter]
+
+- link:https://github.com/OpenReqEU/ri-collection-explicit-feedback-twitter[ri-collection-explicit-feedback-twitter]
+
+All of OpenReq's micro services share a single domain, which is defined in the `VUE_APP_BASE_URL`. You can either update this, or remove it from the build configuration and instead add your custom endoints in `src/RESTconf.js`.
 
 === Sources
 None.
