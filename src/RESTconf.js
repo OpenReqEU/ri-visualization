@@ -3,22 +3,22 @@ export const BASE_URL = process.env.VUE_APP_BASE_URL;
 export const BACKUP_URL = process.env.VUE_APP_BACKUP_URL;
 
 export const GET_ALL_TWEETS_ENDPOINT = function (twitterAccount) {
-  return `${BASE_URL}/account_name/${twitterAccount}/all`;
+  return `${BASE_URL}/ri-storage-twitter/account_name/${twitterAccount}/all`;
 };
 export const GET_TWITTER_ACCOUNT_EXISTS_ENDPOINT = function (twitterAccount) {
-  return `https://api.openreq.eu/ri-collection-explicit-feedback-twitter/${twitterAccount}/exists`;
+  return `${BASE_URL}/ri-collection-explicit-feedback-twitter/${twitterAccount}/exists`;
 };
 export const GET_TWITTER_OBSERVABLES_ENDPOINT = function (twitterAccount) {
-  return `${BASE_URL}/observables`;
+  return `${BASE_URL}/ri-storage-twitter/observables`;
 };
 export const POST_TWITTER_OBSERVABLE_ENDPOINT = function (accountName, interval, lang) {
-  return `https://api.openreq.eu/ri-orchestration-twitter/hitec/orchestration/twitter/observe/tweet/account/${accountName}/interval/${interval}/lang/${lang}`;
+  return `${BASE_URL}/ri-orchestration-twitter/hitec/orchestration/twitter/observe/tweet/account/${accountName}/interval/${interval}/lang/${lang}`;
 };
 export const DELETE_TWITTER_OBSERVABLE_ENDPOINT = function (accountName) {
-  return `https://api.openreq.eu/ri-orchestration-twitter/hitec/orchestration/twitter/observe/account/${accountName}`;
+  return `${BASE_URL}/ri-orchestration-twitter/hitec/orchestration/twitter/observe/account/${accountName}`;
 };
 export const POST_TWEET_LABEL_ENDPOINT = function () {
-  return `${BASE_URL}/label/tweet/`;
+  return `${BASE_URL}/ri-storage-twitter/label/tweet/`;
 };
 export const POST_TWEET_LABEL_PAYLOAD = function (data) {
   let payload = {
