@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-tainer>
     <v-card flat class="header">
       <v-card-title>
         <h1>Configure Twitter Accounts</h1>
@@ -97,7 +97,7 @@
         </tr>
       </template>
     </v-data-table>
-  </v-container>
+  </v-tainer>
 </template>
 
 <script>
@@ -221,7 +221,6 @@ export default {
       }
     },
     updateTwitterAccounts(response, twitterAccount) {
-      console.log("updateTwitterAccounts");
       for (let i = 0; i < this.twitterAccounts.length; i++) {
         if (
           this.twitterAccounts[i].account_name === twitterAccount.account_name
@@ -236,14 +235,12 @@ export default {
       axios
         .get(GET_TWITTER_ACCOUNT_EXISTS_ENDPOINT(twitterAccount.account_name))
         .then(response => {
-          console.log(response.data);
           this.updateTwitterAccounts(response.data, twitterAccount);
           // if valid send action to the store
           // if valid send info to the orchestrator
           if (response.data.account_exists) {
             this.postNewTwitterObservable(twitterAccount);
           }
-          console.log("twitterAccount", twitterAccount);
         })
         .catch(e => {
           this.errors.push(e);
@@ -258,22 +255,14 @@ export default {
             twitterAccount.lang
           )
         )
-        .then(response => {
-          console.log("post observable:", response.data);
-        })
         .catch(e => {
           this.errors.push(e);
         });
     },
     async deleteTwitterObservable(accountName) {
-      axios
-        .delete(DELETE_TWITTER_OBSERVABLE_ENDPOINT(accountName))
-        .then(response => {
-          console.log("delete observable:", accountName);
-        })
-        .catch(e => {
-          this.errors.push(e);
-        });
+      axios.delete(DELETE_TWITTER_OBSERVABLE_ENDPOINT(accountName)).catch(e => {
+        this.errors.push(e);
+      });
     },
     getTwitterObservables() {
       axios
