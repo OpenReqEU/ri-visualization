@@ -1,5 +1,5 @@
 <template>
-  <v-tainer>
+  <v-container>
     <v-card flat class="header">
       <v-card-title>
         <h1>Configure Twitter Accounts</h1>
@@ -97,7 +97,7 @@
         </tr>
       </template>
     </v-data-table>
-  </v-tainer>
+  </v-container>
 </template>
 
 <script>
