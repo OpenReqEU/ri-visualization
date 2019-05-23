@@ -1,8 +1,6 @@
 <template>
   <v-navigation-drawer app v-model="drawer" absolute temporary :style="style">
     <v-list class="pt-0" dense>
-      <v-divider></v-divider>
-
       <v-list-tile
         v-for="item in items"
         :key="item.title"
