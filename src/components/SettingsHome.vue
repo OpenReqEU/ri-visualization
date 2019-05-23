@@ -216,7 +216,9 @@ export default {
       });
       // send action to the store
       // notify the orchestration ms
-      this.deleteTwitterObservable(twitterAccount.account_name);
+      if (twitterAccount.valid) {
+        this.deleteTwitterObservable(twitterAccount.account_name);
+      }
     },
     updateTwitterAccounts(response, twitterAccount) {
       console.log("updateTwitterAccounts");
@@ -238,7 +240,9 @@ export default {
           this.updateTwitterAccounts(response.data, twitterAccount);
           // if valid send action to the store
           // if valid send info to the orchestrator
-          this.postNewTwitterObservable(twitterAccount);
+          if (response.data.account_exists) {
+            this.postNewTwitterObservable(twitterAccount);
+          }
           console.log("twitterAccount", twitterAccount);
         })
         .catch(e => {
@@ -265,7 +269,7 @@ export default {
       axios
         .delete(DELETE_TWITTER_OBSERVABLE_ENDPOINT(accountName))
         .then(response => {
-          console.log("delete observable:", response.data);
+          console.log("delete observable:", accountName);
         })
         .catch(e => {
           this.errors.push(e);
