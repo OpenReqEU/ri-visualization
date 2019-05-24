@@ -13,3 +13,6 @@ export const userConfigurationTwitterAccounts = state => {
 export const filteredTweets = state => {
   return state.filteredTweets;
 };
+export const dataUpToDate = state => {
+  return state.dataUpToDate;
+};

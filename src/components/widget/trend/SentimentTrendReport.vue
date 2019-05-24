@@ -82,10 +82,10 @@ export default {
   }),
   computed: {
     dataUpToDate() {
-      if (this.$store.state.dataUpToDate) {
-        this.loadChartData(this.$store.state.filteredTweets);
+      if (this.$store.getters.dataUpToDate) {
+        this.loadChartData(this.$store.getters.filteredTweets);
       }
-      return this.$store.state.dataUpToDate;
+      return this.$store.getters.dataUpToDate;
     }
   },
   methods: {
