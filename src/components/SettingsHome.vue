@@ -178,13 +178,16 @@ export default {
   methods: {
     initTwitterAccounts(twitterAccounts) {
       twitterAccounts.forEach(observable => {
-        this.twitterAccounts.push({
-          account_name: observable.account_name,
-          lang: observable.lang,
-          interval: observable.interval,
-          valid: true,
-          checking_validity: false
-        });
+        let userConfig = this.$store.getters.userConfigurationTwitterAccounts;
+        if (userConfig.includes(observable.account_name)) {
+          this.twitterAccounts.push({
+            account_name: observable.account_name,
+            lang: observable.lang,
+            interval: observable.interval,
+            valid: true,
+            checking_validity: false
+          });
+        }
       });
     },
     validate() {

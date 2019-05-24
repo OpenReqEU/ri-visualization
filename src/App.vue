@@ -1,14 +1,15 @@
 <template>
   <v-app>
     <top-tool-bar @toggle-drawer="$refs.drawer.drawer = !$refs.drawer.drawer"></top-tool-bar>
-    <top-navigation-drawer ref="drawer"></top-navigation-drawer>
-    <v-content v-if="initialDataLoaded">
-      <!-- <h1>Routing</h1>
-      <hr>-->
+    <top-navigation-drawer ref="drawer" v-show="$store.getters.loggedIn"></top-navigation-drawer>
+    <v-content>
       <router-view :key="$route.path"></router-view>
     </v-content>
     <v-footer class="footer">
-      &copy;{{new Date().getFullYear()}} — Christoph Stanik <strong><a href="https://openreq.eu/"> @OpenReq</a></strong>
+      &copy;{{new Date().getFullYear()}} — Christoph Stanik
+      <strong>
+        <a href="https://openreq.eu/">@OpenReq</a>
+      </strong>
     </v-footer>
   </v-app>
 </template>
@@ -17,9 +18,7 @@
 import TopToolBar from "./components/toolbar/TopToolBar";
 import TopNavigationDrawer from "./components/toolbar/TopNavigationDrawer";
 import FilterToolBar from "./components/toolbar/FilterToolBar";
-import {
-  ACTION_FETCH_INITAL_DATA
-} from "./store/types.js";
+import { ACTION_FETCH_INITAL_DATA } from "./store/types.js";
 
 export default {
   name: "App",
@@ -27,17 +26,6 @@ export default {
     TopToolBar,
     TopNavigationDrawer,
     FilterToolBar
-  },
-  data() {
-    return {};
-  },
-  created() {
-    this.$store.dispatch(ACTION_FETCH_INITAL_DATA);
-  },
-  computed: {
-    initialDataLoaded() {
-      return this.$store.state.initialDataLoaded;
-    }
   }
 };
 </script>

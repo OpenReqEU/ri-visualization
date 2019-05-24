@@ -46,3 +46,12 @@ export const POST_TWEET_LABEL_BACKUP_PAYLOAD = function (data) {
   };
   return JSON.stringify(payload);
 };
+export const POST_RETRIEVE_ACCESS_KEY_CONFIGURATION = function (accessKey) {
+  return `${BASE_URL}/ri-storage-twitter/access_key/configuration`;
+};
+export const POST_RETRIEVE_ACCESS_KEY_CONFIGURATION_PAYLOAD = function (accessKey) {
+  let payload = {
+    access_key: accessKey,
+  };
+  return JSON.stringify(payload);
+};
