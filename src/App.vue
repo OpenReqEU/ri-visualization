@@ -26,17 +26,6 @@ export default {
     TopToolBar,
     TopNavigationDrawer,
     FilterToolBar
-  },
-  data() {
-    return {};
-  },
-  created() {
-    // this.$store.dispatch(ACTION_FETCH_INITAL_DATA);
-  },
-  computed: {
-    initialDataLoaded() {
-      // return this.$store.state.initialDataLoaded;
-    }
   }
 };
 </script>
