@@ -14,6 +14,10 @@ export const mutateLoggedIn = (state, loggedIn) => {
   state.loggedIn = loggedIn;
 };
 
+export const mutateUserConfiguration = (state, userConfiguration) => {
+  state.userConfiguration = userConfiguration;
+};
+
 export const mutateToobarHeader = (state, title) => {
   state.topBarTitle = title;
 };

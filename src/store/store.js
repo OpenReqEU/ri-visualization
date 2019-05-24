@@ -17,7 +17,8 @@ export const store = new Vuex.Store({
     dataUpdating: false,
     showTutorial: false,
     loggedIn: false,
-    user: ""
+    user: "",
+    userConfiguration: {}
   },
   getters,
   mutations,

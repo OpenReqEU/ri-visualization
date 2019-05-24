@@ -47,7 +47,8 @@ import { BLUE_FILL } from "../colors.js";
 import {
   ACTION_FETCH_INITAL_DATA,
   MUTATE_LOGGED_IN,
-  MUTATE_TWEETS
+  MUTATE_TWEETS,
+  MUTATE_USER_CONFIGURATION
 } from "../store/types.js";
 export default {
   data() {
@@ -78,7 +79,9 @@ export default {
         )
         .then(response => {
           if (response.status == 200) {
+            console.log("response.data", response.data);
             this.$store.commit(MUTATE_TWEETS, response.data.twitter_accounts);
+            this.$store.commit(MUTATE_USER_CONFIGURATION, response.data);
             this.$store
               .dispatch(
                 ACTION_FETCH_INITAL_DATA,
