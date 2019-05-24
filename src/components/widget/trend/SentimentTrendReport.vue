@@ -124,6 +124,9 @@ export default {
         let sentimentLastMonth = [];
         tweets.forEach((tweet, index) => {
           let sentimentScore = tweet.sentiment_score;
+          if (sentimentScore === undefined) {
+            return;
+          }
           let createdAt = tweet.created_at;
           if (createdAt <= lastMonth) {
             sentimentLastMonth.push(sentimentScore);
