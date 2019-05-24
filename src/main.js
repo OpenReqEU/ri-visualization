@@ -1,7 +1,5 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import VueTour from 'vue-tour';
-import 'vue-tour/dist/vue-tour.css';
 import App from './App.vue';
 import './plugins/vuetify';
 import {
@@ -12,7 +10,6 @@ import {
 } from './store/store';
 
 Vue.config.productionTip = true;
-Vue.use(VueTour);
 Vue.use(VueRouter);
 const router = new VueRouter({
   base: '/',
