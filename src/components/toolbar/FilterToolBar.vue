@@ -34,12 +34,12 @@
         clearable
         @input="clearDateFrom"
       ></v-text-field>
-      <v-date-picker 
-        v-model="dateFrom" 
-        no-title 
-        @input="modelFromDateMenu = false" 
-        @change="filterTweets">
-      </v-date-picker>
+      <v-date-picker
+        v-model="dateFrom"
+        no-title
+        @input="modelFromDateMenu = false"
+        @change="filterTweets"
+      ></v-date-picker>
     </v-menu>
 
     <v-spacer></v-spacer>
@@ -66,12 +66,12 @@
         clearable
         @input="clearDateTo"
       ></v-text-field>
-      <v-date-picker 
-        v-model="dateTo" 
-        no-title 
-        @input="modelToDateMenu = false" 
-        @change="filterTweets">
-      </v-date-picker>
+      <v-date-picker
+        v-model="dateTo"
+        no-title
+        @input="modelToDateMenu = false"
+        @change="filterTweets"
+      ></v-date-picker>
     </v-menu>
     <v-spacer></v-spacer>
   </v-toolbar>
@@ -105,20 +105,20 @@ export default {
   computed: {
     modelFromDateText: {
       get: function() {
-        return this.dateFrom ? this.formatDate(this.dateFrom) : '';
+        return this.dateFrom ? this.formatDate(this.dateFrom) : "";
       },
       set: function(val) {
-        return this.dateFrom = val;
+        return (this.dateFrom = val);
       }
     },
     modelToDateText: {
       get: function() {
-        return this.dateTo ? this.formatDate(this.dateTo) : '';
+        return this.dateTo ? this.formatDate(this.dateTo) : "";
       },
       set: function(val) {
-        return this.dateTo = val;
+        return (this.dateTo = val);
       }
-    },
+    }
   },
   methods: {
     showFullToolbar() {
@@ -138,7 +138,7 @@ export default {
       this.filterTweets();
     },
     formatDate(date) {
-      return moment(date, 'YYYY-MM-DD').format('DD.MM.YYYY');
+      return moment(date, "YYYY-MM-DD").format("DD.MM.YYYY");
     },
     filterTweets() {
       let payload = {
@@ -150,7 +150,7 @@ export default {
     },
     loadAccountNames() {
       this.twitterAccounts = this.twitterAccounts.concat(
-        this.$store.state.twitterAcconts
+        this.$store.getters.userConfigurationTwitterAccounts
       );
     }
   },
