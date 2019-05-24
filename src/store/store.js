@@ -9,13 +9,15 @@ Vue.use(Vuex);
 export const store = new Vuex.Store({
   state: {
     topBarTitle: 'Dashboard',
-    twitterAcconts: ['Tre_It', 'WindItalia'],
+    twitterAccounts: [],
     tweets: {},
     initialDataLoaded: false,
     filteredTweets: [],
     dataUpToDate: false,
     dataUpdating: false,
-    showTutorial: false
+    showTutorial: false,
+    loggedIn: false,
+    user: ""
   },
   getters,
   mutations,

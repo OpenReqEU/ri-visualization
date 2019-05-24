@@ -1,25 +1,40 @@
 import axios from 'axios';
 import moment from "moment";
 import "moment/locale/de";
-import { GET_ALL_TWEETS_ENDPOINT } from './../RESTconf';
-import { ACTION_RESET_FILTERED_TWEETS, MUTATE_FILTERED_TWEETS, MUTATE_INITIAL_DATA, MUTATE_TOOLBAR_HEADER } from './../store/types';
+import {
+  GET_ALL_TWEETS_ENDPOINT
+} from './../RESTconf';
+import {
+  ACTION_RESET_FILTERED_TWEETS,
+  MUTATE_FILTERED_TWEETS,
+  MUTATE_TOOLBAR_HEADER
+} from './../store/types';
 
 export const actionFetchInitialData = ({
   state,
   commit
-}) => {
-  state.twitterAcconts.forEach(twitterAccount => {
-    axios
-      .get(GET_ALL_TWEETS_ENDPOINT(twitterAccount))
-      .then(response => {
-        let payload = {};
-        payload[twitterAccount] = response.data;
-
-        commit(MUTATE_INITIAL_DATA, payload);
-      })
-      .catch(e => {
-        this.errors.push(e);
-      });
+}, twitterAccounts) => {
+  return new Promise((resolve, reject) => {
+    twitterAccounts.forEach(twitterAccount => {
+      axios
+        .get(GET_ALL_TWEETS_ENDPOINT(twitterAccount))
+        .then(response => {
+          let payload = {};
+          payload[twitterAccount] = response.data;
+          state.tweets = Object.assign({}, state.tweets, payload);
+          let hasAllKeys = twitterAccounts.every(function (item) {
+            return Object.prototype.hasOwnProperty.call(state.tweets, item);
+          });
+          if (hasAllKeys) {
+            state.initialDataLoaded = hasAllKeys;
+            resolve();
+          }
+        })
+        .catch(e => {
+          this.errors.push(e);
+          reject(e);
+        });
+    });
   });
 };
 export const actionFilterTweets = ({
