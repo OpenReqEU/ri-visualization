@@ -56,7 +56,7 @@ export default {
   data() {
     return {
       color: BLUE_FILL,
-      accessKey: "windtre_trial",
+      accessKey: "",
       accessKeyRules: [v => !!v || "required"],
       valid: false,
       waitingForResponse: false,
