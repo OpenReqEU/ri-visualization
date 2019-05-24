@@ -1,6 +1,12 @@
 <template>
   <v-container fluid fill-height>
-    <v-layout align-center justify-center>
+    <v-layout
+      align-center
+      justify-center
+      @keyup.enter.prevent
+      @keydown.enter.prevent
+      @keypress.enter.prevent
+    >
       <v-flex xs12 sm8 md4>
         <v-card class="elevation-12">
           <v-card-text>
@@ -21,6 +27,7 @@
               :color="color"
               class="white--text"
               :disabled="!valid"
+              @submit.prevent="onSubmit"
               @click="sendCheckAccessKey()"
             >
               <v-spacer></v-spacer>
