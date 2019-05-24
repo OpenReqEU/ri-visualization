@@ -24,9 +24,11 @@
               @click="sendCheckAccessKey()"
             >
               <v-spacer></v-spacer>
-              <v-icon left dark>send</v-icon>Send
+              <v-icon v-if="!waitingForResponse" left dark>send</v-icon>
+              <v-progress-circular v-else color="white" indeterminate left></v-progress-circular>Send
             </v-btn>
           </v-card-actions>
+          <!-- <v-progress-linear v-show="waitingForResponse" :indeterminate="true"></v-progress-linear> -->
         </v-card>
         <v-snackbar v-model="errorSnackbar" :timeout="errorSnackbarTimeout" :top="true">
           Access Key does not exist
@@ -57,6 +59,7 @@ export default {
       accessKey: "windtre_trial",
       accessKeyRules: [v => !!v || "required"],
       valid: false,
+      waitingForResponse: false,
       /*
        * errors
        */
@@ -72,6 +75,7 @@ export default {
       }
     },
     sendCheckAccessKey() {
+      this.waitingForResponse = true;
       axios
         .post(
           POST_RETRIEVE_ACCESS_KEY_CONFIGURATION(),
@@ -79,7 +83,6 @@ export default {
         )
         .then(response => {
           if (response.status == 200) {
-            console.log("response.data", response.data);
             this.$store.commit(MUTATE_TWEETS, response.data.twitter_accounts);
             this.$store.commit(MUTATE_USER_CONFIGURATION, response.data);
             this.$store
@@ -89,21 +92,25 @@ export default {
               )
               .then(
                 response => {
+                  this.waitingForResponse = false;
                   this.$store.commit(MUTATE_LOGGED_IN, true);
                   this.$router.push({ path: "/dashboard" });
                 },
                 error => {
+                  this.waitingForResponse = false;
                   console.error(
                     "Got nothing from server. Prompt user to check internet connection and try again"
                   );
                 }
               );
           } else {
+            this.waitingForResponse = false;
             this.errorSnackbar = true;
             this.accessKey = "";
           }
         })
         .catch(e => {
+          this.waitingForResponse = false;
           this.errorSnackbar = true;
           this.accessKey = "";
           this.errors.push(e);
