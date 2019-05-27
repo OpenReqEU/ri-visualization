@@ -15,23 +15,24 @@ export const actionFetchInitialData = ({
   commit
 }, twitterAccounts) => {
   return new Promise((resolve, reject) => {
+    let nRequests = twitterAccounts.length;
+    let counter = 0;
     twitterAccounts.forEach(twitterAccount => {
       axios
         .get(GET_ALL_TWEETS_ENDPOINT(twitterAccount))
         .then(response => {
-          let payload = {};
-          payload[twitterAccount] = response.data;
-          state.tweets = Object.assign({}, state.tweets, payload);
-          let hasAllKeys = twitterAccounts.every(function (item) {
-            return Object.prototype.hasOwnProperty.call(state.tweets, item);
-          });
-          if (hasAllKeys) {
-            state.initialDataLoaded = hasAllKeys;
+          if (response.data !== null) {
+            let payload = {};
+            payload[twitterAccount] = response.data;
+            state.tweets = Object.assign({}, state.tweets, payload);
+          }
+          counter++;
+          if (nRequests === counter) {
+            state.initialDataLoaded = true;
             resolve();
           }
         })
         .catch(e => {
-          this.errors.push(e);
           reject(e);
         });
     });

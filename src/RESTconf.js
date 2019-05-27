@@ -29,6 +29,16 @@ export const POST_TWEET_LABEL_PAYLOAD = function (data) {
   };
   return JSON.stringify(payload);
 };
+export const POST_UPDATE_ACCESS_KEY_CONFIGURATION_ENDPOINT = function () {
+  return `${BASE_URL}/ri-storage-twitter/access_key/update`;
+};
+export const POST_UPDATE_ACCESS_KEY_CONFIGURATION_PAYLOAD = function (accessKey, accessKeyConfiguration) {
+  let payload = {
+    access_key: accessKey,
+    configuration: accessKeyConfiguration
+  };
+  return JSON.stringify(payload);
+};
 export const POST_TWEET_LABEL_BACKUP_ENDPOINT = function () {
   if (BACKUP_URL) {
     return `${BACKUP_URL}/windtretrial/labeledtweet`;

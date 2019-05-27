@@ -57,7 +57,9 @@ import {
   ACTION_FETCH_INITAL_DATA,
   MUTATE_LOGGED_IN,
   MUTATE_TWEETS,
-  MUTATE_USER_CONFIGURATION
+  MUTATE_ACCESS_KEY,
+  MUTATE_ACCESS_KEY_CONFIGURATION,
+  MUTATE_TWITTER_ACCOUNTS
 } from "../store/types.js";
 export default {
   data() {
@@ -90,8 +92,11 @@ export default {
         )
         .then(response => {
           if (response.status == 200) {
-            this.$store.commit(MUTATE_TWEETS, response.data.twitter_accounts);
-            this.$store.commit(MUTATE_USER_CONFIGURATION, response.data);
+            this.$store.commit(
+              MUTATE_TWITTER_ACCOUNTS,
+              response.data.twitter_accounts
+            );
+            this.$store.commit(MUTATE_ACCESS_KEY_CONFIGURATION, response.data);
             this.$store
               .dispatch(
                 ACTION_FETCH_INITAL_DATA,
@@ -100,6 +105,7 @@ export default {
               .then(
                 response => {
                   this.waitingForResponse = false;
+                  this.$store.commit(MUTATE_ACCESS_KEY, this.accessKey);
                   this.$store.commit(MUTATE_LOGGED_IN, true);
                   this.$router.push({ path: "/dashboard" });
                 },

@@ -149,9 +149,13 @@ export default {
       this.$store.dispatch(ACTION_FILTER_TWEETS, payload);
     },
     loadAccountNames() {
-      this.twitterAccounts = this.twitterAccounts.concat(
-        this.$store.getters.userConfigurationTwitterAccounts
-      );
+      let storeTwitterAccounts = this.$store.getters
+        .accessKeyConfigurationTwitterAccounts;
+      storeTwitterAccounts.forEach(twitterAccount => {
+        if (twitterAccount in this.$store.getters.tweets) {
+          this.twitterAccounts.push(twitterAccount);
+        }
+      });
     }
   },
   mounted() {

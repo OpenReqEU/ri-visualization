@@ -7,8 +7,14 @@ export const tweets = state => {
 export const loggedIn = state => {
   return state.loggedIn;
 };
-export const userConfigurationTwitterAccounts = state => {
-  return state.userConfiguration.twitter_accounts;
+export const accessKeyConfigurationTwitterAccounts = state => {
+  return state.accessKeyConfiguration.twitter_accounts;
+};
+export const accessKeyConfiguration = state => {
+  return state.accessKeyConfiguration;
+};
+export const accessKey = state => {
+  return state.accessKey;
 };
 export const filteredTweets = state => {
   return state.filteredTweets;

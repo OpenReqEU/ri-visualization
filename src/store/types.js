@@ -16,8 +16,10 @@ export const ACTION_SET_TOOLBAR_HEADER = 'setToolbarHeader';
 
 // export const MUTATE_ = '';
 export const MUTATE_LOGGED_IN = 'mutateLoggedIn';
-export const MUTATE_USER_CONFIGURATION = 'mutateUserConfiguration';
+export const MUTATE_ACCESS_KEY = 'mutateAccessKey';
+export const MUTATE_ACCESS_KEY_CONFIGURATION = 'mutateAccessKeyConfiguration';
 export const MUTATE_TWEETS = 'mutateTweets';
+export const MUTATE_TWITTER_ACCOUNTS = 'mutateTwitterAccounts';
 export const MUTATE_RESET_UNLABELED_TWEETS = 'mutateResetUnlabeledTweets';
 export const MUTATE_UNLABELED_TWEETS = 'mutateUnlabeledTweets';
 export const MUTATE_INITIAL_DATA = 'mutateInitalData';

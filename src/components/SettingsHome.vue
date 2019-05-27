@@ -106,8 +106,11 @@ import {
   GET_TWITTER_ACCOUNT_EXISTS_ENDPOINT,
   GET_TWITTER_OBSERVABLES_ENDPOINT,
   POST_TWITTER_OBSERVABLE_ENDPOINT,
-  DELETE_TWITTER_OBSERVABLE_ENDPOINT
+  DELETE_TWITTER_OBSERVABLE_ENDPOINT,
+  POST_UPDATE_ACCESS_KEY_CONFIGURATION_ENDPOINT,
+  POST_UPDATE_ACCESS_KEY_CONFIGURATION_PAYLOAD
 } from "./../RESTconf.js";
+import { MUTATE_ACCESS_KEY_CONFIGURATION } from "../store/types.js";
 export default {
   data() {
     return {
@@ -164,7 +167,7 @@ export default {
         v => this.languages.includes(v) || "not supported"
       ],
       newTwitterAccountInterval: "",
-      intervals: ["every 2h", "daily", "weekly", "monthly"],
+      intervals: ["2h", "daily", "weekly", "monthly"],
       intervalRules: [
         v => !!v || "required",
         v => this.intervals.includes(v) || "not supported"
@@ -178,7 +181,8 @@ export default {
   methods: {
     initTwitterAccounts(twitterAccounts) {
       twitterAccounts.forEach(observable => {
-        let userConfig = this.$store.getters.userConfigurationTwitterAccounts;
+        let userConfig = this.$store.getters
+          .accessKeyConfigurationTwitterAccounts;
         if (userConfig.includes(observable.account_name)) {
           this.twitterAccounts.push({
             account_name: observable.account_name,
@@ -221,6 +225,7 @@ export default {
       // notify the orchestration ms
       if (twitterAccount.valid) {
         this.deleteTwitterObservable(twitterAccount.account_name);
+        this.postUpdateAccessKeyConfiguration();
       }
     },
     updateTwitterAccounts(response, twitterAccount) {
@@ -243,6 +248,7 @@ export default {
           // if valid send info to the orchestrator
           if (response.data.account_exists) {
             this.postNewTwitterObservable(twitterAccount);
+            this.postUpdateAccessKeyConfiguration();
           }
         })
         .catch(e => {
@@ -256,6 +262,31 @@ export default {
             twitterAccount.account_name,
             twitterAccount.interval,
             twitterAccount.lang
+          )
+        )
+        .catch(e => {
+          this.errors.push(e);
+        });
+    },
+    async postUpdateAccessKeyConfiguration() {
+      let accessKey = this.$store.getters.accessKey;
+      let configuredTwitterAccounts = [];
+      this.twitterAccounts.forEach(twitterAccount => {
+        configuredTwitterAccounts.push(twitterAccount.account_name);
+      });
+      let accessKeyConfiguration = this.$store.getters.accessKeyConfiguration;
+      accessKeyConfiguration.twitter_accounts = configuredTwitterAccounts;
+      this.$store.commit(
+        MUTATE_ACCESS_KEY_CONFIGURATION,
+        accessKeyConfiguration
+      );
+
+      axios
+        .post(
+          POST_UPDATE_ACCESS_KEY_CONFIGURATION_ENDPOINT(),
+          POST_UPDATE_ACCESS_KEY_CONFIGURATION_PAYLOAD(
+            accessKey,
+            accessKeyConfiguration
           )
         )
         .catch(e => {

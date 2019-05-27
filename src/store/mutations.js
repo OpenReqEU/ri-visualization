@@ -10,12 +10,20 @@ export const mutateTweets = (state, tweets) => {
   state.tweets = tweets;
 };
 
+export const mutateTwitterAccounts = (state, twitterAccounts) => {
+  state.twitterAccounts = twitterAccounts;
+};
+
 export const mutateLoggedIn = (state, loggedIn) => {
   state.loggedIn = loggedIn;
 };
 
-export const mutateUserConfiguration = (state, userConfiguration) => {
-  state.userConfiguration = userConfiguration;
+export const mutateAccessKeyConfiguration = (state, accessKeyConfiguration) => {
+  state.accessKeyConfiguration = accessKeyConfiguration;
+};
+
+export const mutateAccessKey = (state, accessKey) => {
+  state.accessKey = accessKey;
 };
 
 export const mutateToobarHeader = (state, title) => {
