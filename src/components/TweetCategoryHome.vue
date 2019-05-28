@@ -3,6 +3,48 @@
     <v-layout row>
       <filter-tool-bar/>
     </v-layout>
+    <v-layout row>
+      <v-flex xs12>
+        <v-card flat class="header">
+          <v-card-title primary-title>
+            <h1>Most Discussed Topics</h1>
+          </v-card-title>
+          <v-container grid-list-md>
+            <v-layout row wrap>
+              <v-flex v-for="(topic, index) in topics" :key="index" sm3>
+                <v-card
+                  color="white"
+                  class="pointer"
+                  hover
+                  ripple
+                  v-bind:class="{ 'toggle-effect': topic.checked }"
+                  light
+                  @click="loadTopicData(index)"
+                >
+                  <v-card-text>
+                    <v-layout row wrap>
+                      <v-flex xs12 sm6 pt-2>
+                        <p class="anti-margin">{{topic.label}}</p>
+                      </v-flex>
+                      <v-flex xs12 sm6 pl-2>
+                        <span>{{topic.tweetsNumber}}</span>
+                        <v-icon class="spacing">person</v-icon>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <v-icon
+                          v-if="topic.sentimentScore >= -1 && topic.sentimentScore <= 1"
+                          class="spacing"
+                        >thumbs_up_down</v-icon>
+                        <v-icon v-if="topic.sentimentScore > 1" class="spacing">thumb_up</v-icon>
+                        <v-icon v-if="topic.sentimentScore < -1" class="spacing">thumb_down</v-icon>
+                      </v-flex>
+                    </v-layout>
+                  </v-card-text>
+                </v-card>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card>
+      </v-flex>
+    </v-layout>
     <v-card flat class="header">
       <v-card-title>
         <h1>{{ cardTableTitle }}</h1>
@@ -151,7 +193,9 @@ export default {
       tooblarTitle: "",
       cardTableTitle: "",
       data: [],
-      searchQuery: ""
+      searchQuery: "",
+      topics: [],
+      topic: ""
     };
   },
   methods: {
@@ -167,7 +211,7 @@ export default {
         this.tweetCategory = "inquiry";
       }
     },
-    loadData(tweets, tweetCategory) {
+    loadData(tweets, tweetCategory, topic) {
       //Sorted by creation date
       tweets.sort((val1, val2) => {
         return val1.created_at - val2.created_at;
@@ -179,6 +223,18 @@ export default {
           this.data.push(tweet);
         }
       });
+
+      //Update Number for filtered tweets
+      this.tweetsPerTopic(this.data)
+
+      //Update Sentiment Score for filtered tweets
+      this.sentimentScorePerTopic(this.data);
+
+      if (topic != "") {
+        this.data = this.data.filter(
+          tweet => tweet.topics.first_class.label === topic
+        );
+      }
 
       // Update UI
       this.data.splice(0, 0);
@@ -250,17 +306,72 @@ export default {
       });
 
       return items;
+    },
+    loadTopicData(index) {//handles topic selection 
+      this.topics.forEach((topic, i) => {
+        if (i == index) {
+          topic.checked = !topic.checked;
+          if (topic.checked) {
+            this.topic = topic.label;// Only update the topic when it is checked
+          } else {
+            this.topic = "";
+          }
+        } else {
+          topic.checked = false;
+        }
+      });
+    },
+    tweetsPerTopic(tweets) {//Calculate number of tweets per topic
+      this.topics.forEach(topic => {
+        topic.tweetsNumber = tweets.filter(
+          tweet => tweet.topics.first_class.label === topic.label
+        ).length;
+      });
+    },
+    sentimentScorePerTopic(tweets) {// Calculate sentiment score per topic
+      let filteredTweets = [];
+      this.topics.forEach(topic => {
+        filteredTweets = tweets.filter(
+          tweet => tweet.topics.first_class.label === topic.label
+        );
+        var sentimentTotal = 0;
+        filteredTweets.forEach(filteredTweet => {
+          sentimentTotal += filteredTweet.sentiment_score;
+        });
+        topic.sentimentScore = sentimentTotal / tweets.length;
+      });
+    },
+    setupTopics() {// Fetch topics and push them as an object
+      this.$store.state.accessKeyConfiguration.topics.forEach(topic => {
+        this.topics.push({
+          label: topic,
+          checked: false,
+          tweetsNumber: 0,
+          sentimentScore: 0
+        });
+      });
     }
   },
   mounted() {
     this.setup();
-    this.loadData(this.$store.state.filteredTweets, this.tweetCategory);
+    this.loadData(
+      this.$store.state.filteredTweets,
+      this.tweetCategory,
+      this.topic
+    );
     this.$store.dispatch(ACTION_SET_TOOLBAR_HEADER, this.tooblarTitle);
+  },
+  created() {
+    this.setupTopics();
   },
   computed: {
     dataUpToDate() {
       if (this.$store.state.dataUpToDate) {
-        this.loadData(this.$store.state.filteredTweets, this.tweetCategory);
+        this.loadData(
+          this.$store.state.filteredTweets,
+          this.tweetCategory,
+          this.topic
+        );
       }
       return this.$store.state.dataUpToDate;
     }
@@ -312,5 +423,17 @@ h1 {
 }
 .backgroundcolor-grey {
   background-color: rgba(238, 238, 238, 0.04);
+}
+.spacing {
+  padding-top: 0px;
+}
+.pointer {
+  cursor: pointer;
+}
+.toggle-effect {
+  background-color: #bdbdbd !important;
+}
+.anti-margin {
+  margin-bottom: 0px !important;
 }
 </style>
