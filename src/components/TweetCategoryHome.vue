@@ -223,13 +223,18 @@ export default {
           this.data.push(tweet);
         }
       });
+
+      //Update Number for filtered tweets
+      this.tweetsPerTopic(this.data)
+
+      //Update Sentiment Score for filtered tweets
+      this.sentimentScorePerTopic(this.data);
+
       if (topic != "") {
         this.data = this.data.filter(
           tweet => tweet.topics.first_class.label === topic
         );
       }
-      this.tweetsPerTopic(this.data)
-      this.sentimentScorePerTopic(this.data);
 
       // Update UI
       this.data.splice(0, 0);
@@ -302,12 +307,12 @@ export default {
 
       return items;
     },
-    loadTopicData(index) {
+    loadTopicData(index) {//handles topic selection 
       this.topics.forEach((topic, i) => {
         if (i == index) {
           topic.checked = !topic.checked;
           if (topic.checked) {
-            this.topic = topic.label;
+            this.topic = topic.label;// Only update the topic when it is checked
           } else {
             this.topic = "";
           }
@@ -315,16 +320,15 @@ export default {
           topic.checked = false;
         }
       });
-      this.data.splice(0, 0);
     },
-    tweetsPerTopic(tweets) {
+    tweetsPerTopic(tweets) {//Calculate number of tweets per topic
       this.topics.forEach(topic => {
         topic.tweetsNumber = tweets.filter(
           tweet => tweet.topics.first_class.label === topic.label
         ).length;
       });
     },
-    sentimentScorePerTopic(tweets) {
+    sentimentScorePerTopic(tweets) {// Calculate sentiment score per topic
       let filteredTweets = [];
       this.topics.forEach(topic => {
         filteredTweets = tweets.filter(
@@ -337,7 +341,7 @@ export default {
         topic.sentimentScore = sentimentTotal / tweets.length;
       });
     },
-    setupTopics() {
+    setupTopics() {// Fetch topics and push them as an object
       this.$store.state.accessKeyConfiguration.topics.forEach(topic => {
         this.topics.push({
           label: topic,
