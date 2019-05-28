@@ -17,14 +17,14 @@
                   class="pointer"
                   hover
                   ripple
-                  v-bind:class="{ toggleEffect: topic.checked }"
+                  v-bind:class="{ 'toggle-effect': topic.checked }"
                   light
                   @click="loadTopicData(index)"
                 >
                   <v-card-text>
                     <v-layout row wrap>
                       <v-flex xs12 sm6 pt-2>
-                        <p class="antiMargin">{{topic.label}}</p>
+                        <p class="anti-margin">{{topic.label}}</p>
                       </v-flex>
                       <v-flex xs12 sm6 pl-2>
                         <span>{{topic.tweetsNumber}}</span>
@@ -228,6 +228,8 @@ export default {
           tweet => tweet.topics.first_class.label === topic
         );
       }
+      this.tweetsPerTopic(this.data)
+      this.sentimentScorePerTopic(this.data);
 
       // Update UI
       this.data.splice(0, 0);
@@ -315,22 +317,22 @@ export default {
       });
       this.data.splice(0, 0);
     },
-    tweetsPerTopic() {
+    tweetsPerTopic(tweets) {
       this.topics.forEach(topic => {
-        topic.tweetsNumber = this.data.filter(
+        topic.tweetsNumber = tweets.filter(
           tweet => tweet.topics.first_class.label === topic.label
         ).length;
       });
     },
-    sentimentScorePerTopic() {
-      let tweets = [];
+    sentimentScorePerTopic(tweets) {
+      let filteredTweets = [];
       this.topics.forEach(topic => {
-        tweets = this.data.filter(
+        filteredTweets = tweets.filter(
           tweet => tweet.topics.first_class.label === topic.label
         );
         var sentimentTotal = 0;
-        tweets.forEach(tweet => {
-          sentimentTotal += tweet.sentiment_score;
+        filteredTweets.forEach(filteredTweet => {
+          sentimentTotal += filteredTweet.sentiment_score;
         });
         topic.sentimentScore = sentimentTotal / tweets.length;
       });
@@ -354,8 +356,6 @@ export default {
       this.topic
     );
     this.$store.dispatch(ACTION_SET_TOOLBAR_HEADER, this.tooblarTitle);
-    this.tweetsPerTopic();
-    this.sentimentScorePerTopic();
   },
   created() {
     this.setupTopics();
@@ -426,10 +426,10 @@ h1 {
 .pointer {
   cursor: pointer;
 }
-.toggleEffect {
+.toggle-effect {
   background-color: #bdbdbd !important;
 }
-.antiMargin {
+.anti-margin {
   margin-bottom: 0px !important;
 }
 </style>
