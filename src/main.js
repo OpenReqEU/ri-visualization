@@ -18,8 +18,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  // redirect to login page if not logged in and trying to access a restricted page
-  if (to.path !== '/login' && !store.getters.loggedIn) {
+  if (to.path !== '/login' && !store.getters.accessKey) {
     return next('/login');
   }
 

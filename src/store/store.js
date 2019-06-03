@@ -18,7 +18,7 @@ export const store = new Vuex.Store({
     showTutorial: false,
     loggedIn: false,
     accessKey: "",
-    accessKeyConfiguration: {}
+    accessKeyConfiguration: null
   },
   getters,
   mutations,

@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <top-tool-bar @toggle-drawer="$refs.drawer.drawer = !$refs.drawer.drawer"></top-tool-bar>
-    <top-navigation-drawer ref="drawer" v-show="$store.getters.loggedIn"></top-navigation-drawer>
+    <top-navigation-drawer ref="drawer" v-show="$store.getters.accessKey"></top-navigation-drawer>
     <v-content>
       <router-view :key="$route.path"></router-view>
     </v-content>
@@ -18,7 +18,10 @@
 import TopToolBar from "./components/toolbar/TopToolBar";
 import TopNavigationDrawer from "./components/toolbar/TopNavigationDrawer";
 import FilterToolBar from "./components/toolbar/FilterToolBar";
-import { ACTION_FETCH_INITAL_DATA } from "./store/types.js";
+import {
+  ACTION_FETCH_INITAL_DATA,
+  LOCAL_STORAGE_ACCESS_KEY
+} from "./store/types.js";
 
 export default {
   name: "App",

@@ -22,15 +22,13 @@
               :color="color"
               class="white--text"
               :disabled="!valid"
-              @keydown.enter.prevent="sendCheckAccessKey"
+              @click="sendCheckAccessKey"
             >
               <v-spacer></v-spacer>
               <v-icon v-if="!waitingForResponse" left dark>send</v-icon>
               <v-progress-circular v-else color="white" indeterminate left></v-progress-circular>Send
             </v-btn>
           </v-card-actions>
-
-          <!-- <v-progress-linear v-show="waitingForResponse" :indeterminate="true"></v-progress-linear> -->
         </v-card>
         <v-snackbar v-model="errorSnackbar" :timeout="errorSnackbarTimeout" :top="true">
           Access Key does not exist
@@ -54,7 +52,9 @@ import {
   MUTATE_TWEETS,
   MUTATE_ACCESS_KEY,
   MUTATE_ACCESS_KEY_CONFIGURATION,
-  MUTATE_TWITTER_ACCOUNTS
+  MUTATE_TWITTER_ACCOUNTS,
+  LOCAL_STORAGE_ACCESS_KEY,
+  LOCAL_STORAGE_ACCESS_KEY_CONFIGURATION
 } from "../store/types.js";
 export default {
   data() {
@@ -92,6 +92,7 @@ export default {
               response.data.twitter_accounts
             );
             this.$store.commit(MUTATE_ACCESS_KEY_CONFIGURATION, response.data);
+            localStorage.setItem(LOCAL_STORAGE_ACCESS_KEY, this.accessKey);
             this.$store
               .dispatch(
                 ACTION_FETCH_INITAL_DATA,
@@ -101,7 +102,6 @@ export default {
                 response => {
                   this.waitingForResponse = false;
                   this.$store.commit(MUTATE_ACCESS_KEY, this.accessKey);
-                  this.$store.commit(MUTATE_LOGGED_IN, true);
                   this.$router.push({ path: "/dashboard" });
                 },
                 error => {
@@ -130,6 +130,10 @@ export default {
       "setToolbarHeader",
       "Check Access and Load Configuration"
     );
+    if (localStorage.getItem(LOCAL_STORAGE_ACCESS_KEY)) {
+      this.accessKey = localStorage.getItem(LOCAL_STORAGE_ACCESS_KEY);
+      this.sendCheckAccessKey();
+    }
   }
 };
 </script>

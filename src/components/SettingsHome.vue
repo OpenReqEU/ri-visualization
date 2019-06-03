@@ -97,6 +97,17 @@
         </tr>
       </template>
     </v-data-table>
+    <br>
+    <v-card flat class="header">
+      <v-card-title>
+        <h1>Change Access Key</h1>
+      </v-card-title>
+      <v-card-text>
+        current access key:
+        <b>{{ $store.getters.accessKey }}</b>
+        <v-btn small color="primary" @click="changeAccessKey">change</v-btn>
+      </v-card-text>
+    </v-card>
   </v-container>
 </template>
 
@@ -110,7 +121,11 @@ import {
   POST_UPDATE_ACCESS_KEY_CONFIGURATION_ENDPOINT,
   POST_UPDATE_ACCESS_KEY_CONFIGURATION_PAYLOAD
 } from "./../RESTconf.js";
-import { MUTATE_ACCESS_KEY_CONFIGURATION } from "../store/types.js";
+import {
+  MUTATE_ACCESS_KEY_CONFIGURATION,
+  MUTATE_ACCESS_KEY,
+  LOCAL_STORAGE_ACCESS_KEY
+} from "../store/types.js";
 export default {
   data() {
     return {
@@ -307,6 +322,11 @@ export default {
         .catch(e => {
           this.errors.push(e);
         });
+    },
+    changeAccessKey() {
+      localStorage.setItem(LOCAL_STORAGE_ACCESS_KEY, null);
+      this.$store.commit(MUTATE_ACCESS_KEY, null);
+      this.$router.push({ path: "/login" });
     }
   },
   mounted() {
