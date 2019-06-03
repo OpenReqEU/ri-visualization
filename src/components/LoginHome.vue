@@ -1,17 +1,12 @@
 <template>
   <v-container fluid fill-height>
-    <v-layout
-      align-center
-      justify-center
-      @keyup.enter.prevent
-      @keydown.enter.prevent
-      @keypress.enter.prevent
-    >
+    <v-layout align-center justify-center>
       <v-flex xs12 sm8 md4>
         <v-card class="elevation-12">
           <v-card-text>
-            <v-form v-model="valid" ref="form">
+            <v-form v-model="valid" ref="form" @submit.prevent="sendCheckAccessKey">
               <v-text-field
+                autofocus
                 v-model="accessKey"
                 prepend-icon="lock"
                 name="password"
@@ -27,14 +22,14 @@
               :color="color"
               class="white--text"
               :disabled="!valid"
-              @submit.prevent="onSubmit"
-              @click="sendCheckAccessKey()"
+              @keydown.enter.prevent="sendCheckAccessKey"
             >
               <v-spacer></v-spacer>
               <v-icon v-if="!waitingForResponse" left dark>send</v-icon>
               <v-progress-circular v-else color="white" indeterminate left></v-progress-circular>Send
             </v-btn>
           </v-card-actions>
+
           <!-- <v-progress-linear v-show="waitingForResponse" :indeterminate="true"></v-progress-linear> -->
         </v-card>
         <v-snackbar v-model="errorSnackbar" :timeout="errorSnackbarTimeout" :top="true">
