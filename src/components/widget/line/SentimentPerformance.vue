@@ -1,5 +1,13 @@
 <template>
   <v-layout>
+    <v-date-picker
+      v-if="customFromDateActive"
+      v-model="datePickerFrom"
+      no-title
+      @change="datePicker()"
+    ></v-date-picker>
+    <v-date-picker v-if="customToDateActive" v-model="datePickerTo" no-title @change="datePicker()"></v-date-picker>
+    <v-spacer/>
     <v-card class="echarts">
       <ECharts class="chart" :options="line" :loading="!dataUpToDate" auto-resize/>
       <v-layout row align-center>
@@ -11,13 +19,6 @@
         </v-flex>
       </v-layout>
     </v-card>
-    <v-date-picker
-      v-if="customFromDateActive"
-      v-model="datePickerFrom"
-      no-title
-      @change="datePicker()"
-    ></v-date-picker>
-    <v-date-picker v-if="customToDateActive" v-model="datePickerTo" no-title @change="datePicker()"></v-date-picker>
   </v-layout>
 </template>
 <script>

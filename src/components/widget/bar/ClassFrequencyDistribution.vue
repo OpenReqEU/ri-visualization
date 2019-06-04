@@ -1,9 +1,5 @@
 <template>
   <v-layout>
-    <v-card class="echarts">
-      <ECharts class="chart" :options="bar" :loading="!dataUpToDate" auto-resize/>
-      <v-select class="timeframe" :items="timeframes" v-model="selectedTimeFrame"></v-select>
-    </v-card>
     <v-date-picker
       v-if="customFromDateActive"
       v-model="datePickerFrom"
@@ -11,6 +7,11 @@
       @change="datePicker()"
     ></v-date-picker>
     <v-date-picker v-if="customToDateActive" v-model="datePickerTo" no-title @change="datePicker()"></v-date-picker>
+    <v-spacer/>
+    <v-card class="echarts">
+      <ECharts class="chart" :options="bar" :loading="!dataUpToDate" auto-resize/>
+      <v-select class="timeframe" :items="timeframes" v-model="selectedTimeFrame"></v-select>
+    </v-card>
   </v-layout>
 </template>
 
@@ -68,7 +69,12 @@ export default {
           name: "Sales",
           type: "bar",
           data: ["problem report", "inquiry", "irrelevant"],
-          itemStyle: ITEM_STYLE_BAR_BLUE
+          itemStyle: ITEM_STYLE_BAR_BLUE,
+          label: {
+            normal: {
+              show: true
+            }
+          }
         }
       ]
     }
