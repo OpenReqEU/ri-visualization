@@ -14,15 +14,15 @@
         <v-flex xs12>
           <span class="grey--text text-uppercase">yesterday</span>
         </v-flex>
-        <v-flex xs12>
-          <span class="text-uppercase headline">{{yesterdaySentiment}}</span>
-        </v-flex>
-        <v-layout align-center justify-center row fill-height>
+        <v-layout align-center justify-center row fill-height class="text-uppercase headline">
           <v-icon v-if="yesterdayDifference > 0" large color="green">arrow_drop_up</v-icon>
           <v-icon v-else-if="yesterdayDifference < 0" large color="red">arrow_drop_down</v-icon>
           <v-icon v-else large color="black">remove</v-icon>
           <span>{{yesterdayDifference}}</span>
         </v-layout>
+        <v-flex xs12>
+          <span>{{yesterdaySentiment}}</span>
+        </v-flex>
       </v-layout>
 
       <v-divider vertical></v-divider>
@@ -31,15 +31,15 @@
         <v-flex xs12>
           <span class="grey--text text-uppercase">LAST WEEK</span>
         </v-flex>
-        <v-flex xs12>
-          <span class="text-uppercase headline">{{lastWeekSentiment}}</span>
-        </v-flex>
-        <v-layout align-center justify-center row fill-height>
+        <v-layout align-center justify-center row fill-height class="text-uppercase headline">
           <v-icon v-if="lastWeekDifference > 0" large color="green">arrow_drop_up</v-icon>
           <v-icon v-else-if="lastWeekDifference < 0" large color="red">arrow_drop_down</v-icon>
           <v-icon v-else large color="black">remove</v-icon>
           <span>{{lastWeekDifference}}</span>
         </v-layout>
+        <v-flex xs12>
+          <span>{{lastWeekSentiment}}</span>
+        </v-flex>
       </v-layout>
 
       <v-divider vertical></v-divider>
@@ -48,15 +48,15 @@
         <v-flex xs12>
           <span class="grey--text text-uppercase">LAST MONTH</span>
         </v-flex>
-        <v-flex xs12>
-          <span class="text-uppercase headline">{{lastMonthSentiment}}</span>
-        </v-flex>
-        <v-layout align-center justify-center row fill-height>
+        <v-layout align-center justify-center row fill-height class="text-uppercase headline">
           <v-icon v-if="lastMonthDifference > 0" large color="green">arrow_drop_up</v-icon>
           <v-icon v-else-if="lastMonthDifference < 0" large color="red">arrow_drop_down</v-icon>
           <v-icon v-else large color="black">remove</v-icon>
           <span>{{lastMonthDifference}}</span>
         </v-layout>
+        <v-flex xs12>
+          <span>{{lastMonthSentiment}}</span>
+        </v-flex>
       </v-layout>
     </v-card-actions>
   </v-card>
