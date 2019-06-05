@@ -56,6 +56,8 @@ import {
   LOCAL_STORAGE_ACCESS_KEY,
   LOCAL_STORAGE_ACCESS_KEY_CONFIGURATION
 } from "../store/types.js";
+
+import { ROUTE_DASHBOARD } from "../routes";
 export default {
   data() {
     return {
@@ -102,7 +104,7 @@ export default {
                 response => {
                   this.waitingForResponse = false;
                   this.$store.commit(MUTATE_ACCESS_KEY, this.accessKey);
-                  this.$router.push({ path: "/dashboard" });
+                  this.$router.push({ path: ROUTE_DASHBOARD });
                 },
                 error => {
                   this.waitingForResponse = false;
