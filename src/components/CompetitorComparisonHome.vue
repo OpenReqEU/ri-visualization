@@ -76,7 +76,7 @@ const MONTH = "month";
 
 export default {
   components: {
-    FilterToolBar
+    "filter-tool-bar": FilterToolBar
   },
   data() {
     return {

@@ -158,7 +158,7 @@ import { ROUTE_PROBLEM_REPORTS, ROUTE_INQUIRIES } from "../routes.js";
 
 export default {
   components: {
-    FilterToolBar
+    "filter-tool-bar": FilterToolBar
   },
   data() {
     return {
