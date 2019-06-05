@@ -1,6 +1,6 @@
 <template>
   <v-toolbar :color="color" height="75">
-    <!-- <v-spacer v-if="showFullToolbar"></v-spacer> -->
+    <v-spacer v-if="showDateFilter()"></v-spacer>
 
     <v-select
       v-if="showAccountFilter()"
@@ -85,6 +85,12 @@ import { ACTION_FILTER_TWEETS } from "./../../store/types";
 import { BLUE_FILL } from "../../colors.js";
 import moment from "moment";
 import "moment/locale/de";
+import {
+  ROUTE_DASHBOARD,
+  ROUTE_PROBLEM_REPORTS,
+  ROUTE_INQUIRIES,
+  ROUTE_COMPARISON
+} from "../../routes.js";
 
 export default {
   name: "FilterToolBar",
@@ -125,17 +131,17 @@ export default {
     showAccountFilter() {
       let path = this.$router.currentRoute.path;
       return (
-        path === "/dashboard" ||
-        path === "/problemReports" ||
-        path === "/inquiries"
+        path === ROUTE_DASHBOARD ||
+        path === ROUTE_PROBLEM_REPORTS ||
+        path === ROUTE_INQUIRIES
       );
     },
     showDateFilter() {
       let path = this.$router.currentRoute.path;
       return (
-        path === "/comparison" ||
-        path === "/problemReports" ||
-        path === "/inquiries"
+        path === ROUTE_COMPARISON ||
+        path === ROUTE_PROBLEM_REPORTS ||
+        path === ROUTE_INQUIRIES
       );
     },
     clearDateFrom() {
