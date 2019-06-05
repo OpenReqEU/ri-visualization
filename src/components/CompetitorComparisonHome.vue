@@ -3,12 +3,11 @@
     <v-layout row>
       <filter-tool-bar/>
     </v-layout>
-    <v-card>
-      <v-layout row full-row-widget align-center>
-        <v-flex xs4 justify-center>
-          <div class="category-name">Problem Reports</div>
-        </v-flex>
-        <v-flex xs8>
+    <v-spacer/>
+    <v-layout row wrap>
+      <v-flex xs12 class="row">
+        <v-card>
+          <v-card-title class="headline mb-1">Problem Reports</v-card-title>
           <v-data-table
             v-if="dataUpToDate"
             :headers="tableHeaders"
@@ -25,9 +24,31 @@
               </tr>
             </template>
           </v-data-table>
-        </v-flex>
-      </v-layout>
-    </v-card>
+        </v-card>
+      </v-flex>
+      <v-spacer/>
+      <v-flex xs12 class="row">
+        <v-card>
+          <v-card-title class="headline mb-1">Inquiries</v-card-title>
+          <v-data-table
+            v-if="dataUpToDate"
+            :headers="tableHeaders"
+            :items="dataInquiries"
+            hide-actions
+          >
+            <template slot="items" slot-scope="props">
+              <tr>
+                <td class="text-xs-left">{{ props.item.account }}</td>
+                <td class="text-xs-right">{{ props.item.total }}</td>
+                <td class="text-xs-right">{{ props.item.yesterday }}</td>
+                <td class="text-xs-right">{{ props.item.week }}</td>
+                <td class="text-xs-right">{{ props.item.month }}</td>
+              </tr>
+            </template>
+          </v-data-table>
+        </v-card>
+      </v-flex>
+    </v-layout>
   </v-container>
 </template>
 
@@ -76,19 +97,19 @@ export default {
           text: "Since Yesterday",
           align: "center",
           sortable: true,
-          value: "classifier_certainty"
+          value: "yesterday"
         },
         {
           text: "Since Last Week",
           align: "center",
           sortable: true,
-          value: "classifier_certainty"
+          value: "week"
         },
         {
           text: "Since Last Month",
           align: "center",
           sortable: true,
-          value: "classifier_certainty"
+          value: "month"
         }
       ],
       erros: [],
@@ -155,21 +176,15 @@ export default {
     },
     loadData(tweets) {
       this.setup();
-      let counter = 0;
       tweets.forEach(tweet => {
         if (tweet.tweet_class === "problem_report") {
-          if (tweet.account_name === "WindItalia") {
-            counter += 1;
-          }
           this.addToData(this.dataProblemReports, tweet);
         } else if (tweet.tweet_class === "inquiry") {
           this.addToData(this.dataInquiries, tweet);
         }
       });
-      console.log("counter", counter);
       this.calculateTrends(this.dataProblemReports);
-      // this.calculateTrends(this.dataInquiries);
-      // console.log(this.dataProblemReports[0]);
+      this.calculateTrends(this.dataInquiries);
     },
     addToData(source, tweet) {
       var account = tweet.in_reply_to_screen_name;
@@ -191,15 +206,6 @@ export default {
     },
     calculateTrends(source) {
       for (let i of source.keys()) {
-        if (source[i][ACCOUNT] === "WindItalia") {
-          console.log(
-            "WEEK",
-            source[i][ACCOUNT],
-            source[i][WEEK],
-            source[i][TOTAL],
-            source[i][TOTAL] - source[i][WEEK]
-          );
-        }
         source[i][YESTERDAY] = source[i][TOTAL] - source[i][YESTERDAY];
         source[i][WEEK] = source[i][TOTAL] - source[i][WEEK];
         source[i][MONTH] = source[i][TOTAL] - source[i][MONTH];
@@ -229,6 +235,8 @@ table.v-table tbody th {
   height: 50px;
   max-height: 50px;
 }
-.category-name {
+.row {
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 </style>
