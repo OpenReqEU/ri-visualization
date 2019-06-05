@@ -1,8 +1,9 @@
 <template>
   <v-toolbar :color="color" height="75">
-    <v-spacer v-if="showFullToolbar()"></v-spacer>
+    <!-- <v-spacer v-if="showFullToolbar"></v-spacer> -->
 
     <v-select
+      v-if="showAccountFilter()"
       class="account-select text-size"
       :items="twitterAccounts"
       v-model="selectedTwitterAccount"
@@ -12,7 +13,7 @@
     <v-spacer></v-spacer>
 
     <v-menu
-      v-if="showFullToolbar()"
+      v-if="showDateFilter()"
       :close-on-content-click="false"
       v-model="modelFromDateMenu"
       :nudge-right="40"
@@ -45,7 +46,7 @@
     <v-spacer></v-spacer>
 
     <v-menu
-      v-if="showFullToolbar()"
+      v-if="showDateFilter()"
       :close-on-content-click="false"
       v-model="modelToDateMenu"
       :nudge-right="40"
@@ -121,7 +122,15 @@ export default {
     }
   },
   methods: {
-    showFullToolbar() {
+    showAccountFilter() {
+      let path = this.$router.currentRoute.path;
+      return (
+        path === "/dashboard" ||
+        path === "/problemReports" ||
+        path === "/inquiries"
+      );
+    },
+    showDateFilter() {
       let path = this.$router.currentRoute.path;
       return (
         path === "/comparison" ||
