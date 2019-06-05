@@ -1,4 +1,5 @@
 /* eslint-disable */
+import CompetitorComparisonHome from './components/CompetitorComparisonHome.vue';
 import DashboardHome from './components/DashboardHome.vue';
 import LoginHome from './components/LoginHome.vue';
 import SettingsHome from './components/SettingsHome.vue';
@@ -22,6 +23,10 @@ export const routes = [{
   {
     path: '/inquiries',
     component: TweetCategoryHome
+  },
+  {
+    path: '/comparison',
+    component: CompetitorComparisonHome
   },
   {
     path: '/settings',
