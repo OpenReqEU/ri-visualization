@@ -17,18 +17,11 @@
 <script>
 import TopToolBar from "./components/toolbar/TopToolBar";
 import TopNavigationDrawer from "./components/toolbar/TopNavigationDrawer";
-import FilterToolBar from "./components/toolbar/FilterToolBar";
-import {
-  ACTION_FETCH_INITAL_DATA,
-  LOCAL_STORAGE_ACCESS_KEY
-} from "./store/types.js";
-
 export default {
   name: "App",
   components: {
     TopToolBar,
-    TopNavigationDrawer,
-    FilterToolBar
+    TopNavigationDrawer
   }
 };
 </script>
