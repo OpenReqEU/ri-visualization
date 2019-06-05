@@ -154,6 +154,8 @@ import {
   ACTION_UPDATE_TWEET
 } from "./../store/types.js";
 import FilterToolBar from "./toolbar/FilterToolBar";
+import { ROUTE_PROBLEM_REPORTS, ROUTE_INQUIRIES } from "../routes.js";
+
 export default {
   components: {
     FilterToolBar
@@ -201,11 +203,11 @@ export default {
   methods: {
     setup() {
       let currentPath = this.$route.path;
-      if (currentPath === "/problemReports") {
+      if (currentPath === ROUTE_PROBLEM_REPORTS) {
         this.tooblarTitle = "Problem Reports";
         this.cardTableTitle = "Problem Reports";
         this.tweetCategory = "problem_report";
-      } else if (currentPath === "/inquiries") {
+      } else if (currentPath === ROUTE_INQUIRIES) {
         this.tooblarTitle = "inquiries";
         this.cardTableTitle = "Inquiries";
         this.tweetCategory = "inquiry";
