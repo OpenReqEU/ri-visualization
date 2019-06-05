@@ -3,7 +3,8 @@ import VueRouter from 'vue-router';
 import App from './App.vue';
 import './plugins/vuetify';
 import {
-  routes
+  routes,
+  ROUTE_LOGIN
 } from './routes';
 import {
   store
@@ -18,8 +19,8 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.path !== '/login' && !store.getters.accessKey) {
-    return next('/login');
+  if (to.path !== ROUTE_LOGIN && !store.getters.accessKey) {
+    return next(ROUTE_LOGIN);
   }
 
   next();
