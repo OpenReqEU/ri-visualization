@@ -5,10 +5,10 @@
     </v-layout>
     <v-card>
       <v-layout row full-row-widget align-center>
-        <v-flex xs2 justify-center>
-          <div>Problem problemReports</div>
+        <v-flex xs4 justify-center>
+          <div class="category-name">Problem Reports</div>
         </v-flex>
-        <v-flex xs9 offset-xs1>
+        <v-flex xs8>
           <v-data-table
             v-if="dataUpToDate"
             :headers="tableHeaders"
@@ -17,11 +17,11 @@
           >
             <template slot="items" slot-scope="props">
               <tr>
-                <td>{{ props.item }}</td>
-                <td>{{ }}</td>
-                <td>{{ }}</td>
-                <td>{{ }}</td>
-                <td>{{ }}</td>
+                <td class="text-xs-left">{{ props.item.account }}</td>
+                <td class="text-xs-right">{{ props.item.total }}</td>
+                <td class="text-xs-right">{{ props.item.yesterday }}</td>
+                <td class="text-xs-right">{{ props.item.week }}</td>
+                <td class="text-xs-right">{{ props.item.month }}</td>
               </tr>
             </template>
           </v-data-table>
@@ -46,6 +46,13 @@ import {
   ACTION_UPDATE_TWEET
 } from "./../store/types.js";
 import FilterToolBar from "./toolbar/FilterToolBar";
+
+const ACCOUNT = "account";
+const TOTAL = "total";
+const YESTERDAY = "yesterday";
+const WEEK = "week";
+const MONTH = "month";
+
 export default {
   components: {
     FilterToolBar
@@ -61,90 +68,160 @@ export default {
         },
         {
           text: "Total",
-          align: "right",
+          align: "center",
           sortable: true,
           value: "total"
         },
         {
           text: "Since Yesterday",
-          align: "right",
+          align: "center",
           sortable: true,
           value: "classifier_certainty"
         },
         {
           text: "Since Last Week",
-          align: "right",
+          align: "center",
           sortable: true,
           value: "classifier_certainty"
         },
         {
           text: "Since Last Month",
-          align: "right",
+          align: "center",
           sortable: true,
           value: "classifier_certainty"
         }
       ],
       erros: [],
       tooblarTitle: "Competitor Comparison",
+      // filteredTweets: this.$store.getters.filteredTweets,
       dataProblemReports: [],
       dataInquiries: [],
-      dataTopics: {}
+      dataTopics: {},
+      topics: this.$store.getters.accessKeyConfiguration.topics,
+      twitterAccounts: this.$store.getters
+        .accessKeyConfigurationTwitterAccounts,
+      dateYesterday: parseInt(
+        moment()
+          .subtract(1, "day")
+          .format("YYYYMMDD")
+      ),
+      dateLastWeek: parseInt(
+        moment()
+          .subtract(1, "week")
+          .format("YYYYMMDD")
+      ),
+      dateLastMonth: parseInt(
+        moment()
+          .subtract(1, "month")
+          .format("YYYYMMDD")
+      )
     };
   },
   methods: {
     setup() {
-      // set top level keys
-      const topics = this.$store.getters.accessKeyConfiguration.topics;
-      topics.forEach(topic => {
-        this.dataTopics[topic] = {};
-      });
-      console.log(this.dataTopics);
+      (this.dataProblemReports = []),
+        (this.dataInquiries = []),
+        (this.dataTopics = {}),
+        // set top level keys
+        this.topics.forEach(topic => {
+          this.dataTopics[topic] = {};
+        });
 
-      // create sub-maps for each account
-      const twitterAccounts = this.$store.getters
-        .accessKeyConfigurationTwitterAccounts;
-      twitterAccounts.forEach(account => {
+      // create sub objects for each account and init values
+      this.twitterAccounts.forEach(account => {
         // add companies to the problem report data
-        this.dataProblemReports = twitterAccounts;
+        this.dataProblemReports.push({
+          [ACCOUNT]: account,
+          [TOTAL]: 0,
+          [YESTERDAY]: 0,
+          [WEEK]: 0,
+          [MONTH]: 0
+        });
 
         // add companies to the inquiry data
-        this.dataInquiries = twitterAccounts;
+        this.dataInquiries.push({
+          [ACCOUNT]: account,
+          [TOTAL]: 0,
+          [YESTERDAY]: 0,
+          [WEEK]: 0,
+          [MONTH]: 0
+        });
 
         // add companies to the topic based data
         for (var topic in this.dataTopics) {
-          this.dataTopics[topic] = twitterAccounts;
+          this.dataTopics[topic] = this.twitterAccounts;
         }
       });
-      console.log(this.dataTopics);
     },
     loadData(tweets) {
-      // this.data = [];
+      this.setup();
+      let counter = 0;
+      tweets.forEach(tweet => {
+        if (tweet.tweet_class === "problem_report") {
+          if (tweet.account_name === "WindItalia") {
+            counter += 1;
+          }
+          this.addToData(this.dataProblemReports, tweet);
+        } else if (tweet.tweet_class === "inquiry") {
+          this.addToData(this.dataInquiries, tweet);
+        }
+      });
+      console.log("counter", counter);
+      this.calculateTrends(this.dataProblemReports);
+      // this.calculateTrends(this.dataInquiries);
+      // console.log(this.dataProblemReports[0]);
+    },
+    addToData(source, tweet) {
+      var account = tweet.in_reply_to_screen_name;
+      for (let i of source.keys()) {
+        if (source[i][ACCOUNT] == account) {
+          source[i][TOTAL] += 1;
+
+          if (tweet.created_at <= this.dateYesterday) {
+            source[i][YESTERDAY] += 1;
+          }
+          if (tweet.created_at <= this.dateLastWeek) {
+            source[i][WEEK] += 1;
+          }
+          if (tweet.created_at <= this.dateLastMonth) {
+            source[i][MONTH] += 1;
+          }
+        }
+      }
+    },
+    calculateTrends(source) {
+      for (let i of source.keys()) {
+        if (source[i][ACCOUNT] === "WindItalia") {
+          console.log(
+            "WEEK",
+            source[i][ACCOUNT],
+            source[i][WEEK],
+            source[i][TOTAL],
+            source[i][TOTAL] - source[i][WEEK]
+          );
+        }
+        source[i][YESTERDAY] = source[i][TOTAL] - source[i][YESTERDAY];
+        source[i][WEEK] = source[i][TOTAL] - source[i][WEEK];
+        source[i][MONTH] = source[i][TOTAL] - source[i][MONTH];
+      }
     }
   },
   mounted() {
-    this.setup();
-    this.loadData(this.$store.state.filteredTweets);
+    this.loadData(this.$store.getters.filteredTweets);
     this.$store.dispatch(ACTION_SET_TOOLBAR_HEADER, this.tooblarTitle);
   },
   computed: {
     dataUpToDate() {
-      if (this.$store.state.dataUpToDate) {
-        this.loadData(this.$store.state.filteredTweets);
+      if (this.$store.getters.dataUpToDate) {
+        this.loadData(this.$store.getters.filteredTweets);
       }
-      return this.$store.state.dataUpToDate;
+      return this.$store.getters.dataUpToDate;
     }
   }
 };
 </script>
 
 <style scoped>
-.header {
-  margin-top: 20px;
-}
-.card-title-text {
-  font-size: 2em;
-  text-align: center;
-}
 table.v-table tbody tr,
 table.v-table tbody td,
 table.v-table tbody th {
@@ -152,46 +229,6 @@ table.v-table tbody th {
   height: 50px;
   max-height: 50px;
 }
-.row-item {
-  margin: 15px 10px 15px 10px;
-}
-.row-header {
-  margin: 15px 10px 35px 10px;
-  position: "fixed";
-}
-.action-left {
-  margin-right: 5px;
-}
-.action-right {
-  margin-left: 5px;
-}
-h1 {
-  text-align: center;
-}
-.list-enter,
-.list-leave-to {
-  transition: all 0.5s;
-  opacity: 0;
-}
-.backgroundcolor-red {
-  background-color: rgba(255, 0, 0, 0.04);
-}
-.backgroundcolor-yellow {
-  background-color: rgba(255, 249, 196, 0.5);
-}
-.backgroundcolor-grey {
-  background-color: rgba(238, 238, 238, 0.04);
-}
-.spacing {
-  padding-top: 0px;
-}
-.pointer {
-  cursor: pointer;
-}
-.toggle-effect {
-  background-color: #bdbdbd !important;
-}
-.anti-margin {
-  margin-bottom: 0px !important;
+.category-name {
 }
 </style>
