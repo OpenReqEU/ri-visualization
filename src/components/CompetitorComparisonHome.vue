@@ -5,6 +5,9 @@
     </v-layout>
     <v-spacer/>
     <v-layout row wrap>
+      <v-flex xs6 class="row">
+        <sentiment-performance-multiline/>
+      </v-flex>
       <v-flex xs12 class="row">
         <v-card>
           <v-card-title class="headline mb-1">Problem Reports</v-card-title>
@@ -67,6 +70,7 @@ import {
   ACTION_UPDATE_TWEET
 } from "./../store/types.js";
 import FilterToolBar from "./toolbar/FilterToolBar";
+import SentimentPerformanceMultiline from "./widget/line/SentimentPerformanceMultiline";
 
 const ACCOUNT = "account";
 const TOTAL = "total";
@@ -76,7 +80,8 @@ const MONTH = "month";
 
 export default {
   components: {
-    "filter-tool-bar": FilterToolBar
+    "filter-tool-bar": FilterToolBar,
+    SentimentPerformanceMultiline
   },
   data() {
     return {
