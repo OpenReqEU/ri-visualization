@@ -3,12 +3,33 @@
     <v-spacer v-if="showDateFilter()"></v-spacer>
 
     <v-select
-      v-if="showAccountFilter()"
-      class="account-select text-size"
+      :menu-props="{maxWidth:'300'}"
+      v-model="selectedTwitterAccounts"
       :items="twitterAccounts"
-      v-model="selectedTwitterAccount"
-      label="Twitter Account"
-    ></v-select>
+      label="Twitter Accounts"
+      multiple
+    >
+      <template v-slot:prepend-item>
+        <v-list-tile ripple @click="toggle">
+          <v-list-tile-action>
+            <v-icon :color="selectedTwitterAccounts.length > 0 ? 'indigo darken-4' : ''">{{ icon }}</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Select All</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-divider class="mt-2"></v-divider>
+      </template>
+      <template v-slot:selection="{ item, index }">
+        <v-chip v-if="index <= 2" small color="black" outline>
+          <span>{{ item }}</span>
+        </v-chip>
+        <span
+          v-if="index === 3"
+          class="black--text caption"
+        >(+{{ selectedTwitterAccounts.length - 3 }} others)</span>
+      </template>
+    </v-select>
 
     <v-spacer></v-spacer>
 
@@ -102,8 +123,8 @@ export default {
     return {
       modelFromDateMenu: false,
       modelToDateMenu: false,
-      twitterAccounts: ["All"],
-      selectedTwitterAccount: "All",
+      twitterAccounts: [],
+      selectedTwitterAccounts: [],
       dateFrom: null,
       dateTo: null,
       color: BLUE_FILL
@@ -157,7 +178,7 @@ export default {
     },
     filterTweets() {
       let payload = {
-        twitterAccount: this.selectedTwitterAccount,
+        twitterAccounts: this.selectedTwitterAccounts,
         fromDate: this.dateFrom ? this.dateFrom.toString() : null,
         toDate: this.dateTo ? this.dateTo.toString() : null
       };
@@ -171,14 +192,43 @@ export default {
           this.twitterAccounts.push(twitterAccount);
         }
       });
+    },
+    toggle() {
+      this.$nextTick(() => {
+        if (this.selectedAll) {
+          this.selectedTwitterAccounts = [];
+        } else {
+          this.selectedTwitterAccounts = this.twitterAccounts.slice();
+        }
+      });
+    }
+  },
+  computed: {
+    selectedAll() {
+      return (
+        this.selectedTwitterAccounts.length === this.twitterAccounts.length
+      );
+    },
+    selectedSome() {
+      return this.selectedTwitterAccounts.length > 0 && !this.selectedAll;
+    },
+    icon() {
+      if (this.selectedAll) {
+        return "check_box";
+      }
+      if (this.selectedSome) {
+        return "indeterminate_check_box";
+      }
+      return "check_box_outline_blank";
     }
   },
   mounted() {
     this.loadAccountNames();
+    this.selectedTwitterAccounts = this.twitterAccounts;
     this.filterTweets();
   },
   watch: {
-    selectedTwitterAccount() {
+    selectedTwitterAccounts() {
       this.filterTweets();
     }
   }

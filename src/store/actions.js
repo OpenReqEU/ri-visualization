@@ -56,13 +56,9 @@ export const actionFilterTweets = ({
   let tmpFilteredTweets = [];
 
   // 2. check if the user filters for a specific account => if yes, filter
-  if (payload.twitterAccount === 'All') {
-    Object.keys(state.tweets).forEach(function (account) {
-      tmpFilteredTweets = tmpFilteredTweets.concat(state.tweets[account]);
-    });
-  } else {
-    tmpFilteredTweets = state.tweets[payload.twitterAccount];
-  }
+  payload.twitterAccounts.forEach(account => {
+    tmpFilteredTweets = tmpFilteredTweets.concat(state.tweets[account]);
+  });
 
   // 3. check if the user filters for a time-frame => if yes, filter
   if (payload.fromDate !== null) {
