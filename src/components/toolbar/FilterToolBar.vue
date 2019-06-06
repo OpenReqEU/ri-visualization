@@ -1,101 +1,107 @@
 <template>
   <v-toolbar :color="color" height="75">
-    <v-spacer v-if="showDateFilter()"></v-spacer>
+    <v-layout row wrap>
+      <v-flex xs5>
+        <v-select
+          :menu-props="{maxWidth:'300'}"
+          v-model="selectedTwitterAccounts"
+          :items="twitterAccounts"
+          label="Twitter Accounts"
+          multiple
+        >
+          <template v-slot:prepend-item>
+            <v-list-tile ripple @click="toggle">
+              <v-list-tile-action>
+                <v-icon
+                  :color="selectedTwitterAccounts.length > 0 ? 'indigo darken-4' : ''"
+                >{{ icon }}</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-content>
+                <v-list-tile-title>Select All</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+            <v-divider class="mt-2"></v-divider>
+          </template>
+          <template v-slot:selection="{ item, index }">
+            <v-chip v-if="index <= 2" small color="black" outline>
+              <span>{{ item }}</span>
+            </v-chip>
+            <span
+              v-if="index === 3"
+              class="black--text caption"
+            >(+{{ selectedTwitterAccounts.length - 3 }} others)</span>
+          </template>
+        </v-select>
+      </v-flex>
 
-    <v-select
-      :menu-props="{maxWidth:'300'}"
-      v-model="selectedTwitterAccounts"
-      :items="twitterAccounts"
-      label="Twitter Accounts"
-      multiple
-    >
-      <template v-slot:prepend-item>
-        <v-list-tile ripple @click="toggle">
-          <v-list-tile-action>
-            <v-icon :color="selectedTwitterAccounts.length > 0 ? 'indigo darken-4' : ''">{{ icon }}</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>Select All</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-        <v-divider class="mt-2"></v-divider>
-      </template>
-      <template v-slot:selection="{ item, index }">
-        <v-chip v-if="index <= 2" small color="black" outline>
-          <span>{{ item }}</span>
-        </v-chip>
-        <span
-          v-if="index === 3"
-          class="black--text caption"
-        >(+{{ selectedTwitterAccounts.length - 3 }} others)</span>
-      </template>
-    </v-select>
+      <v-flex xs3 offset-xs1>
+        <v-menu
+          v-if="showDateFilter()"
+          :close-on-content-click="false"
+          v-model="modelFromDateMenu"
+          :nudge-right="40"
+          lazy
+          transition="scale-transition"
+          offset-y
+          full-width
+          max-width="290px"
+          min-width="290px"
+        >
+          <v-text-field
+            class="date-text"
+            slot="activator"
+            v-model="modelFromDateText"
+            value="modelFromDateText"
+            label="From:"
+            persistent-hint
+            prepend-icon="event"
+            readonly
+            clearable
+            @input="clearDateFrom"
+          ></v-text-field>
+          <v-date-picker
+            v-model="dateFrom"
+            no-title
+            @input="modelFromDateMenu = false"
+            @change="filterTweets"
+          ></v-date-picker>
+        </v-menu>
+      </v-flex>
+      <!-- <v-spacer></!-->
 
-    <v-spacer></v-spacer>
-
-    <v-menu
-      v-if="showDateFilter()"
-      :close-on-content-click="false"
-      v-model="modelFromDateMenu"
-      :nudge-right="40"
-      lazy
-      transition="scale-transition"
-      offset-y
-      full-width
-      max-width="290px"
-      min-width="290px"
-    >
-      <v-text-field
-        class="date-text"
-        slot="activator"
-        v-model="modelFromDateText"
-        label="From:"
-        persistent-hint
-        prepend-icon="event"
-        readonly
-        clearable
-        @input="clearDateFrom"
-      ></v-text-field>
-      <v-date-picker
-        v-model="dateFrom"
-        no-title
-        @input="modelFromDateMenu = false"
-        @change="filterTweets"
-      ></v-date-picker>
-    </v-menu>
-
-    <v-spacer></v-spacer>
-
-    <v-menu
-      v-if="showDateFilter()"
-      :close-on-content-click="false"
-      v-model="modelToDateMenu"
-      :nudge-right="40"
-      lazy
-      transition="scale-transition"
-      offset-y
-      full-width
-      max-width="290px"
-      min-width="290px"
-    >
-      <v-text-field
-        slot="activator"
-        v-model="modelToDateText"
-        label="To:"
-        persistent-hint
-        prepend-icon="event"
-        readonly
-        clearable
-        @input="clearDateTo"
-      ></v-text-field>
-      <v-date-picker
-        v-model="dateTo"
-        no-title
-        @input="modelToDateMenu = false"
-        @change="filterTweets"
-      ></v-date-picker>
-    </v-menu>
-    <v-spacer></v-spacer>
+      <v-flex xs3>
+        <v-menu
+          v-if="showDateFilter()"
+          :close-on-content-click="false"
+          v-model="modelToDateMenu"
+          :nudge-right="40"
+          lazy
+          transition="scale-transition"
+          offset-y
+          full-width
+          max-width="290px"
+          min-width="290px"
+        >
+          <v-text-field
+            slot="activator"
+            v-model="modelToDateText"
+            label="To:"
+            persistent-hint
+            prepend-icon="event"
+            readonly
+            clearable
+            @input="clearDateTo"
+          ></v-text-field>
+          <v-date-picker
+            v-model="dateTo"
+            no-title
+            @input="modelToDateMenu = false"
+            @change="filterTweets"
+          ></v-date-picker>
+        </v-menu>
+      </v-flex>
+      <v-spacer></v-spacer>
+    </v-layout>
   </v-toolbar>
 </template>
 
@@ -129,24 +135,6 @@ export default {
       dateTo: null,
       color: BLUE_FILL
     };
-  },
-  computed: {
-    modelFromDateText: {
-      get: function() {
-        return this.dateFrom ? this.formatDate(this.dateFrom) : "";
-      },
-      set: function(val) {
-        return (this.dateFrom = val);
-      }
-    },
-    modelToDateText: {
-      get: function() {
-        return this.dateTo ? this.formatDate(this.dateTo) : "";
-      },
-      set: function(val) {
-        return (this.dateTo = val);
-      }
-    }
   },
   methods: {
     showAccountFilter() {
@@ -220,6 +208,22 @@ export default {
         return "indeterminate_check_box";
       }
       return "check_box_outline_blank";
+    },
+    modelFromDateText: {
+      get: function() {
+        return this.dateFrom ? this.formatDate(this.dateFrom) : "";
+      },
+      set: function(val) {
+        return (this.dateFrom = val);
+      }
+    },
+    modelToDateText: {
+      get: function() {
+        return this.dateTo ? this.formatDate(this.dateTo) : "";
+      },
+      set: function(val) {
+        return (this.dateTo = val);
+      }
     }
   },
   mounted() {
