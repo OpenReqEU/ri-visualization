@@ -114,13 +114,10 @@ export default {
       ],
       erros: [],
       tooblarTitle: "Competitor Comparison",
-      // filteredTweets: this.$store.getters.filteredTweets,
       dataProblemReports: [],
       dataInquiries: [],
       dataTopics: {},
       topics: this.$store.getters.accessKeyConfiguration.topics,
-      twitterAccounts: this.$store.getters
-        .accessKeyConfigurationTwitterAccounts,
       dateYesterday: parseInt(
         moment()
           .subtract(1, "day")
@@ -139,7 +136,7 @@ export default {
     };
   },
   methods: {
-    setup() {
+    setup(tweets) {
       (this.dataProblemReports = []),
         (this.dataInquiries = []),
         (this.dataTopics = {}),
@@ -147,9 +144,12 @@ export default {
         this.topics.forEach(topic => {
           this.dataTopics[topic] = {};
         });
-
+      let accounts = new Set();
+      tweets.forEach(tweet => {
+        accounts.add(tweet.in_reply_to_screen_name);
+      });
       // create sub objects for each account and init values
-      this.twitterAccounts.forEach(account => {
+      Array.from(accounts).forEach(account => {
         // add companies to the problem report data
         this.dataProblemReports.push({
           [ACCOUNT]: account,
@@ -175,7 +175,7 @@ export default {
       });
     },
     loadData(tweets) {
-      this.setup();
+      this.setup(tweets);
       tweets.forEach(tweet => {
         if (tweet.tweet_class === "problem_report") {
           this.addToData(this.dataProblemReports, tweet);
