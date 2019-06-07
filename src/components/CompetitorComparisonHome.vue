@@ -13,12 +13,18 @@
       </v-flex>
       <v-flex xs12 class="row">
         <v-card>
-          <v-data-table v-if="dataUpToDate" :headers="headersTop" :items="data" hide-actions>
+          <v-data-table
+            class="ma-0 pa-0"
+            v-if="dataUpToDate"
+            :headers="headersTop"
+            :items="data"
+            hide-actions
+          >
             <template slot="headerCell" slot-scope="props">
               <div slot="activator" class="headline black--text">{{ props.header.text }}</div>
             </template>
-            <template slot="items" slot-scope="props">
-              <td>
+            <template class="ma-0 pa-0" slot="items" slot-scope="props">
+              <td class="ma-0 pa-0">
                 <v-data-table
                   :headers="tableHeadersProblemReports"
                   :items="props.item.problem_reports"
@@ -35,7 +41,7 @@
                   </template>
                 </v-data-table>
               </td>
-              <td>
+              <td class="ma-0 pa-0">
                 <v-data-table
                   :headers="tableHeadersInquiries"
                   :items="props.item.inquiries"
