@@ -1,13 +1,5 @@
 <template>
   <v-layout>
-    <v-date-picker
-      v-if="customFromDateActive"
-      v-model="datePickerFrom"
-      no-title
-      @change="datePicker()"
-    ></v-date-picker>
-    <v-date-picker v-if="customToDateActive" v-model="datePickerTo" no-title @change="datePicker()"></v-date-picker>
-    <v-spacer/>
     <v-card class="echarts">
       <ECharts class="chart" :options="line" :loading="!dataUpToDate" auto-resize/>
     </v-card>
@@ -30,10 +22,6 @@ export default {
   data: () => ({
     startDate: 0,
     endDate: 0,
-    customFromDateActive: false,
-    customToDateActive: false,
-    datePickerFrom: null,
-    datePickerTo: null,
     ignoreNeutralTweets: false,
     line: {}
   }),
