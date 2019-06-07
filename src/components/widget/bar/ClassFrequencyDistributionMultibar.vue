@@ -122,8 +122,10 @@ export default {
           self.bar.series[index] = {
             name: account,
             type: "bar",
-            stack: "all ",
-            data: [dataProblemReports, dataInquiries, dataIrrelevant]
+            data: [dataProblemReports, dataInquiries, dataIrrelevant],
+            label: {
+              show: true
+            }
           };
         });
       }
