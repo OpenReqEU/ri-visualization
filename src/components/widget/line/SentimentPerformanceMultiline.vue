@@ -47,6 +47,7 @@ export default {
           type: "scroll",
           show: true,
           top: 25,
+          selectedMode: false,
           data: []
         },
         xAxis: {
