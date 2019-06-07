@@ -14,9 +14,9 @@
       <v-flex xs12 class="row">
         <v-card>
           <v-data-table v-if="dataUpToDate" :headers="headersTop" :items="data" hide-actions>
-            <!-- <template slot="headerCell" scope="props">
-              <div slot="activator">{{ props.header.text }}</div>
-            </template>-->
+            <template slot="headerCell" slot-scope="props">
+              <div slot="activator" class="headline black--text">{{ props.header.text }}</div>
+            </template>
             <template slot="items" slot-scope="props">
               <td>
                 <v-data-table
@@ -24,7 +24,7 @@
                   :items="props.item.problem_reports"
                   hide-actions
                 >
-                  <template slot="items" scope="props">
+                  <template slot="items" slot-scope="props">
                     <td class="text-xs-left">
                       <b>{{ props.item.account }}</b>
                     </td>
@@ -40,7 +40,7 @@
                   :items="props.item.inquiries"
                   hide-actions
                 >
-                  <template slot="items" scope="props">
+                  <template slot="items" slot-scope="props">
                     <td class="text-xs-left">
                       <b>{{ props.item.account }}</b>
                     </td>
@@ -95,12 +95,12 @@ export default {
     return {
       headersTop: [
         {
-          text: "Problem Reports",
+          text: "Problem Reports (since)",
           value: "problem_reports",
           sortable: false
         },
         {
-          text: "Inquiries",
+          text: "Inquiries (since)",
           value: "inquiries",
           sortable: false
         }
@@ -113,19 +113,19 @@ export default {
           value: "account"
         },
         {
-          text: "Since Y.",
+          text: "Yesterday",
           align: "center",
           sortable: true,
           value: "problem_report_yesterday"
         },
         {
-          text: "Since LW.",
+          text: "Last Week",
           align: "center",
           sortable: true,
           value: "problem_report_week"
         },
         {
-          text: "Since LM.",
+          text: "Last Month",
           align: "center",
           sortable: true,
           value: "problem_report_month"
@@ -139,19 +139,19 @@ export default {
           value: "account"
         },
         {
-          text: "Since Y.",
+          text: "Yesterday",
           align: "center",
           sortable: true,
           value: "inquiries_yesterday"
         },
         {
-          text: "Since LW.",
+          text: "Last Week",
           align: "center",
           sortable: true,
           value: "inquiries_week"
         },
         {
-          text: "Since LM.",
+          text: "Last Month",
           align: "center",
           sortable: true,
           value: "inquiries_month"
@@ -314,35 +314,9 @@ export default {
           [INQUIRIES]: inquiriesData
         }
       ];
-      console.log(this.data);
     }
   },
   mounted() {
-    let tableitems = [
-      {
-        name: [
-          {
-            fname: "Dakota",
-            lname: "Rice"
-          },
-          {
-            fname: "Minerva",
-            lname: "Hooper"
-          }
-        ],
-        geo: [
-          {
-            country: "Niger",
-            city: "Oud-Tunrhout"
-          },
-          {
-            country: "Curaçao",
-            city: "Sinaai-Waas"
-          }
-        ]
-      }
-    ];
-    console.log(tableitems);
     this.loadData(this.$store.getters.filteredTweets);
     this.$store.dispatch(ACTION_SET_TOOLBAR_HEADER, this.tooblarTitle);
   },
