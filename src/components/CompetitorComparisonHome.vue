@@ -14,6 +14,9 @@
       <v-flex xs12 class="row">
         <competitor-two-category-comparison/>
       </v-flex>
+      <v-flex xs12 class="row" v-for="topic in topics" :key="topic">
+        <competitor-two-category-comparison :topic="topic"/>
+      </v-flex>
     </v-layout>
   </v-container>
 </template>
@@ -43,10 +46,12 @@ export default {
   data() {
     return {
       erros: [],
-      tooblarTitle: "Competitor Comparison"
+      tooblarTitle: "Competitor Comparison",
+      topics: []
     };
   },
   mounted() {
+    this.topics = this.$store.state.accessKeyConfiguration.topics;
     this.$store.dispatch(ACTION_SET_TOOLBAR_HEADER, this.tooblarTitle);
   }
 };

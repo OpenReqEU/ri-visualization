@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-title class="headline black--text justify-center ma-0 pa-0">{{ title }}</v-card-title>
+    <v-card-title class="header headline black--text justify-center ma-0 pa-0">{{ title }}</v-card-title>
     <v-data-table
       class="ma-0 pa-0"
       v-if="dataUpToDate"
@@ -63,6 +63,14 @@ const WEEK = "week";
 const MONTH = "month";
 
 export default {
+  name: "CompetitorTwoCategoryComparison",
+  props: {
+    topic: {
+      type: String,
+      default: "",
+      required: false
+    }
+  },
   data() {
     return {
       title: "Overall",
@@ -132,9 +140,8 @@ export default {
       ],
       erros: [],
       tooblarTitle: "Competitor Comparison",
+      tweets: [],
       data: [],
-      dataProblemReports: [],
-      dataInquiries: [],
       dataTopics: {},
       topics: this.$store.getters.accessKeyConfiguration.topics,
       dateYesterday: parseInt(
@@ -155,20 +162,18 @@ export default {
     };
   },
   methods: {
-    setup(tweets) {
+    setup() {
       this.data = [];
-
-      this.dataProblemReports = [];
-      this.dataInquiries = [];
-      this.dataTopics = {};
-      // set top level keys
-      this.topics.forEach(topic => {
-        this.dataTopics[topic] = {};
-      });
       let accounts = new Set();
-      tweets.forEach(tweet => {
+      this.tweets.forEach(tweet => {
         accounts.add(tweet.in_reply_to_screen_name);
       });
+
+      console.log("topic", this.topic);
+      if (this.topic !== "") {
+        this.title = this.topic;
+        this.tweets = this.tweets.filter(this.filterForTopic);
+      }
 
       let tmpData = [];
       // create sub objects for each account and init values
@@ -189,18 +194,13 @@ export default {
             [MONTH]: 0
           }
         });
-
-        // add companies to the topic based data
-        for (var topic in this.dataTopics) {
-          this.dataTopics[topic] = this.twitterAccounts;
-        }
       });
 
       return tmpData;
     },
-    loadData(tweets) {
-      let tmpData = this.setup(tweets);
-      tweets.forEach(tweet => {
+    loadData() {
+      let tmpData = this.setup();
+      this.tweets.forEach(tweet => {
         if (tweet.tweet_class === "problem_report") {
           this.addToData(tmpData, PROBLEM_REPORTS, tweet);
         } else if (tweet.tweet_class === "inquiry") {
@@ -287,6 +287,14 @@ export default {
         }
       ];
     },
+    filterForTopic(tweet) {
+      let firstTopic = tweet.topics.first_class;
+      let secondTopic = tweet.topics.second_class;
+      return (
+        (firstTopic.label == this.topic && firstTopic.score > 0.5) ||
+        (secondTopic.label == this.topic && secondTopic.score > 0.5)
+      );
+    },
     customTableSort(items, index, isDescending) {
       items.sort((a, b) => {
         if (index === "account") {
@@ -320,12 +328,14 @@ export default {
     }
   },
   mounted() {
-    this.loadData(this.$store.getters.filteredTweets);
+    this.tweets = this.$store.getters.filteredTweets;
+    this.loadData();
   },
   computed: {
     dataUpToDate() {
       if (this.$store.getters.dataUpToDate) {
-        this.loadData(this.$store.getters.filteredTweets);
+        this.tweets = this.$store.getters.filteredTweets;
+        this.loadData();
       }
       return this.$store.getters.dataUpToDate;
     }
@@ -345,10 +355,7 @@ table.v-table tbody th {
   margin-top: 20px;
   margin-bottom: 10px;
 }
-.column-colored {
-  background-color: rgba(0, 189, 187, 0.35);
-}
 .header {
-  text-align: center;
+  background-color: rgba(0, 189, 187, 0.35);
 }
 </style>
