@@ -5,8 +5,11 @@
     </v-layout>
     <v-spacer/>
     <v-layout row wrap>
-      <v-flex xs6 class="row">
+      <v-flex xs6 left-half-row-widget class="row">
         <sentiment-performance-multiline/>
+      </v-flex>
+      <v-flex xs6 class="row">
+        <class-frequency-distribution-multibar/>
       </v-flex>
       <v-flex xs12 class="row">
         <v-card>
@@ -71,6 +74,7 @@ import {
 } from "./../store/types.js";
 import FilterToolBar from "./toolbar/FilterToolBar";
 import SentimentPerformanceMultiline from "./widget/line/SentimentPerformanceMultiline";
+import ClassFrequencyDistributionMultibar from "./widget/bar/ClassFrequencyDistributionMultibar";
 
 const ACCOUNT = "account";
 const TOTAL = "total";
@@ -81,7 +85,8 @@ const MONTH = "month";
 export default {
   components: {
     "filter-tool-bar": FilterToolBar,
-    SentimentPerformanceMultiline
+    SentimentPerformanceMultiline,
+    ClassFrequencyDistributionMultibar
   },
   data() {
     return {
@@ -142,13 +147,13 @@ export default {
   },
   methods: {
     setup(tweets) {
-      (this.dataProblemReports = []),
-        (this.dataInquiries = []),
-        (this.dataTopics = {}),
-        // set top level keys
-        this.topics.forEach(topic => {
-          this.dataTopics[topic] = {};
-        });
+      this.dataProblemReports = [];
+      this.dataInquiries = [];
+      this.dataTopics = {};
+      // set top level keys
+      this.topics.forEach(topic => {
+        this.dataTopics[topic] = {};
+      });
       let accounts = new Set();
       tweets.forEach(tweet => {
         accounts.add(tweet.in_reply_to_screen_name);
@@ -242,6 +247,6 @@ table.v-table tbody th {
 }
 .row {
   margin-top: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 </style>
