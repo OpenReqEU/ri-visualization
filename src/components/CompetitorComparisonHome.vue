@@ -12,7 +12,7 @@
         <class-frequency-distribution-multibar/>
       </v-flex>
       <v-flex xs12 class="row">
-        <CompetitorTwoCategoryComparison/>
+        <competitor-two-category-comparison/>
       </v-flex>
     </v-layout>
   </v-container>

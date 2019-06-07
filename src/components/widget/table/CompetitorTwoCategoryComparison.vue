@@ -1,5 +1,6 @@
 <template>
   <v-card>
+    <v-card-title class="headline black--text justify-center ma-0 pa-0">{{ title }}</v-card-title>
     <v-data-table
       class="ma-0 pa-0"
       v-if="dataUpToDate"
@@ -8,7 +9,7 @@
       hide-actions
     >
       <template slot="headerCell" slot-scope="props">
-        <div slot="activator" class="headline black--text">{{ props.header.text }}</div>
+        <div slot="activator" class="subheading black--text">{{ props.header.text }}</div>
       </template>
       <template class="ma-0 pa-0" slot="items" slot-scope="props">
         <td class="ma-0 pa-0">
@@ -64,6 +65,7 @@ const MONTH = "month";
 export default {
   data() {
     return {
+      title: "Overall",
       headersTop: [
         {
           text: "Problem Reports (since)",
@@ -345,5 +347,8 @@ table.v-table tbody th {
 }
 .column-colored {
   background-color: rgba(0, 189, 187, 0.35);
+}
+.header {
+  text-align: center;
 }
 </style>
