@@ -13,7 +13,7 @@
       </v-flex>
       <v-flex xs12 class="row">
         <v-card>
-          <v-card-title class="headline mb-1">Problem Reports</v-card-title>
+          <v-card-title class="headline">Problem Reports</v-card-title>
           <v-data-table
             v-if="dataUpToDate"
             :headers="tableHeaders"
@@ -35,7 +35,7 @@
       <v-spacer/>
       <v-flex xs12 class="row">
         <v-card>
-          <v-card-title class="headline mb-1">Inquiries</v-card-title>
+          <v-card-title class="headline">Inquiries</v-card-title>
           <v-data-table
             v-if="dataUpToDate"
             :headers="tableHeaders"
