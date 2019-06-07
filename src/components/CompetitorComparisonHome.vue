@@ -22,6 +22,7 @@
                 <v-data-table
                   :headers="tableHeadersProblemReports"
                   :items="props.item.problem_reports"
+                  :custom-sort="customTableSort"
                   hide-actions
                 >
                   <template slot="items" slot-scope="props">
@@ -38,6 +39,7 @@
                 <v-data-table
                   :headers="tableHeadersInquiries"
                   :items="props.item.inquiries"
+                  :custom-sort="customTableSort"
                   hide-actions
                 >
                   <template slot="items" slot-scope="props">
@@ -116,19 +118,19 @@ export default {
           text: "Yesterday",
           align: "center",
           sortable: true,
-          value: "problem_report_yesterday"
+          value: "yesterday"
         },
         {
           text: "Last Week",
           align: "center",
           sortable: true,
-          value: "problem_report_week"
+          value: "week"
         },
         {
           text: "Last Month",
           align: "center",
           sortable: true,
-          value: "problem_report_month"
+          value: "month"
         }
       ],
       tableHeadersInquiries: [
@@ -142,19 +144,19 @@ export default {
           text: "Yesterday",
           align: "center",
           sortable: true,
-          value: "inquiries_yesterday"
+          value: "yesterday"
         },
         {
           text: "Last Week",
           align: "center",
           sortable: true,
-          value: "inquiries_week"
+          value: "week"
         },
         {
           text: "Last Month",
           align: "center",
           sortable: true,
-          value: "inquiries_month"
+          value: "month"
         }
       ],
       erros: [],
@@ -314,6 +316,37 @@ export default {
           [INQUIRIES]: inquiriesData
         }
       ];
+    },
+    customTableSort(items, index, isDescending) {
+      items.sort((a, b) => {
+        if (index === "account") {
+          if (isDescending) {
+            return b.account < a.account ? 1 : -1;
+          } else {
+            return a.account > b.account ? 1 : -1;
+          }
+        } else if (index === "yesterday") {
+          if (isDescending) {
+            return b.yesterday - a.yesterday;
+          } else {
+            return a.yesterday - b.yesterday;
+          }
+        } else if (index === "week") {
+          if (isDescending) {
+            return b.week - a.week;
+          } else {
+            return a.week - b.week;
+          }
+        } else if (index === "month") {
+          if (isDescending) {
+            return b.month - a.month;
+          } else {
+            return a.month - b.month;
+          }
+        }
+      });
+
+      return items;
     }
   },
   mounted() {
