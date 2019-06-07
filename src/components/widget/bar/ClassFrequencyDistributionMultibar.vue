@@ -32,6 +32,14 @@ export default {
           left: "center",
           right: "center"
         },
+        toolbox: {
+          showTitle: false,
+          feature: {
+            magicType: {
+              type: ["tiled", "stack"]
+            }
+          }
+        },
         grid: {
           top: "25%",
           bottom: "15%",
@@ -113,6 +121,7 @@ export default {
           self.bar.series[index] = {
             name: account,
             type: "bar",
+            stack: "all ",
             data: [dataProblemReports, dataInquiries, dataIrrelevant]
           };
         });
