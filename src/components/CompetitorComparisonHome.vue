@@ -5,10 +5,10 @@
     </v-layout>
     <v-spacer/>
     <v-layout row wrap>
-      <v-flex xs6 left-half-row-widget class="row">
+      <v-flex xs12 md6 left-half-row-widget class="row">
         <sentiment-performance-multiline/>
       </v-flex>
-      <v-flex xs6 class="row">
+      <v-flex xs12 md6 class="row">
         <class-frequency-distribution-multibar/>
       </v-flex>
       <v-flex xs12 class="row">
