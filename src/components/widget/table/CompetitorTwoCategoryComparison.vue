@@ -169,7 +169,6 @@ export default {
         accounts.add(tweet.in_reply_to_screen_name);
       });
 
-      console.log("topic", this.topic);
       if (this.topic !== "") {
         this.title = this.topic;
         this.tweets = this.tweets.filter(this.filterForTopic);
