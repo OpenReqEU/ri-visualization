@@ -124,13 +124,11 @@ export default {
         this.selectedTimeFrame = "default";
       }
     },
-    postedInTimeframe(tweet) {
-      return (
-        tweet.created_at >= this.startDate && tweet.created_at <= this.endDate
-      );
-    },
     loadData(tweets) {
-      tweets = tweets.filter(this.postedInTimeframe);
+      tweets = tweets.filter(
+        tweet =>
+          tweet.created_at >= this.startDate && tweet.created_at <= this.endDate
+      );
       this.resetChart();
       this.loadChartData(tweets);
     },
