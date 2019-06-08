@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-layout row>
-      <filter-tool-bar></filter-tool-bar>
+      <filter-tool-bar/>
     </v-layout>
 
     <v-layout row full-row-widget>
@@ -61,7 +61,7 @@ import ClassificationTrendReport from "./widget/trend/ClassificationTrendReport"
 export default {
   name: "DashboardHome",
   components: {
-    FilterToolBar,
+    "filter-tool-bar": FilterToolBar,
     SentimentPerformance,
     ClassFrequencyDistribution,
     HeatmapClassFrequency,

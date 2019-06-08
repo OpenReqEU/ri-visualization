@@ -78,7 +78,22 @@ export default {
     lastWeekDifference: 0,
     lastWeekSentiment: 0,
     lastMonthDifference: 0,
-    lastMonthSentiment: 0
+    lastMonthSentiment: 0,
+    dateYesterday: parseInt(
+      moment()
+        .subtract(1, "day")
+        .format("YYYYMMDD")
+    ),
+    dateLastWeek: parseInt(
+      moment()
+        .subtract(1, "week")
+        .format("YYYYMMDD")
+    ),
+    dateLastMonth: parseInt(
+      moment()
+        .subtract(1, "month")
+        .format("YYYYMMDD")
+    )
   }),
   computed: {
     dataUpToDate() {
@@ -101,23 +116,16 @@ export default {
       return [sentimentScore, polarity];
     },
     loadChartData(tweets) {
-      if (tweets != null && tweets.length > 1) {
-        let yesterday = parseInt(
-          moment()
-            .subtract(1, "day")
-            .format("YYYYMMDD")
-        );
-        let lastWeek = parseInt(
-          moment()
-            .subtract(1, "week")
-            .format("YYYYMMDD")
-        );
-        let lastMonth = parseInt(
-          moment()
-            .subtract(1, "month")
-            .format("YYYYMMDD")
-        );
+      this.polarity = [];
+      this.totalSentiment = 0;
+      this.yesterdayDifference = 0;
+      this.yesterdaySentiment = 0;
+      this.lastWeekDifference = 0;
+      this.lastWeekSentiment = 0;
+      this.lastMonthDifference = 0;
+      this.lastMonthSentiment = 0;
 
+      if (tweets != null && tweets.length > 1) {
         let sentimentTotal = [];
         let sentimentYesterday = [];
         let sentimentLastWeek = [];
@@ -128,13 +136,13 @@ export default {
             return;
           }
           let createdAt = tweet.created_at;
-          if (createdAt <= lastMonth) {
+          if (createdAt <= this.dateLastMonth) {
             sentimentLastMonth.push(sentimentScore);
           }
-          if (createdAt <= lastWeek) {
+          if (createdAt <= this.dateLastWeek) {
             sentimentLastWeek.push(sentimentScore);
           }
-          if (createdAt <= yesterday) {
+          if (createdAt <= this.dateYesterday) {
             sentimentYesterday.push(sentimentScore);
           }
           sentimentTotal.push(sentimentScore);

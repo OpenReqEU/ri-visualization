@@ -42,6 +42,11 @@ export default {
           path: "/inquiries"
         },
         {
+          title: "Competitor Comparison",
+          icon: "compare_arrows",
+          path: "/comparison"
+        },
+        {
           title: "Settings",
           icon: "settings",
           path: "/settings"

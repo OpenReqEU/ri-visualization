@@ -154,9 +154,11 @@ import {
   ACTION_UPDATE_TWEET
 } from "./../store/types.js";
 import FilterToolBar from "./toolbar/FilterToolBar";
+import { ROUTE_PROBLEM_REPORTS, ROUTE_INQUIRIES } from "../routes.js";
+
 export default {
   components: {
-    FilterToolBar
+    "filter-tool-bar": FilterToolBar
   },
   data() {
     return {
@@ -201,11 +203,11 @@ export default {
   methods: {
     setup() {
       let currentPath = this.$route.path;
-      if (currentPath === "/problemReports") {
+      if (currentPath === ROUTE_PROBLEM_REPORTS) {
         this.tooblarTitle = "Problem Reports";
         this.cardTableTitle = "Problem Reports";
         this.tweetCategory = "problem_report";
-      } else if (currentPath === "/inquiries") {
+      } else if (currentPath === ROUTE_INQUIRIES) {
         this.tooblarTitle = "inquiries";
         this.cardTableTitle = "Inquiries";
         this.tweetCategory = "inquiry";
@@ -225,7 +227,7 @@ export default {
       });
 
       //Update Number for filtered tweets
-      this.tweetsPerTopic(this.data)
+      this.tweetsPerTopic(this.data);
 
       //Update Sentiment Score for filtered tweets
       this.sentimentScorePerTopic(this.data);
@@ -307,12 +309,13 @@ export default {
 
       return items;
     },
-    loadTopicData(index) {//handles topic selection 
+    loadTopicData(index) {
+      //handles topic selection
       this.topics.forEach((topic, i) => {
         if (i == index) {
           topic.checked = !topic.checked;
           if (topic.checked) {
-            this.topic = topic.label;// Only update the topic when it is checked
+            this.topic = topic.label; // Only update the topic when it is checked
           } else {
             this.topic = "";
           }
@@ -321,14 +324,16 @@ export default {
         }
       });
     },
-    tweetsPerTopic(tweets) {//Calculate number of tweets per topic
+    tweetsPerTopic(tweets) {
+      //Calculate number of tweets per topic
       this.topics.forEach(topic => {
         topic.tweetsNumber = tweets.filter(
           tweet => tweet.topics.first_class.label === topic.label
         ).length;
       });
     },
-    sentimentScorePerTopic(tweets) {// Calculate sentiment score per topic
+    sentimentScorePerTopic(tweets) {
+      // Calculate sentiment score per topic
       let filteredTweets = [];
       this.topics.forEach(topic => {
         filteredTweets = tweets.filter(
@@ -341,7 +346,8 @@ export default {
         topic.sentimentScore = sentimentTotal / tweets.length;
       });
     },
-    setupTopics() {// Fetch topics and push them as an object
+    setupTopics() {
+      // Fetch topics and push them as an object
       this.$store.state.accessKeyConfiguration.topics.forEach(topic => {
         this.topics.push({
           label: topic,

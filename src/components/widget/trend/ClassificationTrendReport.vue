@@ -82,7 +82,22 @@ export default {
     lastWeekDifference: 0,
     lastWeekCategoryTotal: 0,
     lastMonthDifference: 0,
-    lastMonthCategoryTotal: 0
+    lastMonthCategoryTotal: 0,
+    dateYesterday: parseInt(
+      moment()
+        .subtract(1, "day")
+        .format("YYYYMMDD")
+    ),
+    dateLastWeek: parseInt(
+      moment()
+        .subtract(1, "week")
+        .format("YYYYMMDD")
+    ),
+    dateLastMonth: parseInt(
+      moment()
+        .subtract(1, "month")
+        .format("YYYYMMDD")
+    )
   }),
   computed: {
     dataUpToDate() {
@@ -94,52 +109,36 @@ export default {
   },
   methods: {
     loadChartData(tweets) {
+      this.total = 0;
+      this.yesterdayCategoryTotal = 0;
+      this.lastWeekCategoryTotal = 0;
+      this.lastMonthCategoryTotal = 0;
+
+      this.yesterdayDifference = 0;
+      this.lastWeekDifference = 0;
+      this.lastMonthDifference = 0;
+
       if (tweets != null && tweets.length > 1) {
         let self = this;
-        let yesterday = parseInt(
-          moment()
-            .subtract(1, "day")
-            .format("YYYYMMDD")
-        );
-        let lastWeek = parseInt(
-          moment()
-            .subtract(1, "week")
-            .format("YYYYMMDD")
-        );
-        let lastMonth = parseInt(
-          moment()
-            .subtract(1, "month")
-            .format("YYYYMMDD")
-        );
-
-        let total = 0;
-        let categoryYesterday = 0;
-        let categoryLastWeek = 0;
-        let categoryLastMonth = 0;
         tweets.forEach((tweet, index) => {
           let tweetIsCategoryCount =
             tweet.tweet_class === self.tweetCategory ? 1 : 0;
 
-          if (tweet.created_at <= yesterday) {
-            categoryYesterday += tweetIsCategoryCount;
+          if (tweet.created_at <= this.dateYesterday) {
+            this.yesterdayCategoryTotal += tweetIsCategoryCount;
           }
-          if (tweet.created_at <= lastWeek) {
-            categoryLastWeek += tweetIsCategoryCount;
+          if (tweet.created_at <= this.dateLastWeek) {
+            this.lastWeekCategoryTotal += tweetIsCategoryCount;
           }
-          if (tweet.created_at <= lastMonth) {
-            categoryLastMonth += tweetIsCategoryCount;
+          if (tweet.created_at <= this.dateLastMonth) {
+            this.lastMonthCategoryTotal += tweetIsCategoryCount;
           }
-          total += tweetIsCategoryCount;
+          this.total += tweetIsCategoryCount;
         });
 
-        this.total = total;
-        this.yesterdayCategoryTotal = categoryYesterday;
-        this.lastWeekCategoryTotal = categoryLastWeek;
-        this.lastMonthCategoryTotal = categoryLastMonth;
-
-        this.yesterdayDifference = total - categoryYesterday;
-        this.lastWeekDifference = total - categoryLastWeek;
-        this.lastMonthDifference = total - categoryLastMonth;
+        this.yesterdayDifference = this.total - this.yesterdayCategoryTotal;
+        this.lastWeekDifference = this.total - this.lastWeekCategoryTotal;
+        this.lastMonthDifference = this.total - this.lastMonthCategoryTotal;
       }
     },
     getTweetCategoryName() {

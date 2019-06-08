@@ -1,36 +1,45 @@
 <template>
-<v-layout>
-  <v-card class="echarts">
-    <ECharts 
-      class="chart" 
-      :options="option" 
-      :loading="!dataUpToDate" 
-      auto-resize
-    />
-    <v-layout row align-center>
-      <v-flex xs2 offset-xs1>
-        <v-switch 
-          class="action-item"
-          :label="`show only relevant Tweets`" 
-          v-model="modelShowInformativeTweetsOnly">
-        </v-switch>
-      </v-flex>
-      <v-flex xs2>
-        <v-switch 
-          class="action-item"
-          :label="`show Tweet counts`" 
-          v-model="modelShowNumbers">
-        </v-switch>
-      </v-flex>
-    </v-layout>
-  </v-card>
-</v-layout>
+  <v-layout>
+    <v-card class="echarts">
+      <ECharts class="chart" :options="option" :loading="!dataUpToDate" auto-resize/>
+      <v-select
+        class="configuration"
+        label="Configuration (show)"
+        :items="configurationItems"
+        v-model="configuration"
+        multiple
+        chips
+      >
+        <template v-slot:selection="{ item, index }">
+          <v-chip small color="black" outline>
+            <span>show:{{ item }}</span>
+          </v-chip>
+        </template>
+      </v-select>
+      <!-- <v-layout row align-center>
+        <v-flex xs2 offset-xs1>
+          <v-switch class="action-item" :label="`bug reports`" v-model="modelShowBugReports"></v-switch>
+        </v-flex>
+        <v-flex xs2>
+          <v-switch class="action-item" :label="`inquries`" v-model="modelShowInquries"></v-switch>
+        </v-flex>
+        <v-flex xs2>
+          <v-switch class="action-item" :label="`show Tweet counts`" v-model="modelShowNumbers"></v-switch>
+        </v-flex>
+      </v-layout>-->
+    </v-card>
+  </v-layout>
 </template>
 
 <script>
 import ECharts from "vue-echarts";
 import "echarts";
 import { BLUE_LIGHT, BLUE_DARK, BLACK } from "../../../colors.js";
+
+const CONF_SHOW_PROBLEMS = "problems";
+const CONF_SHOW_INQUIRIES = "inquries";
+const CONF_SHOW_OTHERS = "other";
+const CONF_SHOW_VALUES = "values";
 
 export default {
   name: "ChartHeatmapClassFrequency",
@@ -39,9 +48,18 @@ export default {
   },
   props: {},
   data: () => ({
-    modelShowInformativeTweetsOnly: true,
+    modelShowBugReports: true,
+    modelShowInquries: true,
+    modelShowOthers: false,
     modelShowNumbers: true,
     loading: true,
+    configurationItems: [
+      CONF_SHOW_PROBLEMS,
+      CONF_SHOW_INQUIRIES,
+      CONF_SHOW_OTHERS,
+      CONF_SHOW_VALUES
+    ],
+    configuration: [CONF_SHOW_PROBLEMS, CONF_SHOW_INQUIRIES, CONF_SHOW_VALUES],
     option: {
       title: {
         text: "Tweet Frequency per Day and Hour",
@@ -156,11 +174,14 @@ export default {
             let date = new Date(tweet.created_at_full);
             let day = this.convertJSDayToChartDay(date.getDay());
             let hour = date.getHours();
-            if (this.modelShowInformativeTweetsOnly) {
-              if (tweet.tweet_class == "problem_report" || tweet.tweet_class == "inquiry") {
-                chartDict[day][hour] = ++chartDict[day][hour];
-              }
-            } else {
+            if (
+              (tweet.tweet_class == "problem_report" &&
+                this.modelShowBugReports) ||
+              (tweet.tweet_class == "inquiry" && this.modelShowInquries) ||
+              (tweet.tweet_class != "inquiry" &&
+                tweet.tweet_class != "problem_report" &&
+                this.modelShowOthers)
+            ) {
               chartDict[day][hour] = ++chartDict[day][hour];
             }
           }
@@ -227,6 +248,14 @@ export default {
     }
   },
   watch: {
+    configuration() {
+      this.modelShowBugReports = this.configuration.includes(
+        CONF_SHOW_PROBLEMS
+      );
+      this.modelShowInquries = this.configuration.includes(CONF_SHOW_INQUIRIES);
+      this.modelShowOthers = this.configuration.includes(CONF_SHOW_OTHERS);
+      this.modelShowNumbers = this.configuration.includes(CONF_SHOW_VALUES);
+    },
     modelShowNumbers() {
       this.option.series[0].label.normal.show = this.modelShowNumbers;
     }
@@ -250,5 +279,10 @@ export default {
 }
 .divider {
   height: 40px;
+}
+.configuration {
+  padding: 0px 0px 0px 30px;
+  margin: 0px 0px 0px 0px;
+  max-width: 50%;
 }
 </style>
