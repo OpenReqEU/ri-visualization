@@ -12,7 +12,7 @@
       >
         <template v-slot:selection="{ item, index }">
           <v-chip small color="black" outline>
-            <span>{{ item }}</span>
+            <span>show:{{ item }}</span>
           </v-chip>
         </template>
       </v-select>
