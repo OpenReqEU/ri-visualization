@@ -89,8 +89,9 @@ export default {
           name: "Average Sentiment",
           min: -5,
           max: 5,
-          interval: 1,
           type: "value",
+          boundaryGap: true,
+          alignWithLabel: true,
           nameLocation: "center",
           nameTextStyle: {
             padding: 10,
@@ -102,9 +103,6 @@ export default {
             name: "sentiment score",
             type: "line",
             symbolSize: 5,
-            smooth: true,
-            itemStyle: ITEM_STYLE_LINE_BLUE,
-            lineStyle: ITEM_STYLE_LINE_BLUE,
             data: []
           }
         ]
@@ -198,7 +196,6 @@ export default {
         chartData.push({
           name: account,
           type: "line",
-          stack: "all",
           rawData: dictTweetSentimentPerDay,
           data: []
         });
@@ -231,7 +228,6 @@ export default {
           self.line.series[index] = {
             name: o.name,
             type: o.type,
-            stack: o.stack,
             smooth: true,
             data: sentimentAvgPerDay
           };
