@@ -147,11 +147,7 @@ export default {
     },
     showDateFilter() {
       let path = this.$router.currentRoute.path;
-      return (
-        path === ROUTE_COMPARISON ||
-        path === ROUTE_PROBLEM_REPORTS ||
-        path === ROUTE_INQUIRIES
-      );
+      return path === ROUTE_PROBLEM_REPORTS || path === ROUTE_INQUIRIES;
     },
     clearDateFrom() {
       this.dateFrom = null;
