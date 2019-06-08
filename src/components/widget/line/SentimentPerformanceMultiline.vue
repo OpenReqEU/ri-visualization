@@ -136,13 +136,16 @@ export default {
         this.selectedTimeFrame = "default";
       }
     },
-    postedInTimeframe(tweet) {
-      return (
-        tweet.created_at >= this.startDate && tweet.created_at <= this.endDate
-      );
-    },
     loadData(tweets) {
-      tweets = tweets.filter(this.postedInTimeframe);
+      tweets = tweets.filter(
+        tweet =>
+          tweet.created_at >= this.startDate && tweet.created_at <= this.endDate
+      );
+      if (this.ignoreNeutralTweets) {
+        tweets = tweets.filter(
+          tweet => tweet.sentiment_score > 1 || tweet.sentiment_score < -1
+        );
+      }
       this.resetChart();
       this.loadChartData(tweets);
     },
@@ -169,17 +172,7 @@ export default {
             sentimentAvg: 0
           };
         }
-        // console.log("ignoreNeutralTweets", this.ignoreNeutralTweets);
         tweets.forEach(tweet => {
-          // if (
-          //   this.ignoreNeutralTweets &&
-          //   tweet.sentiment_score <= 1 &&
-          //   tweet.sentiment_score >= -1
-          // ) {
-          //   // ignore neutral tweets
-          //   return;
-          // }
-
           if (tweet.in_reply_to_screen_name !== account) {
             return;
           }
@@ -239,6 +232,7 @@ export default {
             name: o.name,
             type: o.type,
             stack: o.stack,
+            smooth: true,
             data: sentimentAvgPerDay
           };
         });
