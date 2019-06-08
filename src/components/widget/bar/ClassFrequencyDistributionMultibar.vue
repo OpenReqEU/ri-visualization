@@ -1,7 +1,16 @@
 <template>
   <v-layout>
+    <v-date-picker
+      v-if="customFromDateActive"
+      v-model="datePickerFrom"
+      no-title
+      @change="datePicker()"
+    ></v-date-picker>
+    <v-date-picker v-if="customToDateActive" v-model="datePickerTo" no-title @change="datePicker()"></v-date-picker>
+    <v-spacer/>
     <v-card class="echarts">
       <ECharts class="chart" :options="bar" :loading="!dataUpToDate" auto-resize/>
+      <v-select class="timeframe" :items="timeframes" v-model="selectedTimeFrame"></v-select>
     </v-card>
   </v-layout>
 </template>
@@ -22,6 +31,20 @@ export default {
   data: () => ({
     startDate: 0,
     endDate: 0,
+    customFromDateActive: false,
+    customToDateActive: false,
+    datePickerFrom: null,
+    datePickerTo: null,
+    timeframes: [
+      "7 days",
+      "30 days",
+      "90 days",
+      "this year",
+      "all time",
+      "from",
+      "to"
+    ],
+    selectedTimeFrame: "7 days",
     bar: {}
   }),
   methods: {
@@ -75,15 +98,38 @@ export default {
         ]
       };
     },
+    datePicker() {
+      if (this.customFromDateActive) {
+        this.startDate = moment(this.datePickerFrom, "YYYY.MM.DD").format(
+          "YYYYMMDD"
+        );
+      } else {
+        this.endDate = moment(this.datePickerTo, "YYYY.MM.DD").format(
+          "YYYYMMDD"
+        );
+      }
+      this.customFromDateActive = false;
+      this.customToDateActive = false;
+      if (
+        moment(this.startDate, "YYYYMMDD").isBefore(
+          moment(this.endDate, "YYYYMMDD")
+        ) ||
+        moment(this.startDate, "YYYYMMDD").isSame(
+          moment(this.endDate, "YYYYMMDD")
+        )
+      ) {
+        this.loadData(this.$store.state.filteredTweets);
+      } else {
+        // reset timeframe to the default value if the user selects an illegal time range
+        this.selectedTimeFrame = "default";
+      }
+    },
     postedInTimeframe(tweet) {
       return (
         tweet.created_at >= this.startDate && tweet.created_at <= this.endDate
       );
     },
     loadData(tweets) {
-      this.startDate = this.getEarliestTweetDate(tweets);
-      this.endDate = this.getFormattedDate(1, "days");
-
       tweets = tweets.filter(this.postedInTimeframe);
       this.resetChart();
       this.loadChartData(tweets);
