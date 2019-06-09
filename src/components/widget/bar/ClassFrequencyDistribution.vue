@@ -21,6 +21,7 @@ import "echarts";
 import moment from "moment";
 import "moment/locale/de";
 import { ITEM_STYLE_BAR_BLUE } from "../../../colors.js";
+import { FILTER_TIMEFRAME } from "../../../dataFilter.js";
 
 export default {
   name: "ClassFrequencyDistribution",
@@ -100,19 +101,14 @@ export default {
           moment(this.endDate, "YYYYMMDD")
         )
       ) {
-        this.loadData(this.$store.state.filteredTweets);
+        this.loadData([...this.$store.state.filteredTweets]);
       } else {
         // reset timeframe to the default value if the user selects an illegal time range
         this.selectedTimeFrame = "default";
       }
     },
-    postedInTimeframe(tweet) {
-      return (
-        tweet.created_at >= this.startDate && tweet.created_at <= this.endDate
-      );
-    },
     loadData(tweets) {
-      tweets = tweets.filter(this.postedInTimeframe);
+      tweets = tweets.filter(FILTER_TIMEFRAME(this.startDate, this.endDate));
       this.loadChartData(tweets);
     },
     loadChartData(tweets) {
