@@ -59,6 +59,7 @@ import {
 
 import { ROUTE_DASHBOARD } from "../routes";
 export default {
+  name: "LoginHome",
   data() {
     return {
       color: BLUE_FILL,
