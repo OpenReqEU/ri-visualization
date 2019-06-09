@@ -26,7 +26,6 @@ import ECharts from "vue-echarts";
 import "echarts";
 import moment from "moment";
 import "moment/locale/de";
-import { ITEM_STYLE_LINE_BLUE } from "../../../colors.js";
 
 moment.locale("en");
 export default {
