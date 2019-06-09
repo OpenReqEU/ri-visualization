@@ -1,7 +1,7 @@
 <template>
   <v-layout>
     <v-card class="echarts">
-      <ECharts class="chart" :options="option" :loading="!dataUpToDate" auto-resize/>
+      <ECharts class="chart" :options="option" auto-resize/>
       <v-select
         class="configuration"
         label="Configuration (show)"
@@ -239,13 +239,14 @@ export default {
       }
     }
   },
-  computed: {
-    dataUpToDate() {
-      if (this.$store.state.dataUpToDate) {
-        this.loadChartData(this.$store.state.filteredTweets);
+  mounted() {
+    this.loadChartData([...this.$store.state.filteredTweets]);
+    this.$store.watch(
+      (state, getters) => getters.filteredTweets,
+      (newValue, oldValue) => {
+        this.loadChartData([...newValue]);
       }
-      return this.$store.state.dataUpToDate;
-    }
+    );
   },
   watch: {
     configuration() {
@@ -255,6 +256,8 @@ export default {
       this.modelShowInquries = this.configuration.includes(CONF_SHOW_INQUIRIES);
       this.modelShowOthers = this.configuration.includes(CONF_SHOW_OTHERS);
       this.modelShowNumbers = this.configuration.includes(CONF_SHOW_VALUES);
+
+      this.loadChartData([...this.$store.state.filteredTweets]);
     },
     modelShowNumbers() {
       this.option.series[0].label.normal.show = this.modelShowNumbers;

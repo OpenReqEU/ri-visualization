@@ -1,5 +1,5 @@
 <template>
-  <v-card v-if="dataUpToDate">
+  <v-card>
     <v-card-title primary-title>
       <div>
         <span class="grey--text">Total {{getTweetCategoryName()}}</span>
@@ -99,13 +99,14 @@ export default {
         .format("YYYYMMDD")
     )
   }),
-  computed: {
-    dataUpToDate() {
-      if (this.$store.getters.dataUpToDate) {
-        this.loadChartData(this.$store.getters.filteredTweets);
+  mounted() {
+    this.loadChartData([...this.$store.getters.filteredTweets]);
+    this.$store.watch(
+      (state, getters) => getters.filteredTweets,
+      (newValue, oldValue) => {
+        this.loadChartData([...newValue]);
       }
-      return this.$store.getters.dataUpToDate;
-    }
+    );
   },
   methods: {
     loadChartData(tweets) {
@@ -124,13 +125,13 @@ export default {
           let tweetIsCategoryCount =
             tweet.tweet_class === self.tweetCategory ? 1 : 0;
 
-          if (tweet.created_at <= this.dateYesterday) {
+          if (tweet.created_at < this.dateYesterday) {
             this.yesterdayCategoryTotal += tweetIsCategoryCount;
           }
-          if (tweet.created_at <= this.dateLastWeek) {
+          if (tweet.created_at < this.dateLastWeek) {
             this.lastWeekCategoryTotal += tweetIsCategoryCount;
           }
-          if (tweet.created_at <= this.dateLastMonth) {
+          if (tweet.created_at < this.dateLastMonth) {
             this.lastMonthCategoryTotal += tweetIsCategoryCount;
           }
           this.total += tweetIsCategoryCount;

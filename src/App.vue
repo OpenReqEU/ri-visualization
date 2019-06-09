@@ -3,7 +3,9 @@
     <top-tool-bar @toggle-drawer="$refs.drawer.drawer = !$refs.drawer.drawer"></top-tool-bar>
     <top-navigation-drawer ref="drawer" v-show="$store.getters.accessKey"></top-navigation-drawer>
     <v-content>
-      <router-view :key="$route.path"></router-view>
+      <keep-alive>
+        <router-view :key="$route.path"></router-view>
+      </keep-alive>
     </v-content>
     <v-footer class="footer">
       &copy;{{new Date().getFullYear()}} — Christoph Stanik

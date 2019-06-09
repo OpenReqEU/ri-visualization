@@ -9,7 +9,7 @@
     <v-date-picker v-if="customToDateActive" v-model="datePickerTo" no-title @change="datePicker()"></v-date-picker>
     <v-spacer/>
     <v-card class="echarts">
-      <ECharts class="chart" :options="line" :loading="!dataUpToDate" auto-resize/>
+      <ECharts class="chart" :options="line" auto-resize/>
       <v-layout row align-center>
         <v-flex xs3>
           <v-select class="timeframe" :items="timeframes" v-model="selectedTimeFrame"></v-select>
@@ -214,15 +214,14 @@ export default {
     this.endDate = moment()
       .subtract(1, "days")
       .format("YYYYMMDD");
-    this.loadData(this.$store.state.filteredTweets);
-  },
-  computed: {
-    dataUpToDate() {
-      if (this.$store.state.dataUpToDate) {
-        this.loadData(this.$store.state.filteredTweets);
+
+    this.loadData([...this.$store.getters.filteredTweets]);
+    this.$store.watch(
+      (state, getters) => getters.filteredTweets,
+      (newValue, oldValue) => {
+        this.loadData([...newValue]);
       }
-      return this.$store.state.dataUpToDate;
-    }
+    );
   },
   watch: {
     selectedTimeFrame() {
@@ -262,10 +261,10 @@ export default {
           this.endDate = this.getFormattedDate(1, "days");
       }
 
-      this.loadData(this.$store.state.filteredTweets);
+      this.loadData([...this.$store.state.filteredTweets]);
     },
     ignoreNeutralTweets() {
-      this.loadData(this.$store.state.filteredTweets);
+      this.loadData([...this.$store.state.filteredTweets]);
     }
   }
 };

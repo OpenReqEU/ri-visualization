@@ -138,7 +138,8 @@ import VContent from "vuetify/lib/components/VGrid/VContent";
 import TopToolBar from "./TopToolBar";
 import {
   ACTION_FILTER_TWEETS,
-  MUTATE_SELECTED_TOPICS
+  MUTATE_SELECTED_TOPICS,
+  MUTATE_SELECTED_TWITTER_ACCOUNTS
 } from "./../../store/types";
 import { BLUE_FILL } from "../../colors.js";
 import moment from "moment";
@@ -295,6 +296,10 @@ export default {
   watch: {
     selectedTwitterAccounts() {
       this.filterTweets();
+      this.$store.commit(
+        MUTATE_SELECTED_TWITTER_ACCOUNTS,
+        this.selectedTwitterAccounts
+      );
     },
     selectedTopics() {
       this.$store.commit(MUTATE_SELECTED_TOPICS, this.selectedTopics);

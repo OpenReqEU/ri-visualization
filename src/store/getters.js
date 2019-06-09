@@ -22,6 +22,9 @@ export const accessKey = state => {
 export const filteredTweets = state => {
   return state.filteredTweets;
 };
+export const selectedTopics = state => {
+  return state.selectedTopics;
+};
 export const dataUpToDate = state => {
   return state.dataUpToDate;
 };

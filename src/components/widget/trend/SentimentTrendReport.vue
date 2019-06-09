@@ -1,5 +1,5 @@
 <template>
-  <v-card v-if="dataUpToDate">
+  <v-card>
     <v-card-title primary-title>
       <div>
         <span class="grey--text">Average Sentiment</span>
@@ -95,13 +95,14 @@ export default {
         .format("YYYYMMDD")
     )
   }),
-  computed: {
-    dataUpToDate() {
-      if (this.$store.getters.dataUpToDate) {
-        this.loadChartData(this.$store.getters.filteredTweets);
+  mounted() {
+    this.loadChartData([...this.$store.getters.filteredTweets]);
+    this.$store.watch(
+      (state, getters) => getters.filteredTweets,
+      (newValue, oldValue) => {
+        this.loadChartData([...newValue]);
       }
-      return this.$store.getters.dataUpToDate;
-    }
+    );
   },
   methods: {
     calculatePolarity(sentimentScore) {
@@ -136,13 +137,13 @@ export default {
             return;
           }
           let createdAt = tweet.created_at;
-          if (createdAt <= this.dateLastMonth) {
+          if (createdAt < this.dateLastMonth) {
             sentimentLastMonth.push(sentimentScore);
           }
-          if (createdAt <= this.dateLastWeek) {
+          if (createdAt < this.dateLastWeek) {
             sentimentLastWeek.push(sentimentScore);
           }
-          if (createdAt <= this.dateYesterday) {
+          if (createdAt < this.dateYesterday) {
             sentimentYesterday.push(sentimentScore);
           }
           sentimentTotal.push(sentimentScore);

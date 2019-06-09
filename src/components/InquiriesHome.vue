@@ -59,7 +59,6 @@
       </v-card-title>
     </v-card>
     <v-data-table
-      v-if="dataUpToDate"
       :headers="tableHeaders"
       :items="data"
       :search="searchQuery"
@@ -153,6 +152,7 @@ import {
   ACTION_SET_TOOLBAR_HEADER,
   ACTION_UPDATE_TWEET
 } from "./../store/types.js";
+import { FILTER_FOR_TOPIC, FILTER_FOR_CATEGORY } from "./../dataFilter.js";
 
 export default {
   name: "InquiriesHome",
@@ -193,6 +193,7 @@ export default {
       erros: [],
       tooblarTitle: "inquiries",
       cardTableTitle: "Inquiries",
+      rawData: [],
       data: [],
       searchQuery: "",
       topics: [],
@@ -200,18 +201,9 @@ export default {
     };
   },
   methods: {
-    loadData(tweets, tweetCategory, topic) {
+    loadData(tweets, topic) {
       //Sorted by creation date
-      tweets.sort((val1, val2) => {
-        return val1.created_at - val2.created_at;
-      });
-      this.data = [];
-
-      tweets.forEach(tweet => {
-        if (tweet.tweet_class === tweetCategory) {
-          this.data.push(tweet);
-        }
-      });
+      this.data = tweets.filter(FILTER_FOR_CATEGORY(this.tweetCategory));
 
       //Update Number for filtered tweets
       this.tweetsPerTopic(this.data);
@@ -220,10 +212,12 @@ export default {
       this.sentimentScorePerTopic(this.data);
 
       if (topic != "") {
-        this.data = this.data.filter(
-          tweet => tweet.topics.first_class.label === topic
-        );
+        this.data = this.data.filter(FILTER_FOR_TOPIC(this.topic));
       }
+
+      this.data.sort((val1, val2) => {
+        return val1.created_at - val2.created_at;
+      });
 
       // Update UI
       this.data.splice(0, 0);
@@ -310,12 +304,13 @@ export default {
           topic.checked = false;
         }
       });
+      this.loadData([...this.$store.getters.filteredTweets], this.topic);
     },
     tweetsPerTopic(tweets) {
       //Calculate number of tweets per topic
       this.topics.forEach(topic => {
         topic.tweetsNumber = tweets.filter(
-          tweet => tweet.topics.first_class.label === topic.label
+          FILTER_FOR_TOPIC(topic.label)
         ).length;
       });
     },
@@ -323,14 +318,12 @@ export default {
       // Calculate sentiment score per topic
       let filteredTweets = [];
       this.topics.forEach(topic => {
-        filteredTweets = tweets.filter(
-          tweet => tweet.topics.first_class.label === topic.label
-        );
-        var sentimentTotal = 0;
+        filteredTweets = tweets.filter(FILTER_FOR_TOPIC(topic.label));
+        let sentimentTotal = 0;
         filteredTweets.forEach(filteredTweet => {
           sentimentTotal += filteredTweet.sentiment_score;
         });
-        topic.sentimentScore = sentimentTotal / tweets.length;
+        topic.sentimentScore = sentimentTotal / filteredTweets.length;
       });
     },
     setupTopics() {
@@ -347,24 +340,13 @@ export default {
   },
   mounted() {
     this.setupTopics();
-    this.loadData(
-      this.$store.state.filteredTweets,
-      this.tweetCategory,
-      this.topic
+    this.$store.watch(
+      (state, getters) => getters.filteredTweets,
+      (newValue, oldValue) => {
+        this.loadData([...newValue], this.topic);
+      }
     );
     this.$store.dispatch(ACTION_SET_TOOLBAR_HEADER, this.tooblarTitle);
-  },
-  computed: {
-    dataUpToDate() {
-      if (this.$store.state.dataUpToDate) {
-        this.loadData(
-          this.$store.state.filteredTweets,
-          this.tweetCategory,
-          this.topic
-        );
-      }
-      return this.$store.state.dataUpToDate;
-    }
   }
 };
 </script>

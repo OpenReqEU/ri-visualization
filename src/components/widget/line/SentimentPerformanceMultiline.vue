@@ -9,7 +9,7 @@
     <v-date-picker v-if="customToDateActive" v-model="datePickerTo" no-title @change="datePicker()"></v-date-picker>
     <v-spacer/>
     <v-card class="echarts">
-      <ECharts class="chart" :options="line" :loading="!dataUpToDate" auto-resize/>
+      <ECharts class="chart" :options="line" auto-resize/>
       <v-layout row align-center>
         <v-flex xs3>
           <v-select class="timeframe" :items="timeframes" v-model="selectedTimeFrame"></v-select>
@@ -26,10 +26,14 @@ import ECharts from "vue-echarts";
 import "echarts";
 import moment from "moment";
 import "moment/locale/de";
+import {
+  FILTER_NEUTRAL_SENTIMENT,
+  FILTER_TIMEFRAME
+} from "./../../../dataFilter";
 
 moment.locale("en");
 export default {
-  name: "ClassFrequencyDistribution",
+  name: "SentimentPerformanceMultiline",
   components: {
     ECharts
   },
@@ -134,14 +138,9 @@ export default {
       }
     },
     loadData(tweets) {
-      tweets = tweets.filter(
-        tweet =>
-          tweet.created_at >= this.startDate && tweet.created_at <= this.endDate
-      );
+      tweets = tweets.filter(FILTER_TIMEFRAME(this.startDate, this.endDate));
       if (this.ignoreNeutralTweets) {
-        tweets = tweets.filter(
-          tweet => tweet.sentiment_score > 1 || tweet.sentiment_score < -1
-        );
+        tweets = tweets.filter(FILTER_NEUTRAL_SENTIMENT);
       }
       this.resetChart();
       this.loadChartData(tweets);
@@ -255,7 +254,14 @@ export default {
     this.endDate = moment()
       .subtract(1, "days")
       .format("YYYYMMDD");
-    this.loadData(this.$store.state.filteredTweets);
+
+    this.loadData([...this.$store.getters.filteredTweets]);
+    this.$store.watch(
+      (state, getters) => getters.filteredTweets,
+      (newValue, oldValue) => {
+        this.loadData([...newValue]);
+      }
+    );
   },
   watch: {
     selectedTimeFrame() {
@@ -295,15 +301,10 @@ export default {
           this.endDate = this.getFormattedDate(1, "days");
       }
 
-      this.loadData(this.$store.state.filteredTweets);
-    }
-  },
-  computed: {
-    dataUpToDate() {
-      if (this.$store.state.dataUpToDate) {
-        this.loadData(this.$store.state.filteredTweets);
-      }
-      return this.$store.state.dataUpToDate;
+      this.loadData([...this.$store.state.filteredTweets]);
+    },
+    ignoreNeutralTweets() {
+      this.loadData([...this.$store.state.filteredTweets]);
     }
   }
 };

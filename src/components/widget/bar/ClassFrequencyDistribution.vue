@@ -9,7 +9,7 @@
     <v-date-picker v-if="customToDateActive" v-model="datePickerTo" no-title @change="datePicker()"></v-date-picker>
     <v-spacer/>
     <v-card class="echarts">
-      <ECharts class="chart" :options="bar" :loading="!dataUpToDate" auto-resize/>
+      <ECharts class="chart" :options="bar" auto-resize/>
       <v-select class="timeframe" :items="timeframes" v-model="selectedTimeFrame"></v-select>
     </v-card>
   </v-layout>
@@ -149,15 +149,14 @@ export default {
     this.endDate = moment()
       .subtract(1, "days")
       .format("YYYYMMDD");
-    this.loadData(this.$store.state.filteredTweets);
-  },
-  computed: {
-    dataUpToDate() {
-      if (this.$store.state.dataUpToDate) {
-        this.loadData(this.$store.state.filteredTweets);
+
+    this.loadData([...this.$store.state.filteredTweets]);
+    this.$store.watch(
+      (state, getters) => getters.filteredTweets,
+      (newValue, oldValue) => {
+        this.loadData([...newValue]);
       }
-      return this.$store.state.dataUpToDate;
-    }
+    );
   },
   watch: {
     selectedTimeFrame() {
@@ -216,7 +215,7 @@ export default {
             .format("YYYYMMDD");
       }
 
-      this.loadData(this.$store.state.filteredTweets);
+      this.loadData([...this.$store.state.filteredTweets]);
     }
   }
 };

@@ -45,23 +45,20 @@ export default {
   },
   data() {
     return {
+      selectedTopics: [],
       erros: [],
       tooblarTitle: "Competitor Comparison"
     };
   },
   mounted() {
     this.topics = this.$store.state.accessKeyConfiguration.topics;
-    this.$store.dispatch(ACTION_SET_TOOLBAR_HEADER, this.tooblarTitle);
-  },
-  computed: {
-    selectedTopics: {
-      get: function() {
-        return this.$store.state.selectedTopics;
-      },
-      set: function(val) {
-        return this.$store.state.selectedTopics;
+    this.$store.watch(
+      (state, getters) => getters.selectedTopics,
+      (newValue, oldValue) => {
+        this.selectedTopics = [...newValue];
       }
-    }
+    );
+    this.$store.dispatch(ACTION_SET_TOOLBAR_HEADER, this.tooblarTitle);
   }
 };
 </script>

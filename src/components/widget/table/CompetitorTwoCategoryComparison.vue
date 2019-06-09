@@ -1,13 +1,7 @@
 <template>
   <v-card>
     <v-card-title class="header headline black--text justify-center ma-0 pa-0">{{ title }}</v-card-title>
-    <v-data-table
-      class="ma-0 pa-0"
-      v-if="dataUpToDate"
-      :headers="headersTop"
-      :items="data"
-      hide-actions
-    >
+    <v-data-table class="ma-0 pa-0" :headers="headersTop" :items="data" hide-actions>
       <template slot="headerCell" slot-scope="props">
         <div slot="activator" class="subheading black--text">{{ props.header.text }}</div>
       </template>
@@ -54,6 +48,8 @@
 <script>
 import moment from "moment";
 import "moment/locale/de";
+import { FILTER_FOR_TOPIC } from "./../../../dataFilter";
+
 const PROBLEM_REPORTS = "problem_reports";
 const INQUIRIES = "inquiries";
 const ACCOUNT = "account";
@@ -164,14 +160,11 @@ export default {
   methods: {
     setup() {
       this.data = [];
-      let accounts = new Set();
-      this.tweets.forEach(tweet => {
-        accounts.add(tweet.in_reply_to_screen_name);
-      });
+      let accounts = this.$store.state.selectedTwitterAccounts;
 
       if (this.topic !== "") {
         this.title = this.topic;
-        this.tweets = this.tweets.filter(this.filterForTopic);
+        this.tweets = this.tweets.filter(FILTER_FOR_TOPIC(this.topic));
       }
 
       let tmpData = [];
@@ -275,10 +268,6 @@ export default {
           month: tmpData[i][INQUIRIES][MONTH]
         });
       }
-      let preparedData = [];
-      preparedData[0] = { [PROBLEM_REPORTS]: problemReportsData };
-      preparedData[1] = { [INQUIRIES]: inquiriesData };
-      // this.data = preparedData;
       this.data = [
         {
           [PROBLEM_REPORTS]: problemReportsData,
@@ -327,17 +316,15 @@ export default {
     }
   },
   mounted() {
-    this.tweets = this.$store.getters.filteredTweets;
+    this.tweets = [...this.$store.getters.filteredTweets];
     this.loadData();
-  },
-  computed: {
-    dataUpToDate() {
-      if (this.$store.getters.dataUpToDate) {
-        this.tweets = this.$store.getters.filteredTweets;
+    this.$store.watch(
+      (state, getters) => getters.filteredTweets,
+      (newValue, oldValue) => {
+        this.tweets = [...newValue];
         this.loadData();
       }
-      return this.$store.getters.dataUpToDate;
-    }
+    );
   }
 };
 </script>
