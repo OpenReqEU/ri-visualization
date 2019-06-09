@@ -153,12 +153,11 @@ import {
   ACTION_SET_TOOLBAR_HEADER,
   ACTION_UPDATE_TWEET
 } from "./../store/types.js";
-import FilterToolBar from "./toolbar/FilterToolBar";
 
 export default {
   name: "InquiriesHome",
   components: {
-    "filter-tool-bar": FilterToolBar
+    "filter-tool-bar": () => import("./toolbar/FilterToolBar")
   },
   data() {
     return {

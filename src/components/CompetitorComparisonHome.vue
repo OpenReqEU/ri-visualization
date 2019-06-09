@@ -23,10 +23,6 @@
 
 <script>
 import { ACTION_SET_TOOLBAR_HEADER } from "./../store/types.js";
-import FilterToolBar from "./toolbar/FilterToolBar";
-import SentimentPerformanceMultiline from "./widget/line/SentimentPerformanceMultiline";
-import ClassFrequencyDistributionMultibar from "./widget/bar/ClassFrequencyDistributionMultibar";
-import CompetitorTwoCategoryComparison from "./widget/table/CompetitorTwoCategoryComparison";
 
 const PROBLEM_REPORTS = "problem_reports";
 const INQUIRIES = "inquiries";
@@ -38,10 +34,13 @@ const MONTH = "month";
 
 export default {
   components: {
-    "filter-tool-bar": FilterToolBar,
-    SentimentPerformanceMultiline,
-    ClassFrequencyDistributionMultibar,
-    CompetitorTwoCategoryComparison
+    "filter-tool-bar": () => import("./toolbar/FilterToolBar"),
+    "sentiment-performance-multiline": () =>
+      import("./widget/line/SentimentPerformanceMultiline"),
+    "class-frequency-distribution-multibar": () =>
+      import("./widget/bar/ClassFrequencyDistributionMultibar"),
+    "competitor-two-category-comparison": () =>
+      import("./widget/table/CompetitorTwoCategoryComparison")
   },
   data() {
     return {

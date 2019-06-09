@@ -52,21 +52,19 @@
   </v-container>
 </template>
 <script>
-import FilterToolBar from "./toolbar/FilterToolBar";
-import ClassFrequencyDistribution from "./widget/bar/ClassFrequencyDistribution";
-import SentimentPerformance from "./widget/line/SentimentPerformance";
-import HeatmapClassFrequency from "./widget/heatmap/HeatmapClassFrequency";
-import SentimentTrendReport from "./widget/trend/SentimentTrendReport";
-import ClassificationTrendReport from "./widget/trend/ClassificationTrendReport";
 export default {
   name: "DashboardHome",
   components: {
-    "filter-tool-bar": FilterToolBar,
-    SentimentPerformance,
-    ClassFrequencyDistribution,
-    HeatmapClassFrequency,
-    SentimentTrendReport,
-    ClassificationTrendReport
+    "filter-tool-bar": () => import("./toolbar/FilterToolBar"),
+    "sentiment-performance": () => import("./widget/line/SentimentPerformance"),
+    "class-frequency-distribution": () =>
+      import("./widget/bar/ClassFrequencyDistribution"),
+    "heatmap-class-frequency": () =>
+      import("./widget/heatmap/HeatmapClassFrequency"),
+    "sentiment-trend-report": () =>
+      import("./widget/trend/SentimentTrendReport"),
+    "classification-trend-report": () =>
+      import("./widget/trend/ClassificationTrendReport")
   },
   mounted() {
     this.$store.dispatch("setToolbarHeader", "Dashboard");
