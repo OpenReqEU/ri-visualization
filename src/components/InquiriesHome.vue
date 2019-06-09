@@ -112,10 +112,10 @@
                     @click="labelTweetAs({
                       origin: tweetCategory, 
                       index: props.index, 
-                      label: tweetCategory==='problem_report' ? 'inquiry' : 'problem_report',
+                      label: 'problem_report',
                       tweet: props.item
                   })"
-                  >{{tweetCategory==='problem_report' ? 'inquiry' : 'problem'}}</v-btn>
+                  >problem</v-btn>
                   <v-btn
                     small
                     outline
@@ -154,16 +154,16 @@ import {
   ACTION_UPDATE_TWEET
 } from "./../store/types.js";
 import FilterToolBar from "./toolbar/FilterToolBar";
-import { ROUTE_PROBLEM_REPORTS, ROUTE_INQUIRIES } from "../routes.js";
 
 export default {
+  name: "InquiriesHome",
   components: {
     "filter-tool-bar": FilterToolBar
   },
   data() {
     return {
       key: this.$route.path,
-      tweetCategory: "",
+      tweetCategory: "inquiry",
       pagination: {
         sortBy: "created_at",
         descending: true
@@ -192,8 +192,8 @@ export default {
         }
       ],
       erros: [],
-      tooblarTitle: "",
-      cardTableTitle: "",
+      tooblarTitle: "inquiries",
+      cardTableTitle: "Inquiries",
       data: [],
       searchQuery: "",
       topics: [],
@@ -201,18 +201,6 @@ export default {
     };
   },
   methods: {
-    setup() {
-      let currentPath = this.$route.path;
-      if (currentPath === ROUTE_PROBLEM_REPORTS) {
-        this.tooblarTitle = "Problem Reports";
-        this.cardTableTitle = "Problem Reports";
-        this.tweetCategory = "problem_report";
-      } else if (currentPath === ROUTE_INQUIRIES) {
-        this.tooblarTitle = "inquiries";
-        this.cardTableTitle = "Inquiries";
-        this.tweetCategory = "inquiry";
-      }
-    },
     loadData(tweets, tweetCategory, topic) {
       //Sorted by creation date
       tweets.sort((val1, val2) => {
@@ -359,16 +347,13 @@ export default {
     }
   },
   mounted() {
-    this.setup();
+    this.setupTopics();
     this.loadData(
       this.$store.state.filteredTweets,
       this.tweetCategory,
       this.topic
     );
     this.$store.dispatch(ACTION_SET_TOOLBAR_HEADER, this.tooblarTitle);
-  },
-  created() {
-    this.setupTopics();
   },
   computed: {
     dataUpToDate() {
