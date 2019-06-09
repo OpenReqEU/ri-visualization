@@ -155,7 +155,7 @@ import {
 } from "./../store/types.js";
 
 export default {
-  anme: "ProblemReportsHome",
+  name: "ProblemReportsHome",
   components: {
     "filter-tool-bar": () => import("./toolbar/FilterToolBar")
   },
