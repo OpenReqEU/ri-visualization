@@ -10,6 +10,9 @@ export const loggedIn = state => {
 export const accessKeyConfigurationTwitterAccounts = state => {
   return state.accessKeyConfiguration.twitter_accounts;
 };
+export const accessKeyConfigurationTopics = state => {
+  return state.accessKeyConfiguration.topics;
+};
 export const accessKeyConfiguration = state => {
   return state.accessKeyConfiguration;
 };

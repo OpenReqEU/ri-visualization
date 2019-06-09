@@ -10,6 +10,10 @@ export const mutateTweets = (state, tweets) => {
   state.tweets = tweets;
 };
 
+export const mutateSelectedTopics = (state, topics) => {
+  state.selectedTopics = topics;
+};
+
 export const mutateTwitterAccounts = (state, twitterAccounts) => {
   state.twitterAccounts = twitterAccounts;
 };

@@ -11,6 +11,7 @@ export const store = new Vuex.Store({
     topBarTitle: 'Dashboard',
     twitterAccounts: [],
     tweets: {},
+    selectedTopics: [],
     initialDataLoaded: false,
     filteredTweets: [],
     dataUpToDate: false,

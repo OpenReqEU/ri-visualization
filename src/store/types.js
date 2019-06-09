@@ -20,6 +20,7 @@ export const MUTATE_ACCESS_KEY = 'mutateAccessKey';
 export const MUTATE_ACCESS_KEY_CONFIGURATION = 'mutateAccessKeyConfiguration';
 export const MUTATE_TWEETS = 'mutateTweets';
 export const MUTATE_TWITTER_ACCOUNTS = 'mutateTwitterAccounts';
+export const MUTATE_SELECTED_TOPICS = 'mutateSelectedTopics';
 export const MUTATE_RESET_UNLABELED_TWEETS = 'mutateResetUnlabeledTweets';
 export const MUTATE_UNLABELED_TWEETS = 'mutateUnlabeledTweets';
 export const MUTATE_INITIAL_DATA = 'mutateInitalData';
