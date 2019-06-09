@@ -1,11 +1,4 @@
 /* eslint-disable */
-const CompetitorComparisonHome = () => import('./components/CompetitorComparisonHome.vue');
-const DashboardHome = () => import('./components/DashboardHome.vue');
-const InquiriesHome = () => import('./components/InquiriesHome.vue');
-const LoginHome = () => import('./components/LoginHome.vue');
-const ProblemReportsHome = () => import('./components/ProblemReportsHome.vue');
-const SettingsHome = () => import('./components/SettingsHome.vue');
-
 export const ROUTE_EMPTY = "";
 export const ROUTE_DEFAULT = "/";
 export const ROUTE_ALL = "*";
@@ -22,27 +15,27 @@ export const routes = [{
   },
   {
     path: ROUTE_DASHBOARD,
-    component: DashboardHome
+    component: () => import('./components/DashboardHome.vue')
   },
   {
     path: ROUTE_LOGIN,
-    component: LoginHome
+    component: () => import('./components/LoginHome.vue')
   },
   {
     path: ROUTE_PROBLEM_REPORTS,
-    component: ProblemReportsHome
+    component: () => import('./components/ProblemReportsHome.vue')
   },
   {
     path: ROUTE_INQUIRIES,
-    component: InquiriesHome
+    component: () => import('./components/InquiriesHome.vue')
   },
   {
     path: ROUTE_COMPARISON,
-    component: CompetitorComparisonHome
+    component: () => import('./components/CompetitorComparisonHome.vue')
   },
   {
     path: ROUTE_SETTINGS,
-    component: SettingsHome
+    component: () => import('./components/SettingsHome.vue')
   },
   {
     path: ROUTE_ALL,
