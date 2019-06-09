@@ -33,6 +33,7 @@ const WEEK = "week";
 const MONTH = "month";
 
 export default {
+  name: "CompetitorComparisonHome",
   components: {
     "filter-tool-bar": () => import("./toolbar/FilterToolBar"),
     "sentiment-performance-multiline": () =>
