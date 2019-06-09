@@ -127,6 +127,7 @@ import {
   LOCAL_STORAGE_ACCESS_KEY
 } from "../store/types.js";
 export default {
+  name: "SettingsHome",
   data() {
     return {
       tableHeaders: [
