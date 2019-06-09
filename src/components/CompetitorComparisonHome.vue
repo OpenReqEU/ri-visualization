@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-layout row>
+    <v-layout>
       <filter-tool-bar/>
     </v-layout>
     <v-spacer/>
