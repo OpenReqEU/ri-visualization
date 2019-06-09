@@ -1,9 +1,10 @@
 /* eslint-disable */
-import CompetitorComparisonHome from './components/CompetitorComparisonHome.vue';
-import DashboardHome from './components/DashboardHome.vue';
-import LoginHome from './components/LoginHome.vue';
-import SettingsHome from './components/SettingsHome.vue';
-import TweetCategoryHome from './components/TweetCategoryHome.vue';
+const CompetitorComparisonHome = () => import('./components/CompetitorComparisonHome.vue');
+const DashboardHome = () => import('./components/DashboardHome.vue');
+const InquiriesHome = () => import('./components/InquiriesHome.vue');
+const LoginHome = () => import('./components/LoginHome.vue');
+const ProblemReportsHome = () => import('./components/ProblemReportsHome.vue');
+const SettingsHome = () => import('./components/SettingsHome.vue');
 
 export const ROUTE_EMPTY = "";
 export const ROUTE_DEFAULT = "/";
@@ -29,11 +30,11 @@ export const routes = [{
   },
   {
     path: ROUTE_PROBLEM_REPORTS,
-    component: TweetCategoryHome
+    component: ProblemReportsHome
   },
   {
     path: ROUTE_INQUIRIES,
-    component: TweetCategoryHome
+    component: InquiriesHome
   },
   {
     path: ROUTE_COMPARISON,
