@@ -126,10 +126,7 @@ export default {
       }
     },
     loadData(tweets) {
-      tweets = tweets.filter(
-        tweet =>
-          tweet.created_at >= this.startDate && tweet.created_at <= this.endDate
-      );
+      tweets = tweets.filter(FILTER_TIMEFRAME(this.startDate, this.endDate));
       this.resetChart();
       this.loadChartData(tweets);
     },
