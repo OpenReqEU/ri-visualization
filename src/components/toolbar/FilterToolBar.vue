@@ -1,7 +1,7 @@
 <template>
   <v-toolbar :color="color" height="75">
     <v-layout row wrap>
-      <v-flex xs5>
+      <v-flex xs5 v-if="showAccountFilter()">
         <v-select
           :menu-props="{maxWidth:'300'}"
           v-model="selectedTwitterAccounts"
@@ -34,9 +34,8 @@
         </v-select>
       </v-flex>
 
-      <v-flex xs5 offset-xs1>
+      <v-flex xs5 offset-xs1 v-if="showTopicFilter()">
         <v-select
-          v-if="showTopicFilter()"
           :menu-props="{maxWidth:'300'}"
           v-model="selectedTopics"
           :items="topics"
@@ -66,9 +65,8 @@
         </v-select>
       </v-flex>
 
-      <v-flex xs3 offset-xs1>
+      <v-flex xs3 offset-xs1 v-if="showDateFilter()">
         <v-menu
-          v-if="showDateFilter()"
           :close-on-content-click="false"
           v-model="modelFromDateMenu"
           :nudge-right="40"
@@ -99,11 +97,9 @@
           ></v-date-picker>
         </v-menu>
       </v-flex>
-      <!-- <v-spacer></!-->
 
-      <v-flex xs3>
+      <v-flex xs3 v-if="showDateFilter()">
         <v-menu
-          v-if="showDateFilter()"
           :close-on-content-click="false"
           v-model="modelToDateMenu"
           :nudge-right="40"
