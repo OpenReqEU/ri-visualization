@@ -213,7 +213,7 @@ export default {
           dateRange = dateRange.concat(Object.keys(o.rawData));
         });
         dateRange = [...new Set(dateRange)];
-        dateRange = dateRange.sort((a, b) => a - b);
+        dateRange.sort((a, b) => a - b);
         dateRange.forEach(date => {
           xAxisLabels.push(moment(date, "YYYYMMDD").format("DD.MM"));
         });
