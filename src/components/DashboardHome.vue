@@ -56,15 +56,15 @@ export default {
   name: "DashboardHome",
   components: {
     "filter-tool-bar": () => import("./toolbar/FilterToolBar"),
-    "sentiment-performance": () => import("./widget/line/SentimentPerformance"),
-    "class-frequency-distribution": () =>
-      import("./widget/bar/ClassFrequencyDistribution"),
     "heatmap-class-frequency": () =>
       import("./widget/heatmap/HeatmapClassFrequency"),
     "sentiment-trend-report": () =>
       import("./widget/trend/SentimentTrendReport"),
     "classification-trend-report": () =>
-      import("./widget/trend/ClassificationTrendReport")
+      import("./widget/trend/ClassificationTrendReport"),
+    "sentiment-performance": () => import("./widget/line/SentimentPerformance"),
+    "class-frequency-distribution": () =>
+      import("./widget/bar/ClassFrequencyDistribution")
   },
   mounted() {
     this.$store.dispatch("setToolbarHeader", "Dashboard");
