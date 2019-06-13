@@ -111,10 +111,10 @@
                     @click="labelTweetAs({
                       origin: tweetCategory, 
                       index: props.index, 
-                      label: 'problem_report',
+                      label: 'inquiry',
                       tweet: props.item
                   })"
-                  >problem</v-btn>
+                  >inquiry</v-btn>
                   <v-btn
                     small
                     outline
