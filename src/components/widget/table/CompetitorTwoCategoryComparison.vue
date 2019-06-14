@@ -209,13 +209,13 @@ export default {
         if (source[i][ACCOUNT] == account) {
           source[i][target][TOTAL] += 1;
 
-          if (tweet.created_at <= this.dateYesterday) {
+          if (tweet.created_at < this.dateYesterday) {
             source[i][target][YESTERDAY] += 1;
           }
-          if (tweet.created_at <= this.dateLastWeek) {
+          if (tweet.created_at < this.dateLastWeek) {
             source[i][target][WEEK] += 1;
           }
-          if (tweet.created_at <= this.dateLastMonth) {
+          if (tweet.created_at < this.dateLastMonth) {
             source[i][target][MONTH] += 1;
           }
         }
