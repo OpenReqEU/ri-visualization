@@ -1,21 +1,21 @@
 <template>
   <v-container>
     <v-layout>
-      <filter-tool-bar/>
+      <filter-tool-bar />
     </v-layout>
-    <v-spacer/>
+    <v-spacer />
     <v-layout row wrap>
       <v-flex xs12 md6 left-half-row-widget class="row">
-        <sentiment-performance-multiline/>
+        <sentiment-performance-multiline />
       </v-flex>
       <v-flex xs12 md6 class="row">
-        <class-frequency-distribution-multibar/>
+        <class-frequency-distribution-multibar />
       </v-flex>
       <v-flex xs12 class="row">
-        <competitor-two-category-comparison/>
+        <competitor-comparison />
       </v-flex>
       <v-flex xs12 class="row" v-for="topic in selectedTopics" :key="topic">
-        <competitor-two-category-comparison :topic="topic"/>
+        <competitor-comparison :topic="topic" />
       </v-flex>
     </v-layout>
   </v-container>
@@ -41,7 +41,10 @@ export default {
     "class-frequency-distribution-multibar": () =>
       import("./widget/bar/ClassFrequencyDistributionMultibar"),
     "competitor-two-category-comparison": () =>
-      import("./widget/table/CompetitorTwoCategoryComparison")
+      import("./widget/table/CompetitorTwoCategoryComparison"),
+    "trend-multiline": () => import("./widget/line/TrendMultiline"),
+    "competitor-comparison": () =>
+      import("./widget/comparison/CompetitorSideBySideComparison")
   },
   data() {
     return {

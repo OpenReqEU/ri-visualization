@@ -1,7 +1,7 @@
 <template>
   <v-layout>
     <v-card class="echarts">
-      <ECharts class="chart" :options="option" auto-resize/>
+      <ECharts class="chart" :options="option" auto-resize />
       <v-select
         class="configuration"
         label="Configuration (show)"

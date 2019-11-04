@@ -1,6 +1,5 @@
 <template>
   <v-card>
-    <v-card-title class="header headline black--text justify-center ma-0 pa-0">{{ title }}</v-card-title>
     <v-data-table class="ma-0 pa-0" :headers="headersTop" :items="data" hide-actions>
       <template slot="headerCell" slot-scope="props">
         <div slot="activator" class="subheading black--text">{{ props.header.text }}</div>
