@@ -1,7 +1,7 @@
 export const FILTER_FOR_TOPIC = topic => tweet => {
   let firstTopic = tweet.topics.first_class;
   let secondTopic = tweet.topics.second_class;
-  return ((firstTopic.label == topic && firstTopic.score > 0.5) || (secondTopic.label == topic && secondTopic.score > 0.5));
+  return ((firstTopic.label == topic && firstTopic.score > 0.7) || (secondTopic.label == topic && secondTopic.score > 0.7));
 };
 export const FILTER_FOR_CATEGORY = category => tweet => {
   return tweet.tweet_class == category;
