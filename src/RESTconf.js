@@ -1,6 +1,11 @@
 /* eslint-disable */
 export const BASE_URL = process.env.VUE_APP_BASE_URL;
 export const BACKUP_URL = process.env.VUE_APP_BACKUP_URL;
+const axios = require('axios');
+axios.defaults.headers.common = {
+  'Authorization': 'Bearer ' + process.env.VUE_APP_BEARER_TOKEN
+};
+export default axios;
 
 export const GET_ALL_TWEETS_ENDPOINT = function (twitterAccount) {
   return `${BASE_URL}/ri-storage-twitter/account_name/${twitterAccount}/all`;

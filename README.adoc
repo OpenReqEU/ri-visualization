@@ -20,7 +20,7 @@ This ms requires a running instance of link:https://github.com/OpenReqEU/ri-stor
 
 Run the following commands to start the microservice:
 
-. docker build --build-arg "VUE_APP_BASE_URL=<URL_TO_ri-storage-twitter>" --build-arg "VUE_APP_BACKUP_URL=<URL_TO_OPTIONAL_BACKUP_BACKEND>" -t ri-visualization .
+. docker build --build-arg "VUE_APP_BEARER_TOKEN=<bearer-token>" --build-arg "VUE_APP_BASE_URL=<URL_TO_ri-storage-twitter>" --build-arg "VUE_APP_BACKUP_URL=<URL_TO_OPTIONAL_BACKUP_BACKEND>" -t ri-visualization .
 
 . docker run --rm -d -p 9707:9707 ri-visualization
 
