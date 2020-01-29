@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-layout row>
-      <filter-tool-bar/>
+      <filter-tool-bar />
     </v-layout>
     <v-layout row>
       <v-flex xs12>
@@ -48,11 +48,8 @@
     <v-card flat class="header">
       <v-card-title>
         <h1>{{ cardTableTitle }}</h1>
-        <v-spacer/>
-        <v-switch
-            v-model="showFakeReviews"
-            label="show fake reviews"
-        ></v-switch>
+        <v-spacer />
+        <v-switch v-model="showFakeReviews" label="show fake reviews"></v-switch>
         <v-text-field
           v-model="searchQuery"
           append-icon="search"
@@ -74,9 +71,7 @@
           <td style="text-align:center">{{ getFormattedDate(props.item.created_at) }}</td>
           <td style="text-align:center">
             <span v-if="props.item.is_fake">
-              <v-icon>
-                warning
-              </v-icon>
+              <v-icon>warning</v-icon>
             </span>
           </td>
           <td class="issue-title-value">{{ props.item.text }}</td>
@@ -216,7 +211,7 @@ export default {
       searchQuery: "",
       topics: [],
       topic: "",
-      showFakeReviews: false,
+      showFakeReviews: false
     };
   },
   methods: {
@@ -224,22 +219,9 @@ export default {
       //Sorted by creation date
       this.data = tweets.filter(FILTER_FOR_CATEGORY(this.tweetCategory));
 
-      //assign random value for is_fake key (key not present | true | false)
-      // this.data = this.data.map(tweet => {
-      //   const dice = Math.random() * 2;
-      //   if (dice < 1) {
-      //     return tweet;
-      //   } else {
-      //     return {
-      //       ...tweet,
-      //       is_fake: (dice < 2)
-      //     }
-      //   }
-      // });
-
       //filter fakes if activated (keep those with no key and those whith !is_fake)
       if (!this.showFakeReviews) {
-        this.data = this.data.filter(item => !item.is_fake)
+        this.data = this.data.filter(item => !item.is_fake);
       }
 
       //Update Number for filtered tweets
@@ -377,7 +359,7 @@ export default {
   },
   watch: {
     showFakeReviews() {
-      this.loadData(this.$store.getters.filteredTweets, this.topic)
+      this.loadData(this.$store.getters.filteredTweets, this.topic);
     }
   },
   mounted() {
