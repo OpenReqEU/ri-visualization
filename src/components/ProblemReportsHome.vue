@@ -49,6 +49,10 @@
       <v-card-title>
         <h1>{{ cardTableTitle }}</h1>
         <v-spacer/>
+        <v-switch
+            v-model="showFakeReviews"
+            label="show fake reviews"
+        ></v-switch>
         <v-text-field
           v-model="searchQuery"
           append-icon="search"
@@ -67,7 +71,14 @@
     >
       <template slot="items" slot-scope="props">
         <tr>
-          <td style="text-align:'center'">{{ getFormattedDate(props.item.created_at) }}</td>
+          <td style="text-align:center">{{ getFormattedDate(props.item.created_at) }}</td>
+          <td style="text-align:center">
+            <span v-if="props.item.is_fake">
+              <v-icon>
+                warning
+              </v-icon>
+            </span>
+          </td>
           <td class="issue-title-value">{{ props.item.text }}</td>
           <td class="issue-action">
             <v-layout row v-if="(!props.item.is_annotated && props.item.classifier_certainty < 70)">
@@ -176,6 +187,13 @@ export default {
           width: "10%"
         },
         {
+          text: "Fake",
+          align: "center",
+          sortable: false,
+          value: "is_fake",
+          width: "5%"
+        },
+        {
           text: "Tweet",
           align: "left",
           sortable: false,
@@ -197,13 +215,32 @@ export default {
       data: [],
       searchQuery: "",
       topics: [],
-      topic: ""
+      topic: "",
+      showFakeReviews: false,
     };
   },
   methods: {
     loadData(tweets, topic) {
       //Sorted by creation date
       this.data = tweets.filter(FILTER_FOR_CATEGORY(this.tweetCategory));
+
+      //assign random value for is_fake key (key not present | true | false)
+      // this.data = this.data.map(tweet => {
+      //   const dice = Math.random() * 2;
+      //   if (dice < 1) {
+      //     return tweet;
+      //   } else {
+      //     return {
+      //       ...tweet,
+      //       is_fake: (dice < 2)
+      //     }
+      //   }
+      // });
+
+      //filter fakes if activated (keep those with no key and those whith !is_fake)
+      if (!this.showFakeReviews) {
+        this.data = this.data.filter(item => !item.is_fake)
+      }
 
       //Update Number for filtered tweets
       this.tweetsPerTopic(this.data);
@@ -336,6 +373,11 @@ export default {
           sentimentScore: 0
         });
       });
+    }
+  },
+  watch: {
+    showFakeReviews() {
+      this.loadData(this.$store.getters.filteredTweets, this.topic)
     }
   },
   mounted() {
