@@ -2,7 +2,7 @@
 export const ROUTE_EMPTY = "";
 export const ROUTE_DEFAULT = "/";
 export const ROUTE_ALL = "*";
-export const ROUTE_DASHBOARD = "/";
+export const ROUTE_DASHBOARD = "/dashboard";
 export const ROUTE_LOGIN = "/login";
 export const ROUTE_PROBLEM_REPORTS = "/problemReports";
 export const ROUTE_INQUIRIES = "/inquiries";
