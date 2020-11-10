@@ -4,7 +4,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, "public"),
     filename: "bundle.js",
-    publicPath: "/",        
+    publicPath: process.env.VUE_APP_URL_PUBLICPATH,        
   },
   devServer: {
     historyApiFallback: true
