@@ -1,4 +1,4 @@
 module.exports = {
-  publicPath: process.env.VUE_APP_URL_PUBLICPATH,
+  publicPath: '/dashboard/',
   productionSourceMap: false
 };
