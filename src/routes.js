@@ -9,12 +9,9 @@ export const ROUTE_INQUIRIES = "/inquiries";
 export const ROUTE_COMPARISON = "/comparison";
 export const ROUTE_SETTINGS = "/settings";
 
-export const routes = [{
-    path: ROUTE_EMPTY,
-    redirect: ROUTE_DASHBOARD
-  },
+export const routes = [
   {
-    path: ROUTE_DASHBOARD,
+    path: ROUTE_DEFAULT,
     component: () => import('./components/DashboardHome.vue')
   },
   {
