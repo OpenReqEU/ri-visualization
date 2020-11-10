@@ -13,7 +13,7 @@ import {
 Vue.config.productionTip = true;
 Vue.use(VueRouter);
 const router = new VueRouter({
-  base: '/',
+  base: '/dashboard/',
   mode: 'history',
   routes
 });
