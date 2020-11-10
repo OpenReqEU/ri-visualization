@@ -8,22 +8,22 @@ axios.defaults.headers.common = {
 export default axios;
 
 export const GET_ALL_TWEETS_ENDPOINT = function (twitterAccount) {
-  return `${BASE_URL}/ri-storage-twitter/account_name/${twitterAccount}/all`;
+  return `${BASE_URL}/hitec/repository/twitter/account_name/${twitterAccount}/all`;
 };
 export const GET_TWITTER_ACCOUNT_EXISTS_ENDPOINT = function (twitterAccount) {
-  return `${BASE_URL}/ri-collection-explicit-feedback-twitter/${twitterAccount}/exists`;
+  return `${BASE_URL}/hitec/crawl/tweets/${twitterAccount}/exists`;
 };
 export const GET_TWITTER_OBSERVABLES_ENDPOINT = function (twitterAccount) {
-  return `${BASE_URL}/ri-storage-twitter/observables`;
+  return `${BASE_URL}/hitec/repository/twitter/observables`;
 };
 export const POST_TWITTER_OBSERVABLE_ENDPOINT = function (accountName, interval, lang) {
-  return `${BASE_URL}/ri-orchestration-twitter/hitec/orchestration/twitter/observe/tweet/account/${accountName}/interval/${interval}/lang/${lang}`;
+  return `${BASE_URL}/hitec/orchestration/twitter/observe/tweet/account/${accountName}/interval/${interval}/lang/${lang}`;
 };
 export const DELETE_TWITTER_OBSERVABLE_ENDPOINT = function (accountName) {
-  return `${BASE_URL}/ri-orchestration-twitter/hitec/orchestration/twitter/observe/account/${accountName}`;
+  return `${BASE_URL}/hitec/orchestration/twitter/observe/account/${accountName}`;
 };
 export const POST_TWEET_LABEL_ENDPOINT = function () {
-  return `${BASE_URL}/ri-storage-twitter/label/tweet/`;
+  return `${BASE_URL}/hitec/repository/twitter/label/tweet/`;
 };
 export const POST_TWEET_LABEL_PAYLOAD = function (data) {
   let payload = {
@@ -35,7 +35,7 @@ export const POST_TWEET_LABEL_PAYLOAD = function (data) {
   return JSON.stringify(payload);
 };
 export const POST_UPDATE_ACCESS_KEY_CONFIGURATION_ENDPOINT = function () {
-  return `${BASE_URL}/ri-storage-twitter/access_key/update`;
+  return `${BASE_URL}/hitec/repository/twitter/access_key/update`;
 };
 export const POST_UPDATE_ACCESS_KEY_CONFIGURATION_PAYLOAD = function (accessKey, accessKeyConfiguration) {
   let payload = {
@@ -62,7 +62,7 @@ export const POST_TWEET_LABEL_BACKUP_PAYLOAD = function (data) {
   return JSON.stringify(payload);
 };
 export const POST_RETRIEVE_ACCESS_KEY_CONFIGURATION = function (accessKey) {
-  return `${BASE_URL}/ri-storage-twitter/access_key/configuration`;
+  return `${BASE_URL}/hitec/repository/twitter/access_key/configuration`;
 };
 export const POST_RETRIEVE_ACCESS_KEY_CONFIGURATION_PAYLOAD = function (accessKey) {
   let payload = {
