@@ -2,16 +2,19 @@
 export const ROUTE_EMPTY = "";
 export const ROUTE_DEFAULT = "/";
 export const ROUTE_ALL = "*";
-export const ROUTE_DASHBOARD = "/dashboard";
+export const ROUTE_DASHBOARD = "/";
 export const ROUTE_LOGIN = "/login";
 export const ROUTE_PROBLEM_REPORTS = "/problemReports";
 export const ROUTE_INQUIRIES = "/inquiries";
 export const ROUTE_COMPARISON = "/comparison";
 export const ROUTE_SETTINGS = "/settings";
 
-export const routes = [
+export const routes = [{
+    path: ROUTE_EMPTY,
+    redirect: ROUTE_DASHBOARD
+  },
   {
-    path: ROUTE_DEFAULT,
+    path: ROUTE_DASHBOARD,
     component: () => import('./components/DashboardHome.vue')
   },
   {
